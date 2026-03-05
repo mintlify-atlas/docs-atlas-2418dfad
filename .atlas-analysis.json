@@ -1,0 +1,133 @@
+{
+  "projectType": "saas",
+  "projectName": "Khoj",
+  "projectDescription": "Your AI second brain - self-hostable personal AI for search, chat, and research with your docs and the web",
+  "theme": "almond",
+  "primaryColor": "#876b32",
+  "lightColor": "#f6eabf",
+  "darkColor": "#23221e",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "self-hosting",
+              "privacy-security"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "features/overview",
+              "features/chat",
+              "features/search",
+              "features/agents",
+              "features/automations",
+              "features/online-search",
+              "features/image-generation",
+              "features/voice-chat",
+              "features/code-execution",
+              "features/share",
+              "features/keyboard-shortcuts"
+            ]
+          },
+          {
+            "group": "Clients",
+            "pages": [
+              "clients/web",
+              "clients/desktop",
+              "clients/obsidian",
+              "clients/emacs",
+              "clients/whatsapp"
+            ]
+          },
+          {
+            "group": "Data Sources",
+            "pages": [
+              "data-sources/files",
+              "data-sources/notion",
+              "data-sources/github"
+            ]
+          },
+          {
+            "group": "Advanced",
+            "pages": [
+              "advanced/admin",
+              "advanced/remote-access",
+              "advanced/litellm",
+              "advanced/lmstudio",
+              "advanced/gcp-vertex",
+              "advanced/openai-proxy",
+              "advanced/tailscale",
+              "advanced/multilingual"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "api/overview",
+              "api/authentication"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "api/search",
+              "api/chat",
+              "api/update",
+              "api/agents",
+              "api/automations",
+              "api/subscriptions"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Contributing",
+        "groups": [
+          {
+            "group": "Development",
+            "pages": [
+              "contributing/overview",
+              "contributing/development",
+              "contributing/architecture",
+              "contributing/performance"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "AI-powered chat with context from your documents and the web",
+    "Advanced semantic search across multiple file formats",
+    "Custom agents with tunable personality, tools, and knowledge bases",
+    "Automated research and smart notifications",
+    "Multi-modal support (text, voice, images)",
+    "Self-hostable with local or cloud LLM support",
+    "Cross-platform clients (web, desktop, Obsidian, Emacs, WhatsApp)",
+    "Integration with Notion, GitHub, and other data sources"
+  ],
+  "publicApiSurface": [
+    "GET /api/search - Search across indexed content",
+    "POST /api/chat - Chat with AI using your documents",
+    "GET /api/update - Update indexed content",
+    "GET /api/agents - List available agents",
+    "POST /api/agents - Create custom agents",
+    "GET /api/automations - List scheduled automations",
+    "POST /api/automations - Create scheduled automations",
+    "POST /api/transcribe - Speech-to-text transcription",
+    "POST /api/synthesize - Text-to-speech synthesis",
+    "POST /api/generate - Image generation"
+  ]
+}
