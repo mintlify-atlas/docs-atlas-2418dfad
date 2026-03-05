@@ -1,0 +1,565 @@
+---
+title: Online Search
+description: Ground AI responses with real-time information from the web
+icon: globe
+---
+
+Khoj's online search capability brings real-time information into your conversations. When current events, fresh data, or web research is needed, Khoj automatically searches the internet and cites sources.
+
+## How It Works
+
+Khoj intelligently decides when to search online:
+
+<Steps>
+  <Step title="Intent Detection">
+    Khoj analyzes your query to determine if it requires current information:
+    - News and current events
+    - Recent product releases or updates
+    - Real-time data (weather, stock prices, scores)
+    - URLs or specific web content
+    - Questions beyond its training data cutoff
+  </Step>
+  
+  <Step title="Web Search">
+    Khoj searches the internet using configured search providers, gathering:
+    - Search results from multiple sources
+    - Webpage content and summaries
+    - Answer boxes and knowledge graphs
+    - Social media posts (if configured)
+  </Step>
+  
+  <Step title="Content Retrieval">
+    Relevant webpages are fetched and processed:
+    - Full text extraction
+    - Cleaned and formatted for readability
+    - Images and media identified
+  </Step>
+  
+  <Step title="Response Generation">
+    Information is synthesized into a coherent answer with:
+    - Clear citations to source URLs
+    - Quotes from original content
+    - Multiple perspectives when relevant
+  </Step>
+</Steps>
+
+## When to Use Online Search
+
+<Tabs>
+  <Tab title="Automatic" icon="wand-magic-sparkles">
+    Khoj automatically searches online for queries like:
+    
+    **Current Events:**
+    ```text
+    What's the latest news about the Mars rover?
+    ```
+    
+    **Recent Information:**
+    ```text
+    What did Apple announce at their last event?
+    ```
+    
+    **Real-time Data:**
+    ```text
+    What's the weather forecast for New York this weekend?
+    ```
+    
+    **Web Content:**
+    ```text
+    Summarize this article: https://example.com/article
+    ```
+  </Tab>
+  
+  <Tab title="Explicit" icon="slash">
+    Force online search with the `/online` command:
+    
+    ```text
+    /online Best restaurants in Tokyo
+    ```
+    
+    ```text
+    /online What are developers saying about the new Python release?
+    ```
+    
+    ```text
+    /online Latest research on climate change solutions
+    ```
+    
+    <Tip>Use `/online` when you want to ensure fresh information even for topics Khoj knows</Tip>
+  </Tab>
+</Tabs>
+
+## Example Queries
+
+<AccordionGroup>
+  <Accordion title="News & Current Events" icon="newspaper">
+    ```text
+    What's happening with AI regulation in the EU?
+    ```
+    
+    ```text
+    Latest developments in quantum computing
+    ```
+    
+    ```text
+    What did the Fed announce about interest rates?
+    ```
+    
+    <Info>Khoj searches recent news and provides multiple sources for balanced coverage</Info>
+  </Accordion>
+  
+  <Accordion title="Product Research" icon="cart-shopping">
+    ```text
+    Compare the latest iPhone vs Samsung flagship
+    ```
+    
+    ```text
+    Reviews of the Sony WH-1000XM5 headphones
+    ```
+    
+    ```text
+    What's the best budget laptop for programming?
+    ```
+  </Accordion>
+  
+  <Accordion title="Local Information" icon="location-dot">
+    ```text
+    Best pizza places in Brooklyn
+    ```
+    
+    ```text
+    Hiking trails near Denver
+    ```
+    
+    ```text
+    Events happening in Austin this weekend
+    ```
+  </Accordion>
+  
+  <Accordion title="How-To & Tutorials" icon="book-open">
+    ```text
+    How to fix a leaky faucet
+    ```
+    
+    ```text
+    Best practices for React hooks in 2024
+    ```
+    
+    ```text
+    /online Tutorial for setting up Docker on Ubuntu
+    ```
+  </Accordion>
+  
+  <Accordion title="Article Summaries" icon="file-lines">
+    ```text
+    Summarize this article: https://en.wikipedia.org/wiki/Haitian_Revolution
+    ```
+    
+    ```text
+    What are the key points in this blog post? [paste URL]
+    ```
+    
+    <Note>Khoj reads the full webpage and provides structured summaries</Note>
+  </Accordion>
+  
+  <Accordion title="Comparative Research" icon="scale-balanced">
+    ```text
+    /online Compare MongoDB vs PostgreSQL for my use case
+    ```
+    
+    ```text
+    Pros and cons of remote work according to recent studies
+    ```
+    
+    ```text
+    What are experts saying about electric vs hybrid cars in 2024?
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Citations and Sources
+
+Khoj always shows where information came from:
+
+<Frame>
+  <img src="https://assets.khoj.dev/online_search_citations.png" alt="Online Search Citations" />
+</Frame>
+
+**What you'll see:**
+- **Inline citations:** [1], [2], [3] markers in the response
+- **Source list:** Full URLs and titles at the end
+- **Clickable links:** Navigate to original sources
+- **Multiple sources:** Balanced perspective from different publishers
+
+<Tip>
+  Always verify critical information by clicking through to the original sources.
+</Tip>
+
+## Combined Search: Web + Your Documents
+
+Khoj can blend online research with your personal knowledge:
+
+```text
+Based on my notes about machine learning and the latest 
+online research, what should I focus on learning next?
+```
+
+```text
+Compare my investment strategy notes with current financial 
+expert recommendations online
+```
+
+<Steps>
+  <Step>Khoj searches your documents</Step>
+  <Step>Simultaneously searches the web</Step>
+  <Step>Synthesizes both sources into a unified answer</Step>
+  <Step>Cites both your notes and web sources</Step>
+</Steps>
+
+## Self-Hosting Configuration
+
+Set up online search for your self-hosted Khoj instance:
+
+### Search Providers
+
+<Tabs>
+  <Tab title="SearXNG (Docker)" icon="docker">
+    **Included in docker-compose.yml by default**
+    
+    No configuration needed! SearXNG runs automatically when you use:
+    
+    ```bash
+    docker-compose up
+    ```
+    
+    **Benefits:**
+    - Completely self-hosted and private
+    - Aggregates results from multiple search engines
+    - No API keys required
+    - Free and open source
+    
+    <Note>SearXNG is the default option and works out of the box with Docker</Note>
+  </Tab>
+  
+  <Tab title="Serper.dev" icon="bolt">
+    **Production-grade, fast search with enhanced features**
+    
+    <Steps>
+      <Step title="Get API Key">
+        Sign up at [serper.dev](https://serper.dev) and generate an API key
+      </Step>
+      
+      <Step title="Set Environment Variable">
+        ```bash
+        export SERPER_DEV_API_KEY=your_api_key_here
+        ```
+        
+        Or in docker-compose.yml:
+        ```yaml
+        environment:
+          - SERPER_DEV_API_KEY=your_api_key_here
+        ```
+      </Step>
+      
+      <Step title="Restart Khoj">
+        Restart your Khoj server to apply changes
+      </Step>
+    </Steps>
+    
+    **Benefits:**
+    - Fast, reliable results
+    - Enhanced context (answer boxes, knowledge graphs)
+    - Lower latency than self-hosted options
+    
+    **Pricing:** Pay per search (see [pricing](https://serper.dev/pricing))
+  </Tab>
+  
+  <Tab title="Firecrawl" icon="fire">
+    **Open, self-hostable search (no social media)**
+    
+    <Steps>
+      <Step title="Get API Key">
+        Sign up at [firecrawl.dev](https://firecrawl.dev) for an API key
+      </Step>
+      
+      <Step title="Set Environment Variable">
+        ```bash
+        export FIRECRAWL_API_KEY=your_api_key_here
+        ```
+      </Step>
+      
+      <Step title="Restart Khoj">
+        Restart your server
+      </Step>
+    </Steps>
+    
+    **Benefits:**
+    - Open source
+    - Can be self-hosted
+    - Privacy-focused
+    
+    **Limitation:** Does not scrape social media results
+  </Tab>
+  
+  <Tab title="Exa" icon="magnifying-glass-chart">
+    **AI-powered semantic search**
+    
+    <Steps>
+      <Step title="Get API Key">
+        Sign up at [exa.ai](https://exa.ai) and get your API key
+      </Step>
+      
+      <Step title="Set Environment Variable">
+        ```bash
+        export EXA_API_KEY=your_api_key_here
+        ```
+      </Step>
+      
+      <Step title="Restart Khoj">
+        Apply the configuration with a restart
+      </Step>
+    </Steps>
+    
+    **Benefits:**
+    - Semantic understanding of queries
+    - High-quality results for technical topics
+    - Modern search approach
+  </Tab>
+</Tabs>
+
+### Webpage Reading
+
+Configure how Khoj reads and extracts webpage content:
+
+<Tabs>
+  <Tab title="Default (Requests)" icon="check">
+    **Built-in, no setup required**
+    
+    Khoj uses Python's `requests` library to fetch webpages.
+    
+    - Works immediately
+    - No API keys needed
+    - Basic content extraction
+    - May struggle with JavaScript-heavy sites
+  </Tab>
+  
+  <Tab title="Firecrawl" icon="fire">
+    **Fast, clean webpage content**
+    
+    <Steps>
+      <Step title="Get Firecrawl API key">
+        See Search Providers section above for details
+      </Step>
+      <Step title="Navigate to admin panel">
+        Go to: `http://localhost:42110/server/admin/database/webscraper/add/`
+      </Step>
+      <Step title="Create new Webscraper">
+        - **Api Key:** Your Firecrawl key
+        - **Type:** Firecrawl
+      </Step>
+      <Step title="Save the configuration">
+        Click Save to complete the setup
+      </Step>
+    </Steps>
+    
+    **Benefits:**
+    - Cleaner text extraction
+    - Better handling of modern websites
+    - Markdown output
+  </Tab>
+  
+  <Tab title="Olostep" icon="globe">
+    **Advanced webpage reading for complex sites**
+    
+    <Steps>
+      <Step title="Sign up">
+        Create an account at [olostep.com](https://olostep.com)
+      </Step>
+      <Step title="Get your API key">
+        Retrieve your API key from the dashboard
+      </Step>
+      <Step title="Navigate to admin panel">
+        Go to: `http://localhost:42110/server/admin/database/webscraper/add/`
+      </Step>
+      <Step title="Create new Webscraper">
+        - **Api Key:** Your Olostep key
+        - **Type:** Olostep
+      </Step>
+      <Step title="Save and restart">
+        Click Save and restart Khoj
+      </Step>
+    </Steps>
+    
+    **Benefits:**
+    - Handles complex, JavaScript-heavy sites
+    - Better extraction quality
+    - Wider website compatibility
+  </Tab>
+  
+  <Tab title="Exa" icon="magnifying-glass">
+    **Semantic webpage understanding**
+    
+    <Steps>
+      <Step title="Use Exa API key">
+        Use the same Exa API key from search setup
+      </Step>
+      <Step title="Navigate to admin panel">
+        Go to: `http://localhost:42110/server/admin/database/webscraper/add/`
+      </Step>
+      <Step title="Create new Webscraper">
+        - **Api Key:** Your Exa key
+        - **Type:** Exa
+      </Step>
+    </Steps>
+    
+    **Benefits:**
+    - Semantic content extraction
+    - Integrated with Exa search
+    - Consistent results
+  </Tab>
+</Tabs>
+
+<Note>
+  You can use different providers for **search** and **webpage reading**. For example:
+  - Search with Serper.dev
+  - Read webpages with Firecrawl
+</Note>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card icon="bullseye" title="Be Specific">
+    "Latest iPhone reviews" is better than "phone reviews"
+  </Card>
+  <Card icon="calendar" title="Include Time Context">
+    "2024 tax deadlines" instead of just "tax deadlines"
+  </Card>
+  <Card icon="list-check" title="Ask for Structure">
+    "List pros and cons" or "summarize in bullet points"
+  </Card>
+  <Card icon="link" title="Verify Sources">
+    Always click through to cited sources for important information
+  </Card>
+</CardGroup>
+
+## Limitations
+
+<Warning>
+  **Be aware of these constraints:**
+</Warning>
+
+<AccordionGroup>
+  <Accordion title="Paywall Content">
+    Khoj cannot access content behind paywalls or login-required sites.
+    
+    **Workaround:** Manually copy content and paste into chat
+  </Accordion>
+  
+  <Accordion title="Real-Time Data">
+    Search results may be a few minutes old, not instantaneous.
+    
+    **Not suitable for:** Live sports scores, stock tickers, breaking news
+  </Accordion>
+  
+  <Accordion title="Geographic Bias">
+    Results may favor certain regions depending on search provider.
+    
+    **Tip:** Include location in query: "news in Japan" vs just "news"
+  </Accordion>
+  
+  <Accordion title="Rate Limits">
+    API-based search providers have usage limits.
+    
+    **Self-hosting:** Monitor your API usage and costs
+  </Accordion>
+</AccordionGroup>
+
+## Privacy Considerations
+
+<Info>
+  **When using online search:**
+  - Your queries are sent to the search provider
+  - Visited URLs may be logged by the search service
+  - Use SearXNG (self-hosted) for maximum privacy
+  - Khoj does not store or log your search queries
+</Info>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Online search not working">
+    **Cloud users:**
+    - Should work automatically - report if broken
+    
+    **Self-hosted:**
+    - Check Docker logs: `docker-compose logs searxng`
+    - Verify environment variables are set correctly
+    - Ensure API keys are valid
+    - Restart Khoj after configuration changes
+  </Accordion>
+  
+  <Accordion title="Poor quality results">
+    **Try:**
+    - Make query more specific
+    - Include time context ("2024", "recent", "latest")
+    - Use `/online` to force web search
+    - Try a different search provider
+  </Accordion>
+  
+  <Accordion title="Cannot read specific webpage">
+    **Possible causes:**
+    - Paywall or login required
+    - JavaScript-heavy site
+    - Bot protection
+    
+    **Solutions:**
+    - Try Olostep for complex sites
+    - Manually copy content and paste in chat
+    - Use reader mode in browser first
+  </Accordion>
+  
+  <Accordion title="Slow response times">
+    **Reasons:**
+    - Fetching multiple webpages
+    - Slow search API
+    - Complex webpage rendering
+    
+    **Solutions:**
+    - Use Serper.dev for faster search
+    - Be more specific to reduce scope
+    - Consider upgrading self-hosted hardware
+  </Accordion>
+</AccordionGroup>
+
+## Advanced: Research Mode
+
+For comprehensive research, use the `/research` command:
+
+```text
+/research What are the environmental impacts of cryptocurrency mining?
+```
+
+**Research mode:**
+- Performs multiple searches
+- Reads more sources
+- Provides deeper analysis
+- Takes longer but more thorough
+- Better citations and cross-referencing
+
+<Tip>
+  Use `/research` for important questions where accuracy and depth matter most.
+</Tip>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Automate Research" icon="calendar-clock" href="/features/automations">
+    Schedule recurring online research tasks
+  </Card>
+  <Card title="Chat Features" icon="message" href="/features/chat">
+    Learn other slash commands and capabilities
+  </Card>
+  <Card title="Code Execution" icon="code" href="/features/code-execution">
+    Combine web data with code analysis
+  </Card>
+</CardGroup>

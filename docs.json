@@ -1,122 +1,130 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Khoj",
+  "theme": "almond",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#876b32",
+    "light": "#f6eabf",
+    "dark": "#23221e"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "https://media.brand.dev/16cf5e1f-16eb-4260-886e-ad58bb6592fe.jpg",
+  "logo": {
+    "light": "https://media.brand.dev/a95e7c4b-9b6b-4f7b-b543-26a5801b46ec.png",
+    "dark": "https://media.brand.dev/a95e7c4b-9b6b-4f7b-b543-26a5801b46ec.png"
+  },
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/khoj-ai/khoj"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/khoj-ai/khoj",
+      "discord": "https://discord.gg/BDgyabRM6e",
+      "twitter": "https://twitter.com/khoj_ai"
+    }
+  },
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Get Started",
             "pages": [
-              "index",
+              "introduction",
               "quickstart",
-              "development"
+              "self-hosting",
+              "privacy-security"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Features",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "features/overview",
+              "features/chat",
+              "features/search",
+              "features/agents",
+              "features/automations",
+              "features/online-search",
+              "features/image-generation",
+              "features/voice-chat",
+              "features/code-execution",
+              "features/share",
+              "features/keyboard-shortcuts"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Clients",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "clients/web",
+              "clients/desktop",
+              "clients/obsidian",
+              "clients/emacs",
+              "clients/whatsapp"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Data Sources",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "data-sources/files",
+              "data-sources/notion",
+              "data-sources/github"
+            ]
+          },
+          {
+            "group": "Advanced",
+            "pages": [
+              "advanced/admin",
+              "advanced/remote-access",
+              "advanced/litellm",
+              "advanced/lmstudio",
+              "advanced/gcp-vertex",
+              "advanced/openai-proxy",
+              "advanced/tailscale",
+              "advanced/multilingual"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Getting Started",
             "pages": [
-              "api-reference/introduction"
+              "api/overview",
+              "api/authentication"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Endpoints",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api/search",
+              "api/chat",
+              "api/update",
+              "api/agents",
+              "api/automations",
+              "api/subscriptions"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Contributing",
+        "groups": [
+          {
+            "group": "Development",
+            "pages": [
+              "contributing/overview",
+              "contributing/development",
+              "contributing/architecture",
+              "contributing/performance"
             ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
-  },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+    ]
   }
 }

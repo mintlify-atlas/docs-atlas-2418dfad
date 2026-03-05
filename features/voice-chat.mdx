@@ -1,0 +1,529 @@
+---
+title: Voice Chat
+description: Talk naturally with Khoj using voice input and output
+icon: microphone
+---
+
+Voice chat lets you speak to Khoj instead of typing. Ask questions out loud, listen to responses, and have natural spoken conversations with your AI assistant.
+
+<Frame>
+  <img src="https://assets.khoj.dev/speech_to_text_demo.gif" alt="Voice Chat Demo" />
+</Frame>
+
+## How Voice Chat Works
+
+<Steps>
+  <Step title="Speak Your Query">
+    Click the microphone icon and talk naturally
+  </Step>
+  
+  <Step title="Speech Recognition">
+    Khoj transcribes your voice to text using speech-to-text AI
+  </Step>
+  
+  <Step title="Review & Edit">
+    The transcription appears - you can edit it before sending if needed
+  </Step>
+  
+  <Step title="Send & Receive">
+    Submit the message and receive text or voice response
+  </Step>
+</Steps>
+
+## Using Voice Input
+
+<Tabs>
+  <Tab title="Web">
+    <Steps>
+      <Step>Open [app.khoj.dev/chat](https://app.khoj.dev/chat)</Step>
+      <Step>Click the microphone icon 🎤 in the chat input box</Step>
+      <Step>Allow microphone access when prompted by your browser</Step>
+      <Step>Speak your question or message</Step>
+      <Step>Click stop or wait for automatic detection</Step>
+      <Step>Review transcription and click send</Step>
+    </Steps>
+  </Tab>
+  
+  <Tab title="Desktop App">
+    <Steps>
+      <Step>Open Khoj Desktop application</Step>
+      <Step>Navigate to Chat section</Step>
+      <Step>Click the microphone icon</Step>
+      <Step>Speak your message</Step>
+      <Step>Review and send</Step>
+    </Steps>
+  </Tab>
+  
+  <Tab title="Obsidian">
+    <Steps>
+      <Step>Open Khoj chat in Obsidian</Step>
+      <Step>Click the microphone button in the input area</Step>
+      <Step>Grant microphone permissions if requested</Step>
+      <Step>Speak your query</Step>
+      <Step>Edit if needed and send</Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+<Tip>
+  Try it now at [app.khoj.dev](https://app.khoj.dev/) - the mic icon is in the chat input!
+</Tip>
+
+## Voice Response
+
+### Automatic Voice Reply
+
+When you send a **voice message**, Khoj automatically responds with **voice**:
+
+<Steps>
+  <Step title="Send Voice Message">
+    Use the microphone to ask your question
+  </Step>
+  
+  <Step title="Receive Voice Response">
+    Khoj speaks the answer automatically
+  </Step>
+  
+  <Step title="Text Also Shown">
+    The response appears as text too for reference
+  </Step>
+</Steps>
+
+### Manual Voice Playback
+
+Listen to any message, even if typed:
+
+<Frame>
+  <img src="/img/text_to_speech.png" alt="Speaker icon for text-to-speech" />
+</Frame>
+
+<Steps>
+  <Step>Find the speaker icon 🔊 next to any Khoj message</Step>
+  <Step>Click to hear the message read aloud</Step>
+  <Step>Click again to pause</Step>
+</Steps>
+
+<Note>
+  **Voice response is currently available on the web interface.** Desktop and Obsidian support coming soon.
+</Note>
+
+## Voice Chat Tips
+
+<AccordionGroup>
+  <Accordion title="Speak Clearly" icon="microphone">
+    - Use a quiet environment when possible
+    - Speak at a normal pace - not too fast or slow
+    - Enunciate clearly, especially for technical terms
+    - Pause briefly between sentences
+  </Accordion>
+  
+  <Accordion title="Structure Complex Queries" icon="list-ol">
+    For multi-part questions, use structure:
+    
+    **Good:**
+    ```
+    "I have three questions. First, what's the weather today? 
+    Second, summarize my notes from yesterday. Third, what's 
+    on my calendar tomorrow?"
+    ```
+    
+    This helps both transcription accuracy and response quality.
+  </Accordion>
+  
+  <Accordion title="Review Before Sending" icon="eye">
+    Always check the transcription:
+    - Fix any misheard words
+    - Add punctuation if needed
+    - Correct technical terms or names
+    
+    This ensures Khoj understands exactly what you meant.
+  </Accordion>
+  
+  <Accordion title="Use Voice for Long-Form" icon="paragraph">
+    Voice shines for:
+    - Lengthy queries or descriptions
+    - Brainstorming sessions
+    - When typing is inconvenient
+    - Dictating notes or ideas
+  </Accordion>
+  
+  <Accordion title="Mix Input Methods" icon="shuffle">
+    Combine voice and text freely:
+    - Speak your question
+    - Type follow-up refinements
+    - Use voice for the next topic
+  </Accordion>
+</AccordionGroup>
+
+## Use Cases
+
+<Tabs>
+  <Tab title="Hands-Free" icon="hand">
+    **While multitasking:**
+    - Cooking while asking for recipe help
+    - Exercising while logging workouts
+    - Driving (parked) while reviewing schedule
+    - Cleaning while brainstorming ideas
+    
+    ```
+    "Hey Khoj, what ingredients do I need for the pasta 
+    recipe in my cooking notes?"
+    ```
+  </Tab>
+  
+  <Tab title="Accessibility" icon="universal-access">
+    **For easier access:**
+    - Faster than typing for some users
+    - Helpful for visual impairments
+    - Reduces repetitive strain
+    - More natural communication style
+    
+    ```
+    "Read me the summary of the article I saved yesterday"
+    ```
+  </Tab>
+  
+  <Tab title="Brainstorming" icon="lightbulb">
+    **Creative thinking:**
+    - Stream of consciousness ideation
+    - Verbal processing of concepts
+    - Natural conversational flow
+    - Quick capture of thoughts
+    
+    ```
+    "I'm thinking about a new feature for my app. It would 
+    let users create custom dashboards with drag and drop 
+    widgets. What do you think about that idea?"
+    ```
+  </Tab>
+  
+  <Tab title="Learning" icon="book-open">
+    **Educational conversations:**
+    - Ask questions naturally
+    - Listen to explanations
+    - Practice pronunciation
+    - Verbal comprehension
+    
+    ```
+    "Explain quantum entanglement to me like I'm a beginner"
+    [Listen to response]
+    "Can you give me an analogy for that?"
+    ```
+  </Tab>
+</Tabs>
+
+## Self-Hosting Configuration
+
+### Speech-to-Text (Voice Input)
+
+<Tabs>
+  <Tab title="Default (Local)" icon="server">
+    **Automatically configured** when you initialize Khoj.
+    
+    - Runs locally on your server
+    - No API keys needed
+    - Privacy-friendly
+    - Works offline
+    - Uses open-source models
+    
+    <Note>Default configuration is sufficient for most users</Note>
+  </Tab>
+  
+  <Tab title="OpenAI Whisper API" icon="cloud">
+    For potentially better accuracy with cloud processing:
+    
+    <Steps>
+      <Step title="Get OpenAI API Key">
+        If not already configured, get an API key from [OpenAI](https://platform.openai.com/settings/organization/api-keys)
+        
+        [See chat model setup →](/get-started/setup#add-chat-models)
+      </Step>
+      
+      <Step title="Create Speech-to-Text Config">
+        Navigate to: `http://localhost:42110/server/admin/database/speechtotextmodeloptions/`
+        
+        Click **"Add Speech to Text Model Options"**
+      </Step>
+      
+      <Step title="Configure Model">
+        - **Model name:** `whisper-1`
+        - **Model type:** `Openai`
+        - **AI model API:** Select your configured OpenAI API
+      </Step>
+      
+      <Step title="Save and Restart">
+        Save configuration and restart Khoj server
+      </Step>
+    </Steps>
+    
+    **Benefits:**
+    - Very high accuracy
+    - Supports many languages
+    - Better with accents and background noise
+    
+    **Cost:** ~$0.006 per minute of audio
+  </Tab>
+</Tabs>
+
+### Text-to-Speech (Voice Output)
+
+<Tabs>
+  <Tab title="Default (Local)" icon="server">
+    **Included by default** - uses local text-to-speech.
+    
+    Works immediately with no configuration.
+  </Tab>
+  
+  <Tab title="ElevenLabs" icon="microphone-lines">
+    For high-quality, natural-sounding voices:
+    
+    <Steps>
+      <Step title="Create ElevenLabs Account">
+        Sign up at [elevenlabs.io](https://elevenlabs.io/)
+      </Step>
+      
+      <Step title="Get API Key">
+        Generate an API key from your ElevenLabs dashboard
+      </Step>
+      
+      <Step title="Set Environment Variable">
+        Add to your environment:
+        
+        ```bash
+        export ELEVEN_LABS_API_KEY=your_api_key_here
+        ```
+        
+        Or in docker-compose.yml:
+        ```yaml
+        environment:
+          - ELEVEN_LABS_API_KEY=your_api_key_here
+        ```
+      </Step>
+      
+      <Step title="(Optional) Choose Voice">
+        Browse voices at [ElevenLabs Voice Library](https://elevenlabs.io/app/voice-library)
+        
+        To configure a specific voice:
+        1. Navigate to: `http://localhost:42110/server/admin/database/voicemodeloption/`
+        2. Click **"Add Voice Model Option"**
+        3. Enter the **Voice ID** from your chosen voice
+        4. Save
+      </Step>
+      
+      <Step title="Restart Server">
+        Restart Khoj to apply changes
+      </Step>
+    </Steps>
+    
+    **Benefits:**
+    - Extremely natural voices
+    - Multiple voice options
+    - Emotional intonation
+    - Multiple languages
+    
+    **Cost:** Character-based pricing (see [ElevenLabs pricing](https://elevenlabs.io/pricing))
+  </Tab>
+</Tabs>
+
+## Language Support
+
+<Tabs>
+  <Tab title="Speech Recognition">
+    Khoj's voice input supports **many languages**:
+    
+    - English (all variants)
+    - Spanish
+    - French
+    - German
+    - Italian
+    - Portuguese
+    - Chinese (Mandarin)
+    - Japanese
+    - Korean
+    - Arabic
+    - Hindi
+    - Russian
+    - And many more...
+    
+    <Note>OpenAI Whisper API has broader language support than local models</Note>
+  </Tab>
+  
+  <Tab title="Voice Output">
+    Text-to-speech language support depends on configuration:
+    
+    - **Local TTS:** Primarily English, varies by system
+    - **ElevenLabs:** 29+ languages with natural voices
+    
+    Check your TTS provider for specific language availability.
+  </Tab>
+</Tabs>
+
+## Voice Chat Best Practices
+
+<CardGroup cols={2}>
+  <Card icon="check" title="Good Microphone">
+    Use a quality mic for better transcription accuracy
+  </Card>
+  <Card icon="volume-low" title="Quiet Environment">
+    Reduce background noise when possible
+  </Card>
+  <Card icon="eye" title="Review Transcriptions">
+    Always check before sending for accuracy
+  </Card>
+  <Card icon="headphones" title="Use Headphones">
+    Prevents feedback when listening to voice responses
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Microphone not working">
+    **Browser (Web):**
+    - Check browser permissions for microphone access
+    - Look for blocked mic icon in address bar
+    - Try a different browser
+    - Ensure no other app is using the microphone
+    
+    **Desktop:**
+    - Check system microphone permissions
+    - Verify mic is selected as input device
+    - Restart the application
+    
+    **General:**
+    - Test microphone in other apps
+    - Check physical mic connection
+    - Update audio drivers
+  </Accordion>
+  
+  <Accordion title="Poor transcription accuracy">
+    **Improve quality:**
+    - Speak more slowly and clearly
+    - Use quieter environment
+    - Get closer to microphone
+    - Switch to OpenAI Whisper API (self-hosted)
+    - Use better microphone hardware
+    
+    **For technical terms:**
+    - Spell them out if needed
+    - Edit transcription before sending
+    - Add to custom vocabulary (if available)
+  </Accordion>
+  
+  <Accordion title="No voice response">
+    **Check:**
+    - Voice output feature is web-only currently
+    - Click speaker icon manually to play
+    - Browser audio permissions granted
+    - Volume not muted
+    - ElevenLabs API key valid (if configured)
+    
+    **Self-hosted:**
+    - Check server logs for TTS errors
+    - Verify ELEVEN_LABS_API_KEY environment variable
+    - Ensure sufficient API credits
+  </Accordion>
+  
+  <Accordion title="Voice response cuts off">
+    - Check internet connection stability
+    - Try shorter messages
+    - Verify browser audio isn't interrupted
+    - Check API rate limits (ElevenLabs)
+  </Accordion>
+</AccordionGroup>
+
+## Privacy Considerations
+
+<Info>
+  **Voice data handling:**
+  
+  **Local processing (default):**
+  - Voice stays on your server
+  - No data sent to third parties
+  - Maximum privacy
+  
+  **Cloud APIs (OpenAI Whisper, ElevenLabs):**
+  - Audio sent to API provider for processing
+  - Subject to provider's privacy policies
+  - Typically not stored long-term
+  - Check provider terms for details
+</Info>
+
+## Keyboard Shortcuts
+
+Speed up voice chat with hotkeys:
+
+| Action | Shortcut |
+|--------|----------|
+| Activate microphone | Click mic icon (no global hotkey yet) |
+| Stop recording | Click again or auto-stop |
+| Play/pause voice | Click speaker icon |
+
+<Tip>
+  More keyboard shortcuts available - see [Keyboard Shortcuts →](/features/keyboard-shortcuts)
+</Tip>
+
+## Combining Voice with Other Features
+
+<Tabs>
+  <Tab title="Voice + Search">
+    ```
+    🎤 "Find my notes about project planning from last week"
+    ```
+    
+    Speak search queries naturally
+  </Tab>
+  
+  <Tab title="Voice + Online Search">
+    ```
+    🎤 "Search online for the best Italian restaurants near me"
+    ```
+    
+    Voice triggers web research too
+  </Tab>
+  
+  <Tab title="Voice + Image Generation">
+    ```
+    🎤 "Create an image of a sunset over mountains"
+    ```
+    
+    Describe images you want verbally
+  </Tab>
+  
+  <Tab title="Voice + Code">
+    ```
+    🎤 "Write Python code to calculate fibonacci numbers"
+    ```
+    
+    Dictate coding tasks
+  </Tab>
+</Tabs>
+
+## Future Enhancements
+
+Voice features coming soon:
+
+- Voice response on Desktop and Obsidian
+- Push-to-talk hotkey
+- Voice-only mode (continuous conversation)
+- Voice activity detection (auto-start/stop)
+- Custom wake word support
+- Voice command shortcuts
+
+<Note>
+  Feature requests and feedback welcome on [Discord](https://discord.gg/BDgyabRM6e)!
+</Note>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Learn Chat Commands" icon="message" href="/features/chat">
+    Master slash commands and conversation features
+  </Card>
+  <Card title="Keyboard Shortcuts" icon="keyboard" href="/features/keyboard-shortcuts">
+    Navigate Khoj efficiently without the mouse
+  </Card>
+  <Card title="Mobile Access" icon="mobile" href="/clients/web">
+    Use voice chat on your phone via web app
+  </Card>
+</CardGroup>

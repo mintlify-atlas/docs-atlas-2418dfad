@@ -1,0 +1,156 @@
+---
+title: Files
+description: Upload and sync your documents with Khoj
+---
+
+Khoj supports indexing a wide variety of file formats, making it easy to search and chat with your documents. You can upload files directly through the web interface, use the desktop app for automatic syncing, or integrate with your favorite note-taking tools.
+
+## Supported File Formats
+
+Khoj can process and index the following file types:
+
+<CardGroup cols={2}>
+  <Card title="PDF Documents" icon="file-pdf">
+    Portable Document Format files (.pdf)
+  </Card>
+  <Card title="Word Documents" icon="file-word">
+    Microsoft Word files (.docx)
+  </Card>
+  <Card title="Markdown" icon="markdown">
+    Markdown files (.md)
+  </Card>
+  <Card title="Org Mode" icon="file-lines">
+    Emacs Org mode files (.org)
+  </Card>
+  <Card title="Plain Text" icon="file-text">
+    Text files (.txt) and code files
+  </Card>
+  <Card title="HTML/XML" icon="code">
+    Web pages (.html, .htm, .xml)
+  </Card>
+</CardGroup>
+
+## Uploading Files
+
+There are several ways to share your documents with Khoj:
+
+### Web Interface
+
+The easiest way to get started is by uploading files directly through the web UI.
+
+<Steps>
+  <Step title="Navigate to the Search Page">
+    Go to [app.khoj.dev/search](https://app.khoj.dev/search)
+  </Step>
+  
+  <Step title="Click 'Add Documents'">
+    Look for the "Add Documents" button in the interface
+  </Step>
+  
+  <Step title="Drag and Drop or Select Files">
+    You can either drag files directly into the upload area or click to browse your files
+  </Step>
+  
+  <Step title="Wait for Processing">
+    Khoj will automatically process and index your documents, making them searchable
+  </Step>
+</Steps>
+
+![Upload documents by dragging and dropping](https://assets.khoj.dev/upload_pdf_doc.gif)
+
+<Note>
+  The web interface is perfect for one-off documents you need to interact with quickly.
+</Note>
+
+### Desktop App
+
+For continuous syncing of local documents, the desktop app provides the most seamless experience.
+
+<Card title="Desktop App" icon="desktop" href="/clients/desktop">
+  Set up automatic document syncing with the Khoj desktop application
+</Card>
+
+<Note>
+  The desktop app is ideal if you have many documents on your computer or need them to stay in sync automatically.
+</Note>
+
+### Editor Integrations
+
+If you use Obsidian or Emacs for note-taking, you can configure automatic syncing:
+
+<CardGroup cols={2}>
+  <Card title="Obsidian Plugin" icon="brain" href="/clients/obsidian">
+    Sync your Obsidian vault with Khoj
+  </Card>
+  <Card title="Emacs Integration" icon="keyboard" href="/clients/emacs">
+    Integrate Khoj with your Emacs workflow
+  </Card>
+</CardGroup>
+
+## How Files Are Processed
+
+When you upload files to Khoj, they go through several processing steps:
+
+1. **Text Extraction**: Content is extracted from the file format (e.g., text from PDFs, content from Word documents)
+2. **Chunking**: Large documents are split into smaller, manageable chunks (typically ~256 tokens) for better search results
+3. **Embedding**: Each chunk is converted into a vector embedding using AI models
+4. **Indexing**: The embeddings are stored in the search index, making your content searchable
+
+<Note>
+  Khoj automatically handles documents with special characters and multiple languages. The chunking process preserves context by maintaining headings and document structure.
+</Note>
+
+## File Limits and Performance
+
+<Warning>
+  Very long words (over 500 characters) are automatically removed during processing to maintain quality. This typically only affects corrupted or malformed files.
+</Warning>
+
+### Best Practices
+
+- **Organize your documents**: Use clear filenames and folder structures for easier reference
+- **Keep files updated**: Re-upload or sync files when you make significant changes
+- **Use appropriate formats**: PDFs and Word documents work well for formatted content, while Markdown and plain text are great for notes
+- **Avoid duplicate uploads**: The desktop app and editor integrations handle this automatically
+
+## Searching Your Files
+
+Once indexed, you can:
+
+- **Search**: Find specific information across all your documents
+- **Chat**: Ask questions about your documents and get contextual answers
+- **Get references**: Khoj provides file paths and line numbers for source attribution
+
+<Card title="Search Documentation" icon="magnifying-glass" href="/features/search">
+  Learn more about searching your indexed content
+</Card>
+
+## Privacy and Security
+
+<Note>
+  Your documents are processed and stored securely. When using Khoj Cloud, your data is encrypted in transit and at rest. For maximum privacy, you can also self-host Khoj.
+</Note>
+
+<Card title="Self-Hosting" icon="server" href="/self-hosting/overview">
+  Host Khoj on your own infrastructure for complete data control
+</Card>
+
+## Troubleshooting
+
+### Files not showing up in search
+
+- Wait a few minutes for processing to complete
+- Check that the file format is supported
+- Verify the file isn't empty or corrupted
+- Try re-uploading the file
+
+### Slow processing for large files
+
+- Large PDFs with many pages may take several minutes to process
+- Consider splitting very large documents into smaller files
+- The first sync with many files will take longer; subsequent syncs are faster
+
+### Character encoding issues
+
+- Khoj handles UTF-8 encoded files by default
+- If you see garbled text, ensure your files are saved with UTF-8 encoding

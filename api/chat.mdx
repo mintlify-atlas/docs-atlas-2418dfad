@@ -1,0 +1,496 @@
+---
+title: Chat API
+description: Build conversational AI interfaces with the Khoj Chat API
+---
+
+## Overview
+
+The Chat API provides access to Khoj's conversational AI capabilities. It supports multi-turn conversations, context-aware responses, document references, online search, code execution, and more.
+
+## Key Features
+
+- **Context-Aware**: Maintains conversation history and references previous messages
+- **Multi-Modal**: Supports text, images, and file attachments
+- **Tool Integration**: Can search documents, browse web, run code, and operate browser
+- **Streaming**: Real-time response streaming for better UX
+- **Agent Support**: Use custom agents with specialized capabilities
+
+## Start a Chat
+
+Send a message and get a response from Khoj.
+
+```bash cURL
+curl -X POST https://app.khoj.dev/api/chat \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "q": "What are the main points from my meeting notes?",
+    "stream": false
+  }'
+```
+
+```python Python
+import requests
+
+headers = {"Authorization": "Bearer YOUR_API_TOKEN"}
+data = {
+    "q": "What are the main points from my meeting notes?",
+    "stream": False
+}
+
+response = requests.post(
+    "https://app.khoj.dev/api/chat",
+    headers=headers,
+    json=data
+)
+result = response.json()
+```
+
+### Request Body
+
+<ParamField body="q" type="string" required>
+  The user's message or query
+</ParamField>
+
+<ParamField body="conversation_id" type="string" optional>
+  ID of existing conversation to continue. If not provided, creates a new conversation.
+</ParamField>
+
+<ParamField body="stream" type="boolean" default="true">
+  Whether to stream the response in real-time
+</ParamField>
+
+<ParamField body="n" type="integer" default="5">
+  Number of document references to retrieve for context
+</ParamField>
+
+<ParamField body="images" type="array" optional>
+  Array of base64-encoded images to include with the message
+</ParamField>
+
+<ParamField body="files" type="array" optional>
+  Array of file objects with `name` and `content` fields
+</ParamField>
+
+<ParamField body="create_new" type="boolean" default="false">
+  Force creation of a new conversation
+</ParamField>
+
+<ParamField body="title" type="string" optional>
+  Title for a new conversation
+</ParamField>
+
+<ParamField body="city" type="string" optional>
+  User's city for location-aware responses
+</ParamField>
+
+<ParamField body="region" type="string" optional>
+  User's region/state
+</ParamField>
+
+<ParamField body="country" type="string" optional>
+  User's country
+</ParamField>
+
+<ParamField body="timezone" type="string" optional>
+  User's timezone (e.g., "America/New_York")
+</ParamField>
+
+### Response
+
+<ResponseField name="status" type="string">
+  Status of the request ("ok" or "error")
+</ResponseField>
+
+<ResponseField name="response" type="string">
+  The AI's response message
+</ResponseField>
+
+<ResponseField name="conversationId" type="string">
+  ID of the conversation for follow-up messages
+</ResponseField>
+
+<ResponseField name="turnId" type="string">
+  Unique ID for this message turn
+</ResponseField>
+
+```json Example Response
+{
+  "response": "Based on your meeting notes, the main points were:\n1. Q4 roadmap priorities\n2. New feature launches\n3. Team expansion plans",
+  "conversationId": "550e8400-e29b-41d4-a716-446655440000",
+  "turnId": "660e8400-e29b-41d4-a716-446655440001"
+}
+```
+
+## Streaming Responses
+
+For real-time streaming, set `stream: true`. The response will be sent as Server-Sent Events (SSE).
+
+```python Python Streaming
+import requests
+import json
+
+headers = {"Authorization": "Bearer YOUR_API_TOKEN"}
+data = {"q": "Explain quantum computing", "stream": True}
+
+response = requests.post(
+    "https://app.khoj.dev/api/chat",
+    headers=headers,
+    json=data,
+    stream=True
+)
+
+for line in response.iter_lines():
+    if line:
+        event_data = json.loads(line.decode('utf-8'))
+        if event_data.get('type') == 'message':
+            print(event_data['data'], end='', flush=True)
+```
+
+### Stream Event Types
+
+<ResponseField name="type: metadata" type="object">
+  Contains conversation ID and turn ID at the start of the stream
+</ResponseField>
+
+<ResponseField name="type: status" type="string">
+  Status updates during processing (e.g., "Searching documents...", "Reading web pages...")
+</ResponseField>
+
+<ResponseField name="type: thought" type="string">
+  AI's reasoning process (chain of thought)
+</ResponseField>
+
+<ResponseField name="type: references" type="object">
+  Document references and context used
+</ResponseField>
+
+<ResponseField name="type: message" type="string">
+  Actual response text (streamed token by token)
+</ResponseField>
+
+<ResponseField name="type: usage" type="object">
+  Token usage and cost information
+</ResponseField>
+
+## Conversation Management
+
+### Get Conversation History
+
+Retrieve messages from a conversation.
+
+```bash
+curl "https://app.khoj.dev/api/chat/history?conversation_id=CONV_ID" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+<ParamField query="conversation_id" type="string" optional>
+  Conversation ID to retrieve. If not provided, gets the most recent conversation.
+</ParamField>
+
+<ParamField query="n" type="integer" optional>
+  Number of messages to retrieve. Positive values get the N most recent messages, negative values get all except the N most recent.
+</ParamField>
+
+**Response**
+
+```json
+{
+  "status": "ok",
+  "response": {
+    "conversation_id": "550e8400-e29b-41d4-a716-446655440000",
+    "slug": "meeting-notes-discussion",
+    "agent": {
+      "slug": "khoj",
+      "name": "Khoj",
+      "color": "#7C3AED",
+      "icon": "🦾"
+    },
+    "chat": [
+      {
+        "message": "What were the key points?",
+        "by": "you",
+        "created": "2024-03-05 10:30:00"
+      },
+      {
+        "message": "The key points were...",
+        "by": "khoj",
+        "created": "2024-03-05 10:30:15"
+      }
+    ]
+  }
+}
+```
+
+### List Conversation Sessions
+
+Get all conversation sessions for the user.
+
+```bash
+curl "https://app.khoj.dev/api/chat/sessions" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+<ParamField query="recent" type="boolean" default="false">
+  If true, only returns the 8 most recent conversations
+</ParamField>
+
+**Response**
+
+```json
+[
+  {
+    "conversation_id": "550e8400-e29b-41d4-a716-446655440000",
+    "slug": "meeting-notes-discussion",
+    "agent_name": "Khoj",
+    "created": "2024-03-05 10:30:00",
+    "updated": "2024-03-05 15:45:00"
+  }
+]
+```
+
+### Create New Conversation
+
+Start a new conversation session.
+
+```bash
+curl -X POST "https://app.khoj.dev/api/chat/sessions" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"agent_slug": "khoj"}'
+```
+
+<ParamField body="agent_slug" type="string" optional>
+  Slug of the agent to use for this conversation
+</ParamField>
+
+### Delete Conversation
+
+Delete a conversation and its history.
+
+```bash
+curl -X DELETE "https://app.khoj.dev/api/chat/history?conversation_id=CONV_ID" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+### Set Conversation Title
+
+Update the title of a conversation.
+
+```bash
+curl -X PATCH "https://app.khoj.dev/api/chat/title" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "conversation_id": "CONV_ID",
+    "title": "Project Planning Discussion"
+  }'
+```
+
+## Advanced Features
+
+### Multi-Modal Input
+
+Include images in your messages:
+
+```python
+import base64
+
+with open("screenshot.png", "rb") as f:
+    image_data = base64.b64encode(f.read()).decode()
+
+data = {
+    "q": "What's in this image?",
+    "images": [f"data:image/png;base64,{image_data}"]
+}
+```
+
+### File Attachments
+
+Attach files for context:
+
+```python
+data = {
+    "q": "Summarize this document",
+    "files": [
+        {
+            "name": "report.txt",
+            "content": "File content here..."
+        }
+    ]
+}
+```
+
+### Conversation Commands
+
+Use special commands to control behavior:
+
+- `/notes` - Search only in your notes
+- `/online` - Search the web
+- `/code` - Run code to answer questions
+- `/image` - Generate an image
+- `/diagram` - Create a diagram
+- `/research` - Perform deep research with multiple iterations
+
+```bash
+curl -X POST https://app.khoj.dev/api/chat \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "q": "/online What are the latest AI developments?"
+  }'
+```
+
+### Get Chat Options
+
+Retrieve available conversation commands.
+
+```bash
+curl "https://app.khoj.dev/api/chat/options" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+### Get Starter Questions
+
+Get suggested questions to start a conversation.
+
+```bash
+curl "https://app.khoj.dev/api/chat/starters" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+## Text-to-Speech
+
+Convert text responses to speech.
+
+```bash
+curl -X POST "https://app.khoj.dev/api/chat/speech" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Hello, how can I help you today?"}' \
+  --output speech.mp3
+```
+
+<ParamField body="text" type="string" required>
+  Text to convert to speech
+</ParamField>
+
+**Response**: Audio file (MP3 format)
+
+## Sharing Conversations
+
+### Create Public Share
+
+Create a public link to share a conversation.
+
+```bash
+curl -X POST "https://app.khoj.dev/api/chat/share" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"conversation_id": "CONV_ID"}'
+```
+
+**Response**
+
+```json
+{
+  "status": "ok",
+  "url": "https://app.khoj.dev/share/abc123xyz"
+}
+```
+
+### Fork Public Conversation
+
+Create your own copy of a public conversation.
+
+```bash
+curl -X POST "https://app.khoj.dev/api/chat/share/fork" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"public_conversation_slug": "abc123xyz"}'
+```
+
+### Delete Public Share
+
+Remove public access to a shared conversation.
+
+```bash
+curl -X DELETE "https://app.khoj.dev/api/chat/share?public_conversation_slug=abc123xyz" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+## File Filters
+
+Limit chat context to specific files.
+
+### Get File Filters
+
+```bash
+curl "https://app.khoj.dev/api/chat/conversation/file-filters/CONV_ID" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+### Add File Filter
+
+```bash
+curl -X POST "https://app.khoj.dev/api/chat/conversation/file-filters" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "conversation_id": "CONV_ID",
+    "filename": "important-doc.md"
+  }'
+```
+
+### Remove File Filter
+
+```bash
+curl -X DELETE "https://app.khoj.dev/api/chat/conversation/file-filters" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "conversation_id": "CONV_ID",
+    "filename": "important-doc.md"
+  }'
+```
+
+## Rate Limits
+
+- **Free tier**: 20 messages per day
+- **Premium tier**: 75 messages per day for standard commands, higher limits for specific features
+
+Some features have additional limits:
+- Image generation: 3 per day (free) / 30 per day (premium)
+- Online search: Limited per query
+- Code execution: Limited per query
+
+## Best Practices
+
+<Steps>
+  <Step title="Provide Context">
+    Include relevant conversation history and file attachments for better responses.
+  </Step>
+  
+  <Step title="Use Streaming">
+    Enable streaming for better user experience with long responses.
+  </Step>
+  
+  <Step title="Reuse Conversations">
+    Continue existing conversations to maintain context across multiple turns.
+  </Step>
+  
+  <Step title="Choose Right Agent">
+    Use specialized agents for specific tasks when available.
+  </Step>
+</Steps>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Agents API" icon="robot" href="/api/agents">
+    Create custom agents with specialized knowledge
+  </Card>
+  <Card title="Automations" icon="clock" href="/api/automations">
+    Schedule recurring chat queries
+  </Card>
+</CardGroup>

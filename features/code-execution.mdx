@@ -1,0 +1,606 @@
+---
+title: Code Execution
+description: Run Python code for data analysis and complex calculations
+icon: code
+---
+
+Khoj can generate and execute Python code in a secure sandbox. Perfect for calculations, data analysis, generating reports, or any task requiring computational precision.
+
+## Why Code Execution?
+
+Large language models struggle with:
+- Complex math and calculations
+- Data processing and analysis
+- Generating charts and visualizations
+- Precise quantitative tasks
+
+**Code execution solves this** by letting Khoj write and run actual Python code for accurate results.
+
+## How It Works
+
+<Steps>
+  <Step title="Task Detection">
+    Khoj identifies when code would be helpful:
+    - Mathematical calculations
+    - Data manipulation
+    - File processing
+    - Chart generation
+  </Step>
+  
+  <Step title="Code Generation">
+    Khoj writes Python code to solve the task
+  </Step>
+  
+  <Step title="Secure Execution">
+    Code runs in an isolated sandbox environment:
+    - No access to your files or network
+    - Limited execution time
+    - Controlled resource usage
+  </Step>
+  
+  <Step title="Results Integration">
+    Output is captured and presented in the chat:
+    - Printed values
+    - Generated plots/charts
+    - Error messages if code fails
+  </Step>
+</Steps>
+
+<Note>
+  Khoj automatically decides when to use code execution. You can also explicitly request it with the `/code` command.
+</Note>
+
+## Using Code Execution
+
+<Tabs>
+  <Tab title="Automatic" icon="wand-magic-sparkles">
+    Simply ask for computational tasks:
+    
+    ```text
+    Calculate compound interest on $10,000 at 5% annually for 10 years
+    ```
+    
+    ```text
+    Generate a bar chart comparing sales data: 
+    Q1: 45000, Q2: 52000, Q3: 48000, Q4: 61000
+    ```
+    
+    ```text
+    What's the standard deviation of these numbers: 12, 15, 18, 22, 25, 29
+    ```
+    
+    Khoj detects the need for code and runs it automatically.
+  </Tab>
+  
+  <Tab title="Explicit /code Command" icon="slash">
+    Force code execution:
+    
+    ```text
+    /code Calculate the first 20 Fibonacci numbers
+    ```
+    
+    ```text
+    /code Create a line plot showing exponential growth: y = 2^x for x from 0 to 10
+    ```
+    
+    <Tip>Use `/code` when you want to ensure a computational approach</Tip>
+  </Tab>
+</Tabs>
+
+## Example Use Cases
+
+<AccordionGroup>
+  <Accordion title="Mathematics" icon="calculator">
+    **Complex Calculations:**
+    ```text
+    Calculate the area under the curve y = x^2 from x=0 to x=5 using numerical integration
+    ```
+    
+    **Statistical Analysis:**
+    ```text
+    /code Find the mean, median, mode, and range of: 23, 45, 12, 67, 45, 89, 34, 45, 78
+    ```
+    
+    **Financial Math:**
+    ```text
+    Compare monthly payment for a $300,000 mortgage at 4% vs 5% interest over 30 years
+    ```
+  </Accordion>
+  
+  <Accordion title="Data Analysis" icon="chart-line">
+    **Processing Lists:**
+    ```text
+    /code I have these test scores: [78, 85, 92, 88, 76, 95, 89]. 
+    Calculate average, highest, lowest, and how many are above 85.
+    ```
+    
+    **Trend Analysis:**
+    ```text
+    Analyze this monthly revenue trend and tell me if it's growing: 
+    Jan: 50k, Feb: 53k, Mar: 49k, Apr: 55k, May: 58k, Jun: 62k
+    ```
+    
+    **Data Transformation:**
+    ```text
+    Convert these temperatures from Fahrenheit to Celsius: 72, 85, 90, 68, 75
+    ```
+  </Accordion>
+  
+  <Accordion title="Visualizations" icon="chart-bar">
+    **Charts:**
+    ```text
+    Create a pie chart of my time allocation: Work 40%, Sleep 32%, 
+    Leisure 18%, Exercise 10%
+    ```
+    
+    **Graphs:**
+    ```text
+    /code Plot the function y = sin(x) * e^(-x/10) for x from 0 to 20
+    ```
+    
+    **Comparisons:**
+    ```text
+    Make a bar chart comparing populations: Tokyo 37M, Delhi 31M, 
+    Shanghai 27M, São Paulo 22M, Mexico City 22M
+    ```
+  </Accordion>
+  
+  <Accordion title="Text Processing" icon="text">
+    **Analysis:**
+    ```text
+    /code Count word frequency in this text: [paste paragraph]
+    ```
+    
+    **Manipulation:**
+    ```text
+    Generate all possible 3-letter combinations of 'ABC'
+    ```
+    
+    **Parsing:**
+    ```text
+    Extract all email addresses from this text: [paste content]
+    ```
+  </Accordion>
+  
+  <Accordion title="Simulations" icon="dice">
+    **Probability:**
+    ```text
+    Simulate rolling two dice 10,000 times and show the distribution of sums
+    ```
+    
+    **Monte Carlo:**
+    ```text
+    /code Estimate the value of pi using Monte Carlo simulation with 100,000 random points
+    ```
+    
+    **Modeling:**
+    ```text
+    Simulate population growth starting with 100, growing at 5% per year for 20 years
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## What You'll See
+
+When Khoj runs code, you get:
+
+<Tabs>
+  <Tab title="Code Block">
+    The actual Python code that was executed:
+    
+    ````markdown
+    ```python
+    # Calculate compound interest
+    principal = 10000
+    rate = 0.05
+    years = 10
+    
+    amount = principal * (1 + rate) ** years
+    interest = amount - principal
+    
+    print(f"Final amount: ${amount:.2f}")
+    print(f"Interest earned: ${interest:.2f}")
+    ```
+    ````
+  </Tab>
+  
+  <Tab title="Output">
+    Results from the code:
+    
+    ```
+    Final amount: $16288.95
+    Interest earned: $6288.95
+    ```
+  </Tab>
+  
+  <Tab title="Visualizations">
+    Charts and plots are embedded as images:
+    
+    [Generated chart appears inline]
+  </Tab>
+  
+  <Tab title="Errors">
+    If code fails, you see the error:
+    
+    ```
+    Error: division by zero
+    Line 5: result = x / 0
+    ```
+    
+    Khoj will typically try to fix and re-run.
+  </Tab>
+</Tabs>
+
+## Supported Python Libraries
+
+<Tabs>
+  <Tab title="Always Available">
+    **Standard Library:**
+    - math, statistics, random
+    - datetime, time
+    - json, csv
+    - re (regex)
+    - collections, itertools
+    
+    **Data & Math:**
+    - numpy
+    - pandas (basic operations)
+    - scipy
+    
+    **Visualization:**
+    - matplotlib
+    - seaborn (if available)
+  </Tab>
+  
+  <Tab title="Sandbox Dependent">
+    Available libraries depend on your sandbox:
+    
+    **Terrarium (default):**
+    - Core Python libraries
+    - Limited package set
+    - Fast, lightweight
+    
+    **E2B (optional):**
+    - Most popular packages
+    - pip install support
+    - More versatile but requires API key
+  </Tab>
+</Tabs>
+
+<Note>
+  If you need a specific library, ask! Khoj will attempt to use it or suggest alternatives.
+</Note>
+
+## Limitations
+
+<Warning>
+  **Current constraints:**
+</Warning>
+
+<AccordionGroup>
+  <Accordion title="No File System Access">
+    Code cannot read or write to your actual files.
+    
+    **Workaround:** Copy-paste data into the chat for processing.
+  </Accordion>
+  
+  <Accordion title="No Network Access">
+    Cannot make HTTP requests or access external APIs.
+    
+    **Workaround:** Use `/online` search first, then process data with `/code`.
+  </Accordion>
+  
+  <Accordion title="Execution Time Limits">
+    Long-running code will timeout (typically 30-60 seconds).
+    
+    **Workaround:** Optimize algorithms or reduce problem size.
+  </Accordion>
+  
+  <Accordion title="Memory Limits">
+    Large datasets may exceed available memory.
+    
+    **Workaround:** Work with smaller samples or summaries.
+  </Accordion>
+  
+  <Accordion title="Simple Code Only">
+    Best for straightforward scripts, not complex applications.
+    
+    **Limitation:** Multi-file projects or complex architectures not supported.
+  </Accordion>
+</AccordionGroup>
+
+## Self-Hosting Setup
+
+Configure code execution for your self-hosted instance:
+
+### Option 1: Terrarium (Recommended)
+
+<Steps>
+  <Step title="Using Docker Compose">
+    **Automatic setup** with the standard `docker-compose.yml`:
+    
+    ```bash
+    docker-compose up
+    ```
+    
+    Terrarium sandbox starts automatically!
+  </Step>
+  
+  <Step title="Manual Docker Setup">
+    If not using docker-compose:
+    
+    ```bash
+    docker pull ghcr.io/khoj-ai/terrarium:latest
+    docker run -d -p 8080:8080 ghcr.io/khoj-ai/terrarium:latest
+    ```
+  </Step>
+  
+  <Step title="Verify Installation">
+    Test the sandbox:
+    
+    ```bash
+    curl -X POST -H "Content-Type: application/json" \
+      --url http://localhost:8080 \
+      --data-raw '{"code": "1 + 1"}' \
+      --no-buffer
+    ```
+    
+    Should return: `2`
+  </Step>
+</Steps>
+
+**Benefits:**
+- Free and open source
+- Runs locally
+- No API keys needed
+- Lightweight
+
+**Limitations:**
+- Limited Python package set
+- Basic sandbox features
+
+[Terrarium GitHub →](https://github.com/khoj-ai/cohere-terrarium)
+
+### Option 2: E2B Sandbox
+
+<Steps>
+  <Step title="Get API Key">
+    Sign up at [e2b.dev](https://e2b.dev/) and generate an API key from [dashboard](https://e2b.dev/dashboard)
+  </Step>
+  
+  <Step title="Set Environment Variable">
+    ```bash
+    export E2B_API_KEY=your_api_key_here
+    ```
+    
+    Or in docker-compose.yml:
+    ```yaml
+    environment:
+      - E2B_API_KEY=your_api_key_here
+    ```
+  </Step>
+  
+  <Step title="Restart Khoj">
+    Restart your Khoj server to switch to E2B
+  </Step>
+</Steps>
+
+**Benefits:**
+- Wide Python package support
+- More powerful sandbox
+- pip install capability
+- Better for complex code
+
+**Cost:**
+- Pay per usage
+- See [E2B pricing](https://e2b.dev/pricing)
+
+<Tip>
+  Start with **Terrarium** (free). Upgrade to **E2B** if you need more packages or advanced features.
+</Tip>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card icon="message" title="Be Specific">
+    Clearly describe what you want calculated or analyzed
+  </Card>
+  <Card icon="table" title="Provide Data">
+    Include actual numbers or datasets in your message
+  </Card>
+  <Card icon="check" title="Verify Results">
+    Review the code to understand how the answer was reached
+  </Card>
+  <Card icon="comments" title="Iterate">
+    Ask follow-up questions to refine or expand analysis
+  </Card>
+</CardGroup>
+
+## Advanced Examples
+
+<CodeGroup>
+```text Statistical Analysis
+I have this sales data:
+Week 1: 234 units
+Week 2: 287 units
+Week 3: 256 units
+Week 4: 312 units
+Week 5: 298 units
+Week 6: 334 units
+
+/code Calculate:
+1. Average weekly sales
+2. Growth rate (first week to last)
+3. Standard deviation
+4. Predict next week using linear trend
+5. Create a line chart showing the trend
+```
+
+```text Financial Planning
+Compare these investment scenarios:
+
+Scenario A: Invest $5,000 annually at 7% return for 30 years
+Scenario B: Invest $10,000 annually at 7% return for 15 years
+Scenario C: Invest $3,000 annually at 9% return for 30 years
+
+Show final amounts and total invested for each.
+Create a bar chart comparing results.
+```
+
+```text Data Conversion
+/code I have a CSV-like data:
+
+Name, Age, Score
+Alice, 25, 87
+Bob, 30, 92
+Carol, 28, 85
+Dave, 35, 78
+
+1. Parse this data
+2. Find who has the highest score
+3. Calculate average age
+4. Create a bar chart of scores by name
+```
+
+```text Simulation
+Simulate a simple investment strategy:
+
+Starting capital: $10,000
+Monthly contribution: $500
+Average annual return: 8% (with 2% monthly variation)
+Time period: 10 years
+
+Run the simulation and show:
+- Final portfolio value
+- Total contributions
+- Total returns
+- A line chart of portfolio growth over time
+```
+</CodeGroup>
+
+## Combining with Other Features
+
+<Tabs>
+  <Tab title="Code + Online Search">
+    Research data, then analyze:
+    
+    ```text
+    1. /online What were Apple's quarterly revenues last year?
+    2. [Khoj provides data]
+    3. /code Calculate year-over-year growth and create a chart
+    ```
+  </Tab>
+  
+  <Tab title="Code + Your Documents">
+    Extract data from notes, then process:
+    
+    ```text
+    /notes Find my expense tracking from last month
+    [Khoj retrieves notes]
+    /code Analyze this data and create a pie chart of spending by category
+    ```
+  </Tab>
+  
+  <Tab title="Code + Automations">
+    Schedule automated analysis:
+    
+    Create automation with:
+    ```text
+    Based on my fitness tracking notes from this week, calculate:
+    - Total workouts
+    - Average duration
+    - Calories burned
+    - Progress toward weekly goal
+    
+    Generate a simple chart showing daily progress.
+    ```
+  </Tab>
+</Tabs>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Code execution not working">
+    **Self-hosted:**
+    - Verify Terrarium is running: `docker ps | grep terrarium`
+    - Check Terrarium logs: `docker logs <container-id>`
+    - Test sandbox directly (see verification step above)
+    - Ensure E2B_API_KEY is valid (if using E2B)
+    - Restart Khoj server
+    
+    **Cloud:**
+    - Feature should work automatically
+    - Try explicit `/code` command
+    - Report if persistent issue
+  </Accordion>
+  
+  <Accordion title="Code errors or failures">
+    **Common issues:**
+    - Library not available in sandbox
+    - Syntax error in generated code
+    - Timeout due to complexity
+    
+    **Solutions:**
+    - Simplify the request
+    - Ask Khoj to "try again with different approach"
+    - Request specific library usage
+    - Check error message and iterate
+  </Accordion>
+  
+  <Accordion title="Missing Python packages">
+    **Terrarium:**
+    - Limited to pre-installed packages
+    - Ask Khoj to use alternatives
+    
+    **E2B:**
+    - Most packages available
+    - Ask Khoj to pip install if needed
+    
+    **Workaround:**
+    - Use built-in libraries
+    - Implement functionality manually
+  </Accordion>
+  
+  <Accordion title="Slow execution">
+    **Causes:**
+    - Complex calculations
+    - Large datasets
+    - Inefficient algorithms
+    
+    **Solutions:**
+    - Reduce problem size
+    - Ask for optimized approach
+    - Use sampling for large data
+  </Accordion>
+</AccordionGroup>
+
+## Security & Safety
+
+<Info>
+  **Code execution is safe:**
+  
+  - Runs in isolated sandbox
+  - No access to your files or network
+  - Cannot install system packages
+  - Execution time limited
+  - Memory constrained
+  - Separate from Khoj server
+</Info>
+
+<Warning>
+  While sandboxed, always review code before accepting results for critical applications.
+</Warning>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Online Search + Code" icon="globe" href="/features/online-search">
+    Combine web research with data analysis
+  </Card>
+  <Card title="Automate Analysis" icon="calendar-clock" href="/features/automations">
+    Schedule recurring code execution tasks
+  </Card>
+  <Card title="Chat Commands" icon="message" href="/features/chat">
+    Learn more slash commands and features
+  </Card>
+</CardGroup>

@@ -1,0 +1,399 @@
+---
+title: Search
+description: Lightning-fast semantic search across your knowledge base
+icon: magnifying-glass
+---
+
+Khoj Search delivers instant, intelligent results from your documents using advanced semantic understanding. Unlike traditional keyword search, Khoj understands meaning and context to find what you're actually looking for.
+
+<Frame>
+  <img src="/img/search_agents_markdown.png" alt="Khoj Search Results" />
+</Frame>
+
+## Why Khoj Search is Different
+
+<CardGroup cols={2}>
+  <Card icon="brain" title="Semantic Understanding">
+    Finds documents by meaning, not just matching keywords
+  </Card>
+  <Card icon="bolt" title="Incremental Search">
+    Results update as you type for instant feedback
+  </Card>
+  <Card icon="language" title="Natural Language">
+    Ask questions naturally - "notes about AI" instead of "artificial AND intelligence"
+  </Card>
+  <Card icon="server" title="Local or Cloud">
+    Works offline with self-hosting or online via cloud
+  </Card>
+</CardGroup>
+
+## Getting Started
+
+<Steps>
+  <Step title="Access Search">
+    <Tabs>
+      <Tab title="Web">
+        Visit [app.khoj.dev](https://app.khoj.dev) - the search bar is on the homepage
+      </Tab>
+      <Tab title="Obsidian">
+        Click the 🔎 Khoj icon in the Ribbon or use Command Palette: **Khoj: Search**
+      </Tab>
+      <Tab title="Emacs">
+        Run `M-x khoj` and enter your search query
+      </Tab>
+      <Tab title="Desktop">
+        Click the search icon in the application toolbar
+      </Tab>
+    </Tabs>
+  </Step>
+  
+  <Step title="Enter Your Query">
+    Type naturally:
+    - "machine learning notes"
+    - "what I learned about nutrition"
+    - "project ideas from last month"
+    
+    <Tip>You don't need exact keywords - describe what you're looking for</Tip>
+  </Step>
+  
+  <Step title="Review Results">
+    Results appear instantly with:
+    - **Highlighted matches** - Key passages that matched your query
+    - **Relevance scores** - How closely each document matches
+    - **Quick preview** - See context without opening the full document
+  </Step>
+</Steps>
+
+## Query Filters
+
+Refine your search with powerful filters:
+
+<AccordionGroup>
+  <Accordion title="File Type Filters" icon="file">
+    Limit results to specific document formats:
+    
+    ```text
+    machine learning file:pdf
+    ```
+    ```text
+    meeting notes file:md
+    ```
+    
+    Supported types: `pdf`, `md`, `org`, `docx`, `txt`, `notion`
+  </Accordion>
+  
+  <Accordion title="File Name Filters" icon="file-signature">
+    Search within specific files or folders:
+    
+    ```text
+    file:"project-notes.md" action items
+    ```
+    ```text
+    file:"/work/2024/" quarterly review
+    ```
+    
+    <Note>Use quotes for file names with spaces</Note>
+  </Accordion>
+  
+  <Accordion title="Date Range Filters" icon="calendar">
+    Find documents created or modified in a time range:
+    
+    ```text
+    dt>="last week" meeting notes
+    ```
+    ```text
+    dt>="2024-01-01" dt<="2024-03-31" goals
+    ```
+    
+    Natural language dates:
+    - `today`, `yesterday`, `this week`, `last month`
+    - Or use ISO format: `YYYY-MM-DD`
+  </Accordion>
+  
+  <Accordion title="Source Filters" icon="database">
+    Filter by data source:
+    
+    ```text
+    source:notion project planning
+    ```
+    ```text
+    source:github code review notes
+    ```
+  </Accordion>
+  
+  <Accordion title="Tag Filters" icon="tag">
+    Search by tags (if your documents use them):
+    
+    ```text
+    tag:work tag:urgent
+    ```
+  </Accordion>
+</AccordionGroup>
+
+[Complete Filter Reference →](#query-filters)
+
+## Search Examples
+
+<Tabs>
+  <Tab title="General Research">
+    **Finding conceptual information:**
+    
+    ```text
+    techniques for better memory retention
+    ```
+    
+    Khoj will find documents discussing memory, learning methods, study techniques, and cognitive science - even if they don't use the exact phrase.
+  </Tab>
+  
+  <Tab title="Personal Tracking">
+    **Recalling past events:**
+    
+    ```text
+    dt>="last month" conversations with Sarah
+    ```
+    
+    ```text
+    what did I eat for dinner dt="yesterday"
+    ```
+  </Tab>
+  
+  <Tab title="Project Work">
+    **Finding work-related content:**
+    
+    ```text
+    file:"/projects/website-redesign/" color scheme
+    ```
+    
+    ```text
+    source:github pull request feedback
+    ```
+  </Tab>
+  
+  <Tab title="Learning">
+    **Reviewing study materials:**
+    
+    ```text
+    file:pdf quantum physics examples
+    ```
+    
+    ```text
+    tag:course tag:lecture notes differential equations
+    ```
+  </Tab>
+</Tabs>
+
+## How Semantic Search Works
+
+Understanding the technology behind the magic:
+
+<Steps>
+  <Step title="Document Encoding">
+    When you sync documents, Khoj uses a **bi-encoder model** to convert text into **vector embeddings** - numerical representations capturing semantic meaning.
+    
+    Each document is split into chunks and encoded separately for granular matching.
+  </Step>
+  
+  <Step title="Query Encoding">
+    Your search query is converted into the same vector space using the same bi-encoder model.
+  </Step>
+  
+  <Step title="Similarity Search">
+    Khoj compares your query vector against all document vectors, finding semantically similar content even without exact keyword matches.
+    
+    This happens in milliseconds thanks to efficient vector databases.
+  </Step>
+  
+  <Step title="Re-Ranking">
+    A slower but more accurate **cross-encoder model** re-ranks the top results, considering the full relationship between query and document.
+  </Step>
+  
+  <Step title="Results Display">
+    Final results are presented with relevance scores and highlighted excerpts.
+  </Step>
+</Steps>
+
+<Info>
+  **Bi-encoder models** (like Sentence Transformers) are fast at comparing many documents.
+  
+  **Cross-encoder models** are slower but more accurate, used only on top candidates.
+</Info>
+
+## Search vs. Chat
+
+When should you use each?
+
+| Feature | Search | Chat |
+|---------|--------|------|
+| **Speed** | Instant results | Takes a few seconds |
+| **Output** | Direct document excerpts | AI-generated summaries |
+| **Best For** | Finding specific notes | Understanding and synthesis |
+| **Citations** | Implicit (you see the source) | Explicit reference links |
+| **Follow-up** | New search required | Multi-turn conversation |
+
+<Tip>
+  **Workflow tip:** Use **Search** to find documents, then use **Chat** to understand and synthesize information from multiple sources.
+</Tip>
+
+## Advanced Configuration (Self-Hosting)
+
+Customize search behavior when self-hosting:
+
+<Steps>
+  <Step title="Access Admin Panel">
+    Navigate to: `http://localhost:42110/server/admin/database/searchmodelconfig/`
+  </Step>
+  
+  <Step title="Configure or Add Model">
+    Click the `+` button to add a new search model or click an existing ID to edit.
+  </Step>
+  
+  <Step title="Set Bi-Encoder Model">
+    Choose from:
+    - **Local models** from [Hugging Face](https://huggingface.co/models?library=sentence-transformers)
+    - **OpenAI embeddings** (text-embedding-3-small, text-embedding-3-large)
+    - **Azure OpenAI** embeddings
+    - **Ollama** or other OpenAI-compatible APIs
+    
+    Example local model: `sentence-transformers/all-MiniLM-L6-v2`
+  </Step>
+  
+  <Step title="Configure API Settings (if using remote)">
+    - Set `Embeddings inference endpoint` to your API URL
+    - Add `Embeddings inference endpoint api key`
+    - Select `Embeddings inference endpoint type` (OpenAI, Azure, etc.)
+  </Step>
+  
+  <Step title="Set Confidence Threshold">
+    Adjust `Bi encoder confidence threshold` (0.0-1.0):
+    - **Lower values** (0.1-0.3): More results, less strict matching
+    - **Higher values** (0.5-0.7): Fewer but more relevant results
+    
+    <Warning>Changing the threshold affects how many documents are retrieved for chat</Warning>
+  </Step>
+  
+  <Step title="Mark as Default">
+    Ensure the `name` field is set to `default` for your active configuration.
+  </Step>
+  
+  <Step title="Restart and Re-index">
+    - Restart the Khoj server
+    - **Important:** Re-sync all documents to create embeddings with the new model
+  </Step>
+</Steps>
+
+<Note>
+  Khoj automatically configures decent default models for general use. Only customize if you need:
+  - Better multi-lingual support
+  - Domain-specific models
+  - Different embedding providers
+</Note>
+
+## Model Recommendations
+
+<Tabs>
+  <Tab title="General Purpose">
+    **For most users:**
+    
+    - `sentence-transformers/all-MiniLM-L6-v2` (default, fast, local)
+    - OpenAI `text-embedding-3-small` (cloud, balanced)
+  </Tab>
+  
+  <Tab title="Multi-Lingual">
+    **For non-English content:**
+    
+    - `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
+    - `intfloat/multilingual-e5-large`
+  </Tab>
+  
+  <Tab title="High Accuracy">
+    **For maximum quality:**
+    
+    - OpenAI `text-embedding-3-large`
+    - `sentence-transformers/all-mpnet-base-v2`
+  </Tab>
+  
+  <Tab title="Privacy-First">
+    **For completely offline use:**
+    
+    - Any `sentence-transformers` model from Hugging Face
+    - Models run entirely on your hardware
+  </Tab>
+</Tabs>
+
+## Performance Tips
+
+<AccordionGroup>
+  <Accordion title="Optimize for Speed">
+    - Use smaller embedding models (MiniLM variants)
+    - Reduce confidence threshold to limit results
+    - Filter by file type or date to narrow the search space
+  </Accordion>
+  
+  <Accordion title="Improve Accuracy">
+    - Use larger embedding models (MPNet, OpenAI large)
+    - Increase confidence threshold to filter low-quality matches
+    - Be more specific in your queries
+  </Accordion>
+  
+  <Accordion title="Handle Large Knowledge Bases">
+    - Use file filters strategically
+    - Organize documents into folders by topic
+    - Consider multiple search model configs for different document types
+  </Accordion>
+</AccordionGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="No results found">
+    **Possible causes:**
+    - Documents not synced yet (check data sources page)
+    - Confidence threshold too high
+    - Query too specific or using jargon the model doesn't recognize
+    
+    **Solutions:**
+    - Try broader search terms
+    - Lower the confidence threshold in settings
+    - Verify documents are indexed
+  </Accordion>
+  
+  <Accordion title="Irrelevant results">
+    **Possible causes:**
+    - Confidence threshold too low
+    - Embedding model not well-suited to your content
+    
+    **Solutions:**
+    - Increase confidence threshold
+    - Try a different embedding model
+    - Use query filters to narrow scope
+  </Accordion>
+  
+  <Accordion title="Search is slow">
+    **Possible causes:**
+    - Very large knowledge base
+    - Resource-intensive embedding model
+    - Remote API latency
+    
+    **Solutions:**
+    - Switch to faster embedding model
+    - Use local models instead of API
+    - Add file filters to reduce search scope
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Use Search in Chat" icon="message" href="/features/chat">
+    Chat leverages search to retrieve relevant context
+  </Card>
+  <Card title="Connect Data Sources" icon="database" href="/data-sources/overview">
+    Sync more documents to expand your knowledge base
+  </Card>
+  <Card title="Query Filters" icon="filter" href="/features/search#query-filters">
+    Master advanced filtering techniques
+  </Card>
+  <Card title="Keyboard Shortcuts" icon="keyboard" href="/features/keyboard-shortcuts">
+    Search faster with hotkeys
+  </Card>
+</CardGroup>

@@ -1,0 +1,117 @@
+---
+title: Multilingual Support
+description: Configure Khoj to work with documents in multiple languages
+---
+
+## Overview
+
+Khoj uses an embedding model to understand documents. Multilingual embedding models improve the search quality for documents not in English. This affects both search and chat with docs experiences across Khoj.
+
+## Setup
+
+To improve search and chat quality for non-English documents, you can use a [multilingual model](https://www.sbert.net/docs/pretrained_models.html#multi-lingual-models).
+
+<Note>
+  For example, the [paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2) supports [50+ languages](https://www.sbert.net/docs/pretrained_models.html#:~:text=we%20used%20the%20following%2050%2B%20languages), has decent search quality and speed for a consumer machine.
+</Note>
+
+<Steps>
+  <Step title="Configure Search Model">
+    Open [the search config](http://localhost:42110/server/admin/database/searchmodelconfig/) on your server's admin settings page. Either create a new search model, if none exists, or update the existing one.
+    
+    For example:
+    - Set the `bi_encoder` field to `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
+    - Set the `cross_encoder` field to `mixedbread-ai/mxbai-rerank-xsmall-v1`
+  </Step>
+  
+  <Step title="Regenerate Content Index">
+    <Warning>
+      This step is **very important**, as you'll need to re-encode all your content with the new model.
+    </Warning>
+    
+    Regenerate your content index from all the relevant clients.
+  </Step>
+</Steps>
+
+## Advanced Configuration
+
+### Query Prefix for Modern Models
+
+<Info>
+  Modern search/embedding models like [mixedbread-ai/mxbai-embed-large-v1](https://huggingface.co/mixedbread-ai/mxbai-embed-large-v1) expect a prefix to the query (or docs) string to improve encoding.
+</Info>
+
+Update the `bi_encoder_query_encode_config` field of your [embedding model](http://localhost:42110/server/admin/database/searchmodelconfig/) with `{prompt: <prefix-prompt>}` to improve the search quality of these models.
+
+<CodeGroup>
+
+```json Example Configuration
+{
+  "prompt": "Represent this query for searching documents"
+}
+```
+
+```json Full Configuration
+{
+  "prompt": "Represent this query for searching documents",
+  "normalize_embeddings": true
+}
+```
+
+</CodeGroup>
+
+<Note>
+  You can pass any valid JSON object that the SentenceTransformer `encode` function accepts.
+</Note>
+
+## Recommended Models
+
+<AccordionGroup>
+  <Accordion title="Balanced Performance: paraphrase-multilingual-MiniLM-L12-v2">
+    **Languages**: 50+ including Arabic, Chinese, Dutch, English, French, German, Italian, Korean, Polish, Portuguese, Russian, Spanish, Turkish
+    
+    **Pros**:
+    - Good balance of speed and quality
+    - Works well on consumer hardware
+    - Wide language support
+    
+    **Model**: `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
+  </Accordion>
+  
+  <Accordion title="High Quality: mixedbread-ai/mxbai-embed-large-v1">
+    **Languages**: Multilingual support with state-of-the-art performance
+    
+    **Pros**:
+    - Excellent search quality
+    - Modern architecture
+    - Supports query prefixes
+    
+    **Note**: Requires more compute resources
+    
+    **Model**: `mixedbread-ai/mxbai-embed-large-v1`
+  </Accordion>
+  
+  <Accordion title="Reranker: mxbai-rerank-xsmall-v1">
+    **Purpose**: Rerank search results for improved relevance
+    
+    **Pros**:
+    - Small and fast
+    - Improves final result quality
+    - Works across languages
+    
+    **Model**: `mixedbread-ai/mxbai-rerank-xsmall-v1`
+  </Accordion>
+</AccordionGroup>
+
+## Testing Your Configuration
+
+After setting up multilingual support:
+
+1. **Index some documents** in your target language
+2. **Try searching** for content in that language
+3. **Start a chat** and ask questions about your documents
+4. **Verify results** are relevant and accurate
+
+<Tip>
+  If search quality is not satisfactory, try a different embedding model or adjust the query prefix configuration for modern models.
+</Tip>

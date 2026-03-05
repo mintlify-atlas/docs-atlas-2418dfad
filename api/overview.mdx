@@ -1,0 +1,155 @@
+---
+title: API Overview
+description: Introduction to the Khoj API for programmatic access to search, chat, and content management
+---
+
+## Overview
+
+The Khoj API provides comprehensive programmatic access to all of Khoj's features including search, chat, content indexing, agents, automations, and subscriptions. The API uses RESTful conventions with JSON request and response bodies.
+
+## Base URL
+
+All API requests should be made to:
+
+```
+https://app.khoj.dev/api
+```
+
+For self-hosted instances, replace with your server URL.
+
+## API Structure
+
+The Khoj API is organized into the following main sections:
+
+- **Search** - Semantic search across your indexed content
+- **Chat** - Conversational AI interface with context awareness
+- **Content** - Index and manage documents, files, and data sources
+- **Agents** - Create and configure custom AI agents
+- **Automations** - Schedule recurring tasks and queries
+- **Subscriptions** - Manage billing and subscription status
+- **Authentication** - Token management and OAuth flows
+
+## Authentication
+
+Most API endpoints require authentication. See the [Authentication](/api/authentication) page for details on:
+
+- Generating API tokens
+- OAuth with Google
+- Magic link authentication
+- Including tokens in requests
+
+## Rate Limiting
+
+API requests are rate-limited based on your subscription tier:
+
+- **Free tier**: Lower rate limits for most endpoints
+- **Premium tier**: Higher rate limits and access to advanced features
+
+Rate limit details are specific to each endpoint and documented in the individual sections.
+
+## Response Format
+
+All API responses return JSON with the following structure:
+
+### Success Response
+
+```json
+{
+  "status": "ok",
+  "response": { /* endpoint-specific data */ }
+}
+```
+
+### Error Response
+
+```json
+{
+  "status": "error",
+  "message": "Error description",
+  "detail": "Additional error details"
+}
+```
+
+## Common HTTP Status Codes
+
+| Code | Meaning |
+|------|--------|
+| 200 | Success |
+| 201 | Created |
+| 204 | No Content (successful deletion) |
+| 400 | Bad Request - Invalid parameters |
+| 401 | Unauthorized - Missing or invalid authentication |
+| 403 | Forbidden - Valid auth but insufficient permissions |
+| 404 | Not Found - Resource doesn't exist |
+| 422 | Unprocessable Entity - Validation error |
+| 429 | Too Many Requests - Rate limit exceeded |
+| 500 | Internal Server Error |
+| 501 | Not Implemented - Feature not configured |
+
+## Common Query Parameters
+
+Many endpoints accept these common parameters:
+
+<ParamField query="client" type="string">
+  Client identifier (e.g., "web", "obsidian", "emacs")
+</ParamField>
+
+<ParamField query="user_agent" type="string">
+  User agent string for telemetry
+</ParamField>
+
+## SDK and Client Libraries
+
+While Khoj doesn't currently have official SDKs, the API is designed to be easy to integrate with standard HTTP clients in any programming language.
+
+### Example with cURL
+
+```bash
+curl https://app.khoj.dev/api/search?q=machine+learning \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+### Example with Python
+
+```python
+import requests
+
+headers = {"Authorization": "Bearer YOUR_API_TOKEN"}
+response = requests.get(
+    "https://app.khoj.dev/api/search",
+    params={"q": "machine learning"},
+    headers=headers
+)
+data = response.json()
+```
+
+### Example with JavaScript
+
+```javascript
+const response = await fetch(
+  'https://app.khoj.dev/api/search?q=machine+learning',
+  {
+    headers: {
+      'Authorization': 'Bearer YOUR_API_TOKEN'
+    }
+  }
+);
+const data = await response.json();
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/api/authentication">
+    Set up API authentication
+  </Card>
+  <Card title="Search API" icon="magnifying-glass" href="/api/search">
+    Search your knowledge base
+  </Card>
+  <Card title="Chat API" icon="comments" href="/api/chat">
+    Build conversational interfaces
+  </Card>
+  <Card title="Content API" icon="file" href="/api/update">
+    Index and manage content
+  </Card>
+</CardGroup>

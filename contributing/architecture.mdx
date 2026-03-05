@@ -1,0 +1,687 @@
+---
+title: Architecture
+description: Understanding Khoj's system design and codebase structure
+icon: sitemap
+---
+
+## System Overview
+
+Khoj is a full-stack AI application with a Python backend, Next.js frontend, and multiple client interfaces. It uses PostgreSQL with pgvector for semantic search and supports various AI models through a plugin architecture.
+
+![Khoj Architecture]()
+
+## High-Level Architecture
+
+<Steps>
+  <Step title="Client Layer">
+    Multiple client interfaces communicate with the Khoj server:
+    - Web App (Next.js)
+    - Desktop App (Electron)
+    - Obsidian Plugin
+    - Emacs Package
+    - Android App
+    - API Clients
+  </Step>
+  
+  <Step title="API Layer">
+    FastAPI-based REST API handles:
+    - Authentication & Authorization
+    - Chat & Search Endpoints
+    - Content Indexing
+    - Agent Management
+    - Automation Triggers
+  </Step>
+  
+  <Step title="Processing Layer">
+    Core business logic for:
+    - Document Processing
+    - Embedding Generation
+    - Conversation Management
+    - Tool Execution
+    - Research Mode
+  </Step>
+  
+  <Step title="Storage Layer">
+    - PostgreSQL with pgvector for embeddings
+    - Django ORM for database management
+    - File system for static assets
+  </Step>
+  
+  <Step title="External Services">
+    - LLM APIs (OpenAI, Anthropic, Google, etc.)
+    - Speech Recognition (Whisper)
+    - Image Generation
+    - Web Search
+  </Step>
+</Steps>
+
+## Backend Architecture
+
+### Directory Structure
+
+```
+src/khoj/
+├── app/                    # Django application
+│   ├── settings.py        # Django settings
+│   ├── urls.py            # URL routing
+│   └── wsgi.py            # WSGI application
+├── database/              # Database layer
+│   ├── models/           # Django models
+│   ├── adapters/         # Database adapters
+│   └── migrations/       # Schema migrations
+├── interface/             # Client interfaces
+│   └── built/            # Compiled frontend assets
+├── processor/             # Core processing logic
+│   ├── content/          # Content processors
+│   ├── conversation/     # Chat & conversation
+│   ├── embeddings.py     # Embedding generation
+│   ├── tools/            # Agent tools
+│   └── speech/           # Speech processing
+├── routers/               # FastAPI routers
+│   ├── api.py            # Main API endpoints
+│   ├── api_chat.py       # Chat endpoints
+│   ├── api_agents.py     # Agent management
+│   ├── api_content.py    # Content indexing
+│   ├── auth.py           # Authentication
+│   └── helpers.py        # Shared utilities
+├── search_filter/         # Search filters
+├── search_type/           # Search implementations
+├── utils/                 # Utility functions
+│   ├── helpers.py        # Helper functions
+│   ├── initialization.py # App initialization
+│   └── state.py          # Application state
+├── configure.py           # Configuration logic
+└── main.py               # Application entry point
+```
+
+### Core Components
+
+<AccordionGroup>
+  <Accordion title="main.py - Application Bootstrap" icon="rocket">
+    The entry point that:
+    - Initializes Django
+    - Sets up FastAPI application
+    - Configures CORS middleware
+    - Runs database migrations
+    - Collects static files
+    - Starts the uvicorn server
+    
+    ```python
+    # Initialize Django
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "khoj.app.settings")
+    django.setup()
+    
+    # Initialize FastAPI
+    app = FastAPI()
+    
+    # Configure routes and middleware
+    configure_routes(app)
+    configure_middleware(app)
+    ```
+  </Accordion>
+  
+  <Accordion title="routers/ - API Endpoints" icon="route">
+    FastAPI routers organized by domain:
+    
+    - **api.py**: Core API (health, config, sync)
+    - **api_chat.py**: Chat & conversation (70KB+, main chat logic)
+    - **api_agents.py**: Agent creation and management
+    - **api_content.py**: Content upload and indexing
+    - **api_automation.py**: Scheduled automations
+    - **api_subscription.py**: User subscriptions
+    - **auth.py**: OAuth, login, registration
+    - **helpers.py**: Shared router utilities (130KB+)
+    
+    Example endpoint structure:
+    ```python
+    @api_chat.post("/chat")
+    async def chat(
+        request: Request,
+        q: str,
+        conversation_id: str = None,
+        user: KhojUser = Depends(get_current_user)
+    ):
+        # Chat logic
+    ```
+  </Accordion>
+  
+  <Accordion title="processor/ - Business Logic" icon="gear">
+    Contains core processing modules:
+    
+    **Content Processors** (`processor/content/`):
+    - PDF, Markdown, Org-mode, Word, Notion
+    - Image, plaintext, Github, Docx
+    
+    **Conversation** (`processor/conversation/`):
+    - LLM integrations (OpenAI, Anthropic, Google, Offline)
+    - Prompt management
+    - Context building
+    - Tool calling
+    
+    **Tools** (`processor/tools/`):
+    - Web search
+    - Code execution
+    - Document retrieval
+    - Custom agent tools
+    
+    **Embeddings** (`processor/embeddings.py`):
+    - Text embedding generation
+    - Batch processing
+    - Model management
+  </Accordion>
+  
+  <Accordion title="database/ - Data Layer" icon="database">
+    Django-based database management:
+    
+    **Models** (`database/models/`):
+    - User, Subscription
+    - Conversation, ChatModel
+    - Agent, Entry
+    - SearchModel, Automation
+    - ProcessLock
+    
+    **Adapters** (`database/adapters/`):
+    - High-level database operations
+    - Business logic for data access
+    - Caching and optimization
+    
+    **Migrations** (`database/migrations/`):
+    - Schema version control
+    - Database evolution
+  </Accordion>
+  
+  <Accordion title="utils/ - Utilities" icon="wrench">
+    Shared utility modules:
+    
+    - **helpers.py**: Common helper functions (47KB)
+    - **initialization.py**: App startup logic
+    - **state.py**: Application state management
+    - **cli.py**: Command-line interface
+    - **constants.py**: Application constants
+  </Accordion>
+</AccordionGroup>
+
+## Frontend Architecture
+
+### Web Application
+
+```
+src/interface/web/
+├── app/                   # Next.js App Router
+│   ├── (app)/            # Main application routes
+│   ├── api/              # API routes
+│   ├── layout.tsx        # Root layout
+│   └── page.tsx          # Home page
+├── components/            # React components
+│   ├── ui/               # UI primitives (Radix)
+│   ├── chat/             # Chat components
+│   ├── agents/           # Agent management
+│   └── settings/         # Settings UI
+├── lib/                   # Utilities
+│   ├── utils.ts          # Helper functions
+│   └── api.ts            # API client
+├── public/                # Static assets
+├── styles/                # Global styles
+└── package.json           # Dependencies
+```
+
+### Key Frontend Technologies
+
+<CardGroup cols={2}>
+  <Card title="Next.js 14" icon="react">
+    - App Router for file-based routing
+    - Server-side rendering (SSR)
+    - API routes for backend proxying
+    - Static export for production
+  </Card>
+  
+  <Card title="TypeScript" icon="code">
+    - Type-safe React components
+    - API client with full typing
+    - Enhanced IDE support
+  </Card>
+  
+  <Card title="Tailwind CSS" icon="palette">
+    - Utility-first styling
+    - Responsive design
+    - Custom design system
+  </Card>
+  
+  <Card title="Radix UI" icon="square-check">
+    - Accessible primitives
+    - Dialog, Dropdown, Tooltip
+    - Form components
+  </Card>
+</CardGroup>
+
+### State Management
+
+- **SWR**: Data fetching and caching
+- **React Context**: Global state (user, settings)
+- **URL State**: Search params for routing
+- **WebSockets**: Real-time chat streaming
+
+## Client Architecture
+
+<Tabs>
+  <Tab title="Desktop App">
+    **Technology**: Electron + React
+    
+    **Location**: `src/interface/desktop/`
+    
+    **Features**:
+    - Tray icon integration
+    - System notifications
+    - Auto-start on login
+    - Local file indexing
+    - Embedded web view
+    
+    **Structure**:
+    ```
+    desktop/
+    ├── main.js          # Electron main process
+    ├── preload.js       # Preload script
+    ├── renderer/        # React renderer
+    └── package.json
+    ```
+  </Tab>
+  
+  <Tab title="Obsidian Plugin">
+    **Technology**: TypeScript
+    
+    **Location**: `src/interface/obsidian/`
+    
+    **Features**:
+    - Inline chat
+    - Search integration
+    - Note indexing
+    - Custom commands
+    
+    **Key Files**:
+    - `main.ts`: Plugin entry point
+    - `src/chat_view.ts`: Chat interface
+    - `src/search_view.ts`: Search UI
+    - `manifest.json`: Plugin metadata
+  </Tab>
+  
+  <Tab title="Emacs Package">
+    **Technology**: Emacs Lisp
+    
+    **Location**: `src/interface/emacs/`
+    
+    **Features**:
+    - Transient UI for commands
+    - Org-mode integration
+    - Search in buffers
+    - Chat interface
+    
+    **Key Files**:
+    - `khoj.el`: Main package
+    - `khoj-chat.el`: Chat functionality
+    - `khoj-search.el`: Search features
+  </Tab>
+  
+  <Tab title="Android App">
+    **Technology**: Kotlin
+    
+    **Location**: `src/interface/android/`
+    
+    **Features**:
+    - Native mobile UI
+    - Voice input
+    - Push notifications
+    - File sharing
+    
+    **Structure**:
+    ```
+    android/
+    ├── app/src/main/
+    │   ├── java/dev/khoj/
+    │   ├── res/
+    │   └── AndroidManifest.xml
+    └── build.gradle
+    ```
+  </Tab>
+</Tabs>
+
+## Data Flow
+
+### Search & Retrieval
+
+<Steps>
+  <Step title="Query Ingestion">
+    User submits search query through client → API endpoint
+  </Step>
+  
+  <Step title="Embedding Generation">
+    Query text converted to vector embedding using Sentence Transformers
+  </Step>
+  
+  <Step title="Vector Search">
+    pgvector performs cosine similarity search in PostgreSQL
+  </Step>
+  
+  <Step title="Re-ranking">
+    Top results re-ranked using cross-encoder model for accuracy
+  </Step>
+  
+  <Step title="Filter Application">
+    Apply date, file, and content filters to results
+  </Step>
+  
+  <Step title="Response">
+    Ranked results returned to client with metadata
+  </Step>
+</Steps>
+
+### Chat Conversation
+
+<Steps>
+  <Step title="Message Ingestion">
+    User message received at `/api/chat` endpoint
+  </Step>
+  
+  <Step title="Context Retrieval">
+    Relevant documents retrieved using semantic search
+  </Step>
+  
+  <Step title="Tool Planning">
+    Agent determines which tools to use (search, calculate, etc.)
+  </Step>
+  
+  <Step title="Tool Execution">
+    Tools executed in sequence, results collected
+  </Step>
+  
+  <Step title="Prompt Construction">
+    System prompt + conversation history + context + tool results
+  </Step>
+  
+  <Step title="LLM Generation">
+    Prompt sent to configured LLM (OpenAI, Anthropic, etc.)
+  </Step>
+  
+  <Step title="Streaming Response">
+    Response streamed back to client via WebSocket/SSE
+  </Step>
+  
+  <Step title="History Storage">
+    Conversation saved to database for future context
+  </Step>
+</Steps>
+
+### Content Indexing
+
+<Steps>
+  <Step title="Content Upload">
+    Files/URLs uploaded through `/api/content`
+  </Step>
+  
+  <Step title="Format Detection">
+    File type detected using mime type and magika
+  </Step>
+  
+  <Step title="Content Extraction">
+    Appropriate processor extracts text (PDF, Markdown, etc.)
+  </Step>
+  
+  <Step title="Chunking">
+    Text split into semantic chunks using LangChain
+  </Step>
+  
+  <Step title="Embedding Generation">
+    Each chunk converted to vector embedding
+  </Step>
+  
+  <Step title="Storage">
+    Embeddings and metadata stored in PostgreSQL with pgvector
+  </Step>
+  
+  <Step title="Indexing Complete">
+    Content now searchable and available for chat context
+  </Step>
+</Steps>
+
+## Database Schema
+
+### Key Models
+
+<AccordionGroup>
+  <Accordion title="User & Authentication">
+    ```python
+    class KhojUser(AbstractUser):
+        uuid = models.UUIDField(default=uuid.uuid4)
+        email = models.EmailField(unique=True)
+        phone_number = models.CharField()
+        is_active = models.BooleanField(default=True)
+        subscription = models.ForeignKey(Subscription)
+    ```
+  </Accordion>
+  
+  <Accordion title="Conversation">
+    ```python
+    class Conversation(models.Model):
+        user = models.ForeignKey(KhojUser)
+        conversation_log = models.JSONField(default=dict)
+        agent = models.ForeignKey(Agent, null=True)
+        title = models.CharField()
+        created_at = models.DateTimeField(auto_now_add=True)
+        updated_at = models.DateTimeField(auto_now=True)
+    ```
+  </Accordion>
+  
+  <Accordion title="Entry (Indexed Content)">
+    ```python
+    class Entry(models.Model):
+        user = models.ForeignKey(KhojUser)
+        embeddings = VectorField(dimensions=384)  # pgvector
+        raw = models.TextField()
+        compiled = models.TextField()
+        heading = models.CharField()
+        file_source = models.CharField()
+        file_type = models.CharField()
+        created_at = models.DateTimeField(auto_now_add=True)
+    ```
+  </Accordion>
+  
+  <Accordion title="Agent">
+    ```python
+    class Agent(models.Model):
+        creator = models.ForeignKey(KhojUser)
+        name = models.CharField()
+        personality = models.TextField()
+        chat_model = models.ForeignKey(ChatModelOptions)
+        tools = models.JSONField(default=list)
+        files = models.ManyToManyField(Entry)
+        public = models.BooleanField(default=False)
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Testing Architecture
+
+### Test Organization
+
+```
+tests/
+├── conftest.py              # Pytest fixtures
+├── helpers.py               # Test utilities
+├── test_client.py           # API endpoint tests
+├── test_agents.py           # Agent functionality
+├── test_conversation_utils.py
+├── test_date_filter.py
+├── test_file_filter.py
+├── test_grep_files.py
+├── data/                    # Test data
+└── evals/                   # Evaluation tests
+```
+
+### Testing Stack
+
+<CardGroup cols={2}>
+  <Card title="pytest" icon="flask">
+    - Unit and integration tests
+    - Fixtures for database setup
+    - Parallel test execution
+  </Card>
+  
+  <Card title="pytest-django" icon="database">
+    - Django test database
+    - Model factories
+    - Transaction management
+  </Card>
+  
+  <Card title="pytest-asyncio" icon="bolt">
+    - Async endpoint testing
+    - WebSocket tests
+  </Card>
+  
+  <Card title="factory-boy" icon="industry">
+    - Test data generation
+    - Model factories
+  </Card>
+</CardGroup>
+
+## CI/CD Pipeline
+
+### GitHub Actions Workflows
+
+<Tabs>
+  <Tab title="test.yml">
+    Runs on every PR and push to master:
+    - Matrix testing on Python 3.10, 3.11, 3.12
+    - PostgreSQL service with pgvector
+    - Full test suite execution
+    - Type checking with mypy
+  </Tab>
+  
+  <Tab title="pre-commit.yml">
+    Code quality checks:
+    - ruff linting
+    - Format checking
+    - Import sorting
+  </Tab>
+  
+  <Tab title="dockerize.yml">
+    Docker image builds:
+    - Multi-arch builds (amd64, arm64)
+    - Push to ghcr.io
+    - Tagged releases
+  </Tab>
+  
+  <Tab title="pypi.yml">
+    PyPI package release:
+    - Version bumping
+    - Package building
+    - Upload to PyPI
+  </Tab>
+  
+  <Tab title="desktop.yml">
+    Desktop app builds:
+    - Windows, macOS, Linux
+    - Code signing
+    - Release artifacts
+  </Tab>
+</Tabs>
+
+## Performance Considerations
+
+<CardGroup cols={2}>
+  <Card title="Embedding Caching" icon="bolt">
+    Embeddings cached to avoid recomputation. Incremental updates only process changed content.
+  </Card>
+  
+  <Card title="Connection Pooling" icon="database">
+    PostgreSQL connection pooling via Django to handle concurrent requests efficiently.
+  </Card>
+  
+  <Card title="Async Processing" icon="gears">
+    FastAPI async endpoints allow non-blocking I/O for external API calls.
+  </Card>
+  
+  <Card title="Vector Indexing" icon="magnifying-glass">
+    pgvector indexes optimize similarity search performance for large datasets.
+  </Card>
+</CardGroup>
+
+For detailed performance metrics, see the [Performance Guide](/contributing/performance).
+
+## Security Architecture
+
+<Steps>
+  <Step title="Authentication">
+    - OAuth 2.0 (Google, GitHub)
+    - JWT-based sessions
+    - Magic link login
+  </Step>
+  
+  <Step title="Authorization">
+    - User-scoped data access
+    - Agent permission model
+    - Public vs private agents
+  </Step>
+  
+  <Step title="Data Protection">
+    - HTTPS-only in production
+    - Environment variable secrets
+    - Secure password hashing
+  </Step>
+  
+  <Step title="Input Validation">
+    - Pydantic models for API validation
+    - File upload size limits
+    - Content sanitization
+  </Step>
+</Steps>
+
+## Extension Points
+
+### Adding New Content Types
+
+1. Create processor in `processor/content/`
+2. Implement `ContentProcessor` interface
+3. Register in content type registry
+4. Add tests in `tests/`
+
+### Adding New LLM Providers
+
+1. Create provider class in `processor/conversation/`
+2. Implement `LLMProvider` interface
+3. Add configuration in settings
+4. Update model selection UI
+
+### Adding New Tools
+
+1. Create tool in `processor/tools/`
+2. Define tool schema
+3. Register in agent toolset
+4. Add to tool selection UI
+
+## Visual References
+
+<CardGroup cols={2}>
+  <Card title="Codebase Visualization" icon="diagram-project" href="https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=khoj-ai%2Fkhoj">
+    Interactive visualization of the entire codebase structure
+  </Card>
+  
+  <Card title="Architecture Diagram" icon="sitemap">
+    Refer to `` for the complete system diagram
+  </Card>
+</CardGroup>
+
+## Additional Resources
+
+<CardGroup cols={2}>
+  <Card title="Development Setup" icon="code" href="/contributing/development">
+    Set up your local environment
+  </Card>
+  <Card title="Performance Guide" icon="gauge" href="/contributing/performance">
+    Optimization best practices
+  </Card>
+  <Card title="API Documentation" icon="book" href="/api">
+    Complete API reference
+  </Card>
+  <Card title="GitHub Repository" icon="github" href="https://github.com/khoj-ai/khoj">
+    View the source code
+  </Card>
+</CardGroup>

@@ -1,0 +1,468 @@
+---
+title: Automations API
+description: Schedule recurring tasks and queries with the Khoj Automations API
+---
+
+## Overview
+
+Automations allow you to schedule recurring queries that run automatically based on a cron schedule. Perfect for daily summaries, weekly reports, periodic research, or any recurring AI task.
+
+## Key Features
+
+- **Cron Scheduling**: Flexible scheduling using cron expressions
+- **Email Delivery**: Results sent to your email automatically
+- **Dedicated Conversations**: Each automation has its own conversation thread
+- **Manual Triggers**: Run automations on-demand in addition to scheduled times
+- **Query Transformation**: Khoj interprets and optimizes your query before execution
+
+## List Automations
+
+Get all active automations for your account.
+
+```bash cURL
+curl "https://app.khoj.dev/api/automation" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+```python Python
+import requests
+
+headers = {"Authorization": "Bearer YOUR_API_TOKEN"}
+response = requests.get(
+    "https://app.khoj.dev/api/automation",
+    headers=headers
+)
+automations = response.json()
+```
+
+**Response**
+
+```json
+[
+  {
+    "id": "automation_123",
+    "subject": "Daily Summary",
+    "query": "Summarize important updates from my notes today",
+    "scheduling_request": "Give me a daily summary of my notes",
+    "schedule": "0 9 * * *",
+    "schedule_description": "At 09:00 AM",
+    "next_run_time": "2024-03-06T09:00:00Z",
+    "conversation_id": "550e8400-e29b-41d4-a716-446655440000"
+  },
+  {
+    "id": "automation_456",
+    "subject": "Weekly Research Digest",
+    "query": "Find and summarize new AI research papers from this week",
+    "scheduling_request": "Weekly digest of AI papers",
+    "schedule": "0 18 * * 5",
+    "schedule_description": "At 06:00 PM, only on Friday",
+    "next_run_time": "2024-03-08T18:00:00Z",
+    "conversation_id": "660e8400-e29b-41d4-a716-446655440001"
+  }
+]
+```
+
+<ResponseField name="id" type="string">
+  Unique identifier for the automation
+</ResponseField>
+
+<ResponseField name="subject" type="string">
+  Email subject line / automation title
+</ResponseField>
+
+<ResponseField name="query" type="string">
+  The actual query that will be executed (may be transformed from original request)
+</ResponseField>
+
+<ResponseField name="scheduling_request" type="string">
+  Original natural language scheduling request
+</ResponseField>
+
+<ResponseField name="schedule" type="string">
+  Cron expression defining the schedule
+</ResponseField>
+
+<ResponseField name="schedule_description" type="string">
+  Human-readable description of the schedule
+</ResponseField>
+
+<ResponseField name="next_run_time" type="string">
+  ISO timestamp of next scheduled execution
+</ResponseField>
+
+<ResponseField name="conversation_id" type="string">
+  Associated conversation thread ID
+</ResponseField>
+
+## Create Automation
+
+Schedule a new recurring automation.
+
+```bash cURL
+curl -X POST "https://app.khoj.dev/api/automation" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "q": "Summarize my notes from today",
+    "crontime": "0 9 * * *",
+    "subject": "Daily Notes Summary",
+    "timezone": "America/New_York"
+  }'
+```
+
+```python Python
+import requests
+
+headers = {"Authorization": "Bearer YOUR_API_TOKEN"}
+automation_data = {
+    "q": "Summarize my notes from today",
+    "crontime": "0 9 * * *",
+    "subject": "Daily Notes Summary",
+    "timezone": "America/New_York"
+}
+
+response = requests.post(
+    "https://app.khoj.dev/api/automation",
+    headers=headers,
+    json=automation_data
+)
+automation = response.json()
+```
+
+### Request Parameters
+
+<ParamField body="q" type="string" required>
+  The query to execute. Can be natural language - Khoj will interpret and optimize it.
+</ParamField>
+
+<ParamField body="crontime" type="string" required>
+  Cron expression defining when to run (standard 5-field format)
+  
+  Examples:
+  - `0 9 * * *` - Daily at 9:00 AM
+  - `0 18 * * 5` - Every Friday at 6:00 PM
+  - `30 14 1 * *` - 1st of every month at 2:30 PM
+  - `0 */4 * * *` - Every 4 hours
+</ParamField>
+
+<ParamField body="subject" type="string" optional>
+  Email subject / automation title. Auto-generated if not provided.
+</ParamField>
+
+<ParamField body="timezone" type="string" optional>
+  Timezone for schedule (e.g., "America/New_York", "Europe/London", "Asia/Tokyo")
+</ParamField>
+
+<ParamField body="city" type="string" optional>
+  City for location-aware queries
+</ParamField>
+
+<ParamField body="region" type="string" optional>
+  Region/state for location-aware queries
+</ParamField>
+
+<ParamField body="country" type="string" optional>
+  Country for location-aware queries
+</ParamField>
+
+### Response
+
+Returns the created automation object with all metadata.
+
+<Warning>
+  Minute-level recurrence (e.g., `*/5 * * * *` for "every 5 minutes") is not supported. Minimum interval is hourly.
+</Warning>
+
+## Update Automation
+
+Modify an existing automation.
+
+```bash cURL
+curl -X PUT "https://app.khoj.dev/api/automation?automation_id=automation_123" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "q": "Summarize important updates and action items from today",
+    "subject": "Daily Action Items",
+    "crontime": "0 17 * * *",
+    "timezone": "America/Los_Angeles"
+  }'
+```
+
+<ParamField query="automation_id" type="string" required>
+  ID of the automation to update
+</ParamField>
+
+<ParamField body="q" type="string" required>
+  Updated query
+</ParamField>
+
+<ParamField body="subject" type="string" required>
+  Updated subject line
+</ParamField>
+
+<ParamField body="crontime" type="string" required>
+  Updated cron schedule
+</ParamField>
+
+<ParamField body="timezone" type="string" optional>
+  Updated timezone
+</ParamField>
+
+**Response**: Updated automation object
+
+## Delete Automation
+
+Remove an automation.
+
+```bash cURL
+curl -X DELETE "https://app.khoj.dev/api/automation?automation_id=automation_123" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+<ParamField query="automation_id" type="string" required>
+  ID of the automation to delete
+</ParamField>
+
+**Response**
+
+```json
+{
+  "id": "automation_123",
+  "subject": "Daily Summary",
+  "status": "deleted"
+}
+```
+
+## Trigger Automation Manually
+
+Run an automation immediately without waiting for the schedule.
+
+```bash cURL
+curl -X POST "https://app.khoj.dev/api/automation/trigger?automation_id=automation_123" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+<ParamField query="automation_id" type="string" required>
+  ID of the automation to trigger
+</ParamField>
+
+**Response**
+
+```
+Automation triggered
+```
+
+The automation runs asynchronously in the background. Results will be sent to your email.
+
+## Cron Schedule Format
+
+Khoj uses standard 5-field cron expressions:
+
+```
+┌───────────── minute (0 - 59)
+│ ┌───────────── hour (0 - 23)
+│ │ ┌───────────── day of month (1 - 31)
+│ │ │ ┌───────────── month (1 - 12)
+│ │ │ │ ┌───────────── day of week (0 - 6) (0=Sunday)
+│ │ │ │ │
+* * * * *
+```
+
+### Common Patterns
+
+| Pattern | Description | Example |
+|---------|-------------|--------|
+| `0 9 * * *` | Daily at 9 AM | Morning summary |
+| `0 */6 * * *` | Every 6 hours | Periodic check-ins |
+| `0 9 * * 1` | Every Monday at 9 AM | Weekly planning |
+| `0 18 * * 5` | Every Friday at 6 PM | Week wrap-up |
+| `0 9 1 * *` | 1st of month at 9 AM | Monthly report |
+| `30 8 * * 1-5` | Weekdays at 8:30 AM | Workday briefing |
+| `0 0 * * 0` | Every Sunday at midnight | Weekly reset |
+
+### Special Characters
+
+- `*` - Any value
+- `,` - Value list separator (e.g., `1,15` = 1st and 15th)
+- `-` - Range (e.g., `1-5` = Monday through Friday)
+- `/` - Step values (e.g., `*/2` = every 2 units)
+
+<Note>
+  Khoj replaces `?` with `*` automatically. Both are equivalent.
+</Note>
+
+## Use Cases
+
+### Daily Summaries
+
+```json
+{
+  "q": "Summarize what I accomplished today based on my notes",
+  "crontime": "0 18 * * *",
+  "subject": "Daily Accomplishments"
+}
+```
+
+### Weekly Research Digest
+
+```json
+{
+  "q": "Find and summarize the most important AI research papers published this week",
+  "crontime": "0 9 * * 1",
+  "subject": "Weekly AI Research Digest"
+}
+```
+
+### Monthly Financial Review
+
+```json
+{
+  "q": "Analyze my financial notes from the past month and provide insights",
+  "crontime": "0 10 1 * *",
+  "subject": "Monthly Financial Review"
+}
+```
+
+### Morning Briefing
+
+```json
+{
+  "q": "What are my tasks and priorities for today? Check my calendar and notes.",
+  "crontime": "0 7 * * 1-5",
+  "subject": "Morning Briefing"
+}
+```
+
+### Project Status Updates
+
+```json
+{
+  "q": "Summarize progress on the Phoenix project based on recent notes and documents",
+  "crontime": "0 16 * * 3",
+  "subject": "Phoenix Project Update"
+}
+```
+
+## Automation Query Tips
+
+<Steps>
+  <Step title="Be Specific">
+    Clear, specific queries produce better results. Instead of "summarize notes", try "summarize meeting notes about the Q1 marketing campaign".
+  </Step>
+  
+  <Step title="Use Time References">
+    Queries can reference relative times: "today", "this week", "last month", "recent", etc.
+  </Step>
+  
+  <Step title="Include Context">
+    Specify what types of content to focus on: "from my project notes", "in my research folder", etc.
+  </Step>
+  
+  <Step title="Define Output Format">
+    Request specific formats: "create a bullet list", "write a brief summary", "generate a detailed report".
+  </Step>
+  
+  <Step title="Use Commands">
+    Include commands like `/notes` (search notes only) or `/online` (include web search).
+  </Step>
+</Steps>
+
+## How Automations Work
+
+1. **Schedule**: Automation triggers at the scheduled cron time in your timezone
+2. **Query Execution**: Khoj executes the query, searching your knowledge base and/or web
+3. **Response Generation**: AI generates a comprehensive response with references
+4. **Email Delivery**: Results are sent to your registered email address
+5. **Conversation Storage**: The exchange is saved to the dedicated conversation thread
+
+You can view past automation results in the conversation associated with each automation.
+
+## Error Handling
+
+### 400 Bad Request - Missing Parameters
+
+```json
+{
+  "detail": "A query and crontime is required"
+}
+```
+
+Ensure both `q` and `crontime` are provided.
+
+### 400 Bad Request - Invalid Cron
+
+```json
+{
+  "detail": "Invalid crontime"
+}
+```
+
+Check your cron expression syntax. Use a [cron validator](https://crontab.guru/) to verify.
+
+### 400 Bad Request - Too Frequent
+
+```json
+{
+  "detail": "Minute level recurrence is unsupported. Please create a less frequent schedule."
+}
+```
+
+Your schedule runs too frequently. Minimum interval is hourly.
+
+### 403 Forbidden
+
+```json
+{
+  "detail": "Invalid automation"
+}
+```
+
+Automation doesn't exist or you don't own it.
+
+### 500 Internal Server Error
+
+```json
+{
+  "detail": "Unable to create automation. Ensure the automation doesn't already exist."
+}
+```
+
+An automation with identical parameters may already exist.
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Smart Scheduling" icon="calendar">
+    Schedule automations at times when results are most useful. Daily summaries work well end-of-day.
+  </Card>
+  
+  <Card title="Descriptive Subjects" icon="heading">
+    Use clear subject lines so you can identify automation emails easily.
+  </Card>
+  
+  <Card title="Test First" icon="flask">
+    Use manual trigger to test your query before scheduling.
+  </Card>
+  
+  <Card title="Review Conversations" icon="message">
+    Check the conversation thread periodically to see automation history and refine queries.
+  </Card>
+</CardGroup>
+
+## Limitations
+
+- Minimum scheduling interval: 1 hour
+- Maximum automations per user: Varies by subscription tier
+- Automations use the default Khoj agent (you can't specify custom agents yet)
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Chat API" icon="comments" href="/api/chat">
+    Learn about the chat capabilities used by automations
+  </Card>
+  <Card title="Agents API" icon="robot" href="/api/agents">
+    Create specialized agents for different automation tasks
+  </Card>
+</CardGroup>

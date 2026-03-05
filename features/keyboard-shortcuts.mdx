@@ -1,0 +1,457 @@
+---
+title: Keyboard Shortcuts
+description: Navigate Khoj efficiently without leaving your keyboard
+icon: keyboard
+---
+
+Speed up your workflow with keyboard shortcuts. Keep your hands on the keyboard and maintain your flow while working with Khoj.
+
+<Note>
+  Shortcuts vary by platform. This guide covers shortcuts for Web, Obsidian, Desktop, and Emacs interfaces.
+</Note>
+
+## Chat Input Shortcuts
+
+<Tabs>
+  <Tab title="Obsidian" icon="o">
+    Navigate your chat history without reaching for the mouse:
+    
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>↑</kbd> Up Arrow | Move up in recent message history |
+    | <kbd>↓</kbd> Down Arrow | Move down in recent message history |
+    | <kbd>Enter</kbd> | Send current message |
+    | <kbd>Shift</kbd> + <kbd>Enter</kbd> | New line in message |
+    
+    ### How Message History Works
+    
+    <Steps>
+      <Step>Place cursor in chat input box</Step>
+      <Step>Press <kbd>↑</kbd> to load your previous message</Step>
+      <Step>Keep pressing <kbd>↑</kbd> to go further back</Step>
+      <Step>Press <kbd>↓</kbd> to move forward in history</Step>
+      <Step>Edit and send to revise your query</Step>
+    </Steps>
+    
+    <Frame>
+      <img src="https://assets.khoj.dev/up_down_shortcuts.gif" alt="Arrow key navigation demo" />
+    </Frame>
+    
+    <Tip>
+      Try it on [this sample conversation](http://app.khoj.dev/share/chat/in-particular-assess-the-prospect-for-brazil-/)
+    </Tip>
+  </Tab>
+  
+  <Tab title="Web" icon="globe">
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>Enter</kbd> | Send message |
+    | <kbd>Shift</kbd> + <kbd>Enter</kbd> | New line in message |
+    | <kbd>Esc</kbd> | Clear input / Cancel |
+    
+    <Note>
+      Message history navigation (up/down arrows) coming soon to web interface
+    </Note>
+  </Tab>
+  
+  <Tab title="Desktop" icon="desktop">
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>Enter</kbd> | Send message |
+    | <kbd>Shift</kbd> + <kbd>Enter</kbd> | New line |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>K</kbd> | Focus search/chat input |
+  </Tab>
+  
+  <Tab title="Emacs" icon="code">
+    Standard Emacs keybindings apply:
+    
+    | Shortcut | Action |
+    |----------|--------|
+    | `M-x khoj` | Open Khoj interface |
+    | <kbd>C-c</kbd> <kbd>C-c</kbd> | Send query |
+    | <kbd>C-c</kbd> <kbd>C-k</kbd> | Clear input |
+    | <kbd>C-p</kbd> / <kbd>C-n</kbd> | Previous/Next line |
+    
+    [Full Emacs client docs →](/clients/emacs)
+  </Tab>
+</Tabs>
+
+## Navigation Shortcuts
+
+<Tabs>
+  <Tab title="Web">
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>K</kbd> | Focus search bar |
+    | <kbd>/</kbd> | Focus chat input |
+    | <kbd>Esc</kbd> | Close modals/panels |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>\\</kbd> | Toggle sidebar |
+  </Tab>
+  
+  <Tab title="Obsidian">
+    Use Command Palette (<kbd>Cmd/Ctrl</kbd> + <kbd>P</kbd>) then type:
+    
+    | Command | Action |
+    |---------|--------|
+    | `Khoj: Chat` | Open chat interface |
+    | `Khoj: Search` | Open search |
+    | `Khoj: Find similar notes` | Semantic search current note |
+    | `Khoj: Configure` | Open settings |
+    
+    <Tip>
+      Assign custom hotkeys in Obsidian Settings → Hotkeys → Search "Khoj"
+    </Tip>
+  </Tab>
+  
+  <Tab title="Desktop">
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>,</kbd> | Open settings |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>N</kbd> | New chat |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>1/2/3</kbd> | Switch between tabs |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>W</kbd> | Close current tab |
+  </Tab>
+</Tabs>
+
+## Conversation Management
+
+<Tabs>
+  <Tab title="Web">
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>N</kbd> | New conversation |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>Delete</kbd> | Delete conversation |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>S</kbd> | Share conversation |
+    
+    <Note>Requires focus on conversation area</Note>
+  </Tab>
+  
+  <Tab title="Obsidian">
+    Access via Command Palette (<kbd>Cmd/Ctrl</kbd> + <kbd>P</kbd>):
+    
+    - `Khoj: New conversation`
+    - `Khoj: Delete conversation`
+    - `Khoj: Select agent`
+  </Tab>
+</Tabs>
+
+## Text Editing
+
+<Tabs>
+  <Tab title="Universal">
+    Standard text editing shortcuts work in chat input:
+    
+    ### Selection
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>A</kbd> | Select all |
+    | <kbd>Shift</kbd> + <kbd>←/→</kbd> | Select character |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>←/→</kbd> | Select word |
+    
+    ### Clipboard
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>C</kbd> | Copy |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>X</kbd> | Cut |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>V</kbd> | Paste |
+    
+    ### Undo/Redo
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>Z</kbd> | Undo |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd> | Redo |
+  </Tab>
+  
+  <Tab title="Emacs">
+    Emacs users have full keybinding support:
+    
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>C-a</kbd> | Beginning of line |
+    | <kbd>C-e</kbd> | End of line |
+    | <kbd>C-k</kbd> | Kill to end of line |
+    | <kbd>C-y</kbd> | Yank (paste) |
+    | <kbd>M-w</kbd> | Copy region |
+    | <kbd>C-w</kbd> | Kill region |
+  </Tab>
+</Tabs>
+
+## Message Actions
+
+Interact with chat messages:
+
+<Tabs>
+  <Tab title="Web">
+    Hover over any message to reveal action buttons, or use keyboard:
+    
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>C</kbd> | Copy message text |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>R</kbd> | Regenerate response |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>E</kbd> | Edit message |
+    
+    <Note>These shortcuts work when hovering over a message</Note>
+  </Tab>
+</Tabs>
+
+## Search Shortcuts
+
+<Tabs>
+  <Tab title="Web">
+    On the search page:
+    
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>/</kbd> | Focus search input |
+    | <kbd>Enter</kbd> | Execute search |
+    | <kbd>Esc</kbd> | Clear search |
+    | <kbd>↑/↓</kbd> | Navigate results |
+    | <kbd>Enter</kbd> (on result) | Open result |
+  </Tab>
+  
+  <Tab title="Obsidian">
+    In Khoj search interface:
+    
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>Enter</kbd> | Search |
+    | <kbd>Esc</kbd> | Close search |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>O</kbd> | Open selected note |
+  </Tab>
+</Tabs>
+
+## Voice Input
+
+<Tabs>
+  <Tab title="Web">
+    | Action | How To |
+    |--------|--------|
+    | Start voice input | Click microphone icon (no hotkey yet) |
+    | Stop recording | Click microphone again |
+    | Play voice response | Click speaker icon |
+    | Pause voice playback | Click speaker again |
+    
+    <Note>Global voice activation hotkey coming in future update</Note>
+  </Tab>
+</Tabs>
+
+## Browser-Specific
+
+<Tabs>
+  <Tab title="Chrome/Edge">
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>T</kbd> | New tab to app.khoj.dev |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>L</kbd> | Focus address bar |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>R</kbd> | Refresh page |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>+/-</kbd> | Zoom in/out |
+  </Tab>
+  
+  <Tab title="Firefox">
+    | Shortcut | Action |
+    |----------|--------|
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>T</kbd> | New tab |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>L</kbd> | Focus URL bar |
+    | <kbd>F5</kbd> | Refresh |
+    | <kbd>Cmd/Ctrl</kbd> + <kbd>+/-</kbd> | Zoom |
+  </Tab>
+</Tabs>
+
+## Custom Shortcuts
+
+<AccordionGroup>
+  <Accordion title="Obsidian Custom Hotkeys" icon="o">
+    Set up your own shortcuts:
+    
+    <Steps>
+      <Step>Open Obsidian Settings (<kbd>Cmd/Ctrl</kbd> + <kbd>,</kbd>)</Step>
+      <Step>Go to **Hotkeys** section</Step>
+      <Step>Search for "Khoj"</Step>
+      <Step>Click the "+" next to any command</Step>
+      <Step>Press your desired key combination</Step>
+      <Step>Click outside to save</Step>
+    </Steps>
+    
+    **Recommended custom hotkeys:**
+    - `Khoj: Chat` → <kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>K</kbd>
+    - `Khoj: Search` → <kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd>
+    - `Khoj: Find similar` → <kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>
+  </Accordion>
+  
+  <Accordion title="Browser Shortcuts (Web)" icon="globe">
+    Create browser bookmarks with keyboard shortcuts:
+    
+    **Chrome/Edge:**
+    1. Visit app.khoj.dev
+    2. Click star icon to bookmark
+    3. Right-click bookmark → Edit
+    4. Can't directly assign hotkey, but use bookmark bar (<kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd>)
+    
+    **Firefox:**
+    1. Bookmark app.khoj.dev
+    2. Give it a keyword like "khoj"
+    3. Type "khoj" in address bar to open quickly
+  </Accordion>
+  
+  <Accordion title="System-Level Shortcuts" icon="desktop">
+    Launch Khoj Desktop with global hotkey:
+    
+    **macOS:**
+    1. System Settings → Keyboard → Shortcuts
+    2. App Shortcuts → Add (+)
+    3. Select Khoj application
+    4. Assign hotkey
+    
+    **Windows:**
+    1. Right-click Khoj shortcut
+    2. Properties → Shortcut key
+    3. Press desired key combination
+    4. Click OK
+    
+    **Linux:**
+    Depends on desktop environment (GNOME, KDE, etc.)
+    - Usually in Keyboard Settings
+    - Create custom shortcut to launch Khoj
+  </Accordion>
+</AccordionGroup>
+
+## Productivity Tips
+
+<CardGroup cols={2}>
+  <Card icon="bolt" title="Keep Hands on Keyboard">
+    Master the most common shortcuts to avoid mouse usage during flow state
+  </Card>
+  <Card icon="brain" title="Muscle Memory">
+    Practice shortcuts until they become automatic - speed comes with repetition
+  </Card>
+  <Card icon="list-check" title="Start Small">
+    Learn 3-5 shortcuts first, then gradually add more to your repertoire
+  </Card>
+  <Card icon="file-pen" title="Cheat Sheet">
+    Keep a note with your most-used shortcuts until memorized
+  </Card>
+</CardGroup>
+
+## Quick Reference Card
+
+<Tabs>
+  <Tab title="Essential (All Platforms)">
+    **Must-know shortcuts for daily use:**
+    
+    | Action | Shortcut |
+    |--------|----------|
+    | Send message | <kbd>Enter</kbd> |
+    | New line | <kbd>Shift</kbd> + <kbd>Enter</kbd> |
+    | New conversation | <kbd>Cmd/Ctrl</kbd> + <kbd>N</kbd> |
+    | Focus search | <kbd>Cmd/Ctrl</kbd> + <kbd>K</kbd> |
+    | Copy text | <kbd>Cmd/Ctrl</kbd> + <kbd>C</kbd> |
+    | Paste text | <kbd>Cmd/Ctrl</kbd> + <kbd>V</kbd> |
+  </Tab>
+  
+  <Tab title="Power User (Obsidian)">
+    **Advanced shortcuts for Obsidian users:**
+    
+    | Action | Shortcut |
+    |--------|----------|
+    | Command Palette | <kbd>Cmd/Ctrl</kbd> + <kbd>P</kbd> |
+    | Message history up | <kbd>↑</kbd> |
+    | Message history down | <kbd>↓</kbd> |
+    | Open chat | (Custom - set in settings) |
+    | Find similar | (Custom - set in settings) |
+  </Tab>
+  
+  <Tab title="Web Workflow">
+    **Optimized web interface workflow:**
+    
+    | Action | Shortcut |
+    |--------|----------|
+    | Focus input | <kbd>/</kbd> |
+    | Send message | <kbd>Enter</kbd> |
+    | New chat | <kbd>Cmd/Ctrl</kbd> + <kbd>N</kbd> |
+    | Toggle sidebar | <kbd>Cmd/Ctrl</kbd> + <kbd>\\</kbd> |
+    | Close modal | <kbd>Esc</kbd> |
+  </Tab>
+</Tabs>
+
+## Platform Comparison
+
+| Feature | Web | Obsidian | Desktop | Emacs |
+|---------|-----|----------|---------|-------|
+| **Message History (↑/↓)** | Coming | ✓ Yes | Coming | ✓ Yes |
+| **Custom Hotkeys** | Limited | ✓ Full | Partial | ✓ Full |
+| **Voice Activation** | Manual | Manual | Manual | N/A |
+| **Tab Navigation** | Browser | Obsidian | App | Emacs |
+| **Quick Access** | Bookmark | Command | System | M-x |
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Shortcut not working">
+    **Possible causes:**
+    - Conflict with system/browser shortcuts
+    - Different keyboard layout
+    - Platform-specific variations
+    - Feature not available on current platform
+    
+    **Try:**
+    - Check if another app is capturing the shortcut
+    - Try alternative key combination
+    - Restart the application
+    - Check documentation for your specific platform
+  </Accordion>
+  
+  <Accordion title="Arrow keys not navigating messages (Obsidian)">
+    **Check:**
+    - Cursor is in the input box
+    - No text is currently in the input
+    - Khoj plugin is up to date
+    - Conversation has previous messages
+    
+    **Try:**
+    - Click in input box first
+    - Clear any existing text
+    - Update Khoj plugin
+  </Accordion>
+  
+  <Accordion title="Different behavior on Mac vs Windows">
+    Remember:
+    - Mac uses <kbd>Cmd</kbd> where Windows uses <kbd>Ctrl</kbd>
+    - Some shortcuts are OS-specific
+    - Browser shortcuts may differ
+    
+    This guide shows **Cmd/Ctrl** to indicate the modifier key for your platform.
+  </Accordion>
+</AccordionGroup>
+
+## Future Shortcuts
+
+**Planned keyboard shortcuts:**
+
+- Global voice activation hotkey
+- Quick agent switching
+- Message history on web (up/down arrows)
+- Bookmark/favorite conversations
+- Quick filter application
+- Citation navigation
+- Multi-message selection
+
+<Note>
+  Vote on keyboard shortcut priorities on [Discord](https://discord.gg/BDgyabRM6e) or GitHub discussions!
+</Note>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Master Chat" icon="message" href="/features/chat">
+    Combine shortcuts with chat features for maximum efficiency
+  </Card>
+  <Card title="Voice Chat" icon="microphone" href="/features/voice-chat">
+    Use voice when keyboard shortcuts aren't enough
+  </Card>
+  <Card title="Obsidian Client" icon="o" href="/clients/obsidian">
+    Full Obsidian integration details and shortcuts
+  </Card>
+  <Card title="Emacs Client" icon="code" href="/clients/emacs">
+    Complete Emacs keybinding reference
+  </Card>
+</CardGroup>

@@ -1,0 +1,335 @@
+---
+title: Search API
+description: Search semantically across your indexed content with the Khoj Search API
+---
+
+## Overview
+
+The Search API performs semantic search across all your indexed content in Khoj. It uses embeddings to find relevant information based on meaning, not just keyword matching.
+
+## Search Content
+
+Search for content across your knowledge base.
+
+```bash cURL
+curl "https://app.khoj.dev/api/search?q=machine+learning&n=10&t=all" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+```python Python
+import requests
+
+headers = {"Authorization": "Bearer YOUR_API_TOKEN"}
+params = {
+    "q": "machine learning",
+    "n": 10,
+    "t": "all"
+}
+response = requests.get(
+    "https://app.khoj.dev/api/search",
+    params=params,
+    headers=headers
+)
+results = response.json()
+```
+
+```javascript JavaScript
+const params = new URLSearchParams({
+  q: 'machine learning',
+  n: 10,
+  t: 'all'
+});
+
+const response = await fetch(
+  `https://app.khoj.dev/api/search?${params}`,
+  {
+    headers: {
+      'Authorization': 'Bearer YOUR_API_TOKEN'
+    }
+  }
+);
+const results = await response.json();
+```
+
+### Request
+
+<ParamField query="q" type="string" required>
+  Search query string
+</ParamField>
+
+<ParamField query="n" type="integer" default="5">
+  Number of results to return (1-100)
+</ParamField>
+
+<ParamField query="t" type="string" default="all">
+  Content type to search. Options:
+  - `all` - Search all content types
+  - `org` - Org-mode files
+  - `markdown` - Markdown files
+  - `pdf` - PDF documents
+  - `plaintext` - Plain text files
+  - `image` - Images
+  - `docx` - Word documents
+  - `github` - GitHub repositories
+  - `notion` - Notion pages
+</ParamField>
+
+<ParamField query="r" type="boolean" default="false">
+  Whether to rerank results using cross-encoder for improved relevance
+</ParamField>
+
+<ParamField query="max_distance" type="float" optional>
+  Maximum semantic distance for results (0.0-1.0). Lower values return more similar results.
+</ParamField>
+
+<ParamField query="dedupe" type="boolean" default="true">
+  Whether to deduplicate similar results
+</ParamField>
+
+<ParamField query="client" type="string" optional>
+  Client identifier for telemetry (e.g., "web", "obsidian", "emacs")
+</ParamField>
+
+### Response
+
+Returns an array of search results ordered by relevance.
+
+<ResponseField name="entry" type="string">
+  The content snippet or entry text
+</ResponseField>
+
+<ResponseField name="score" type="float">
+  Relevance score (lower is more relevant)
+</ResponseField>
+
+<ResponseField name="additional" type="object">
+  Additional metadata about the result
+  
+  <Expandable title="additional fields">
+    <ResponseField name="file" type="string">
+      Source file path
+    </ResponseField>
+    
+    <ResponseField name="compiled" type="string">
+      Compiled/formatted content
+    </ResponseField>
+    
+    <ResponseField name="heading" type="string">
+      Section heading if applicable
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Example Response
+
+```json
+[
+  {
+    "entry": "Machine learning is a subset of artificial intelligence...",
+    "score": 0.234,
+    "additional": {
+      "file": "notes/ai/machine-learning.md",
+      "compiled": "# Machine Learning\n\nMachine learning is a subset...",
+      "heading": "Introduction"
+    }
+  },
+  {
+    "entry": "Deep learning uses neural networks with multiple layers...",
+    "score": 0.312,
+    "additional": {
+      "file": "notes/ai/deep-learning.md",
+      "compiled": "## Deep Learning\n\nDeep learning uses neural networks...",
+      "heading": "Overview"
+    }
+  }
+]
+```
+
+## Search Types
+
+Khoj supports searching across different content types:
+
+### All Content
+
+Search across all indexed content:
+
+```bash
+curl "https://app.khoj.dev/api/search?q=productivity&t=all" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+### Markdown Files
+
+Search only markdown documents:
+
+```bash
+curl "https://app.khoj.dev/api/search?q=project+notes&t=markdown" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+### PDF Documents
+
+Search only PDF files:
+
+```bash
+curl "https://app.khoj.dev/api/search?q=research+papers&t=pdf" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+### GitHub Repositories
+
+Search across indexed GitHub repos:
+
+```bash
+curl "https://app.khoj.dev/api/search?q=api+endpoint&t=github" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+### Notion Pages
+
+Search Notion content:
+
+```bash
+curl "https://app.khoj.dev/api/search?q=meeting+notes&t=notion" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+## Advanced Search Options
+
+### Reranking for Better Results
+
+Enable reranking to improve result quality using a cross-encoder model:
+
+```bash
+curl "https://app.khoj.dev/api/search?q=query&r=true" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+Reranking uses a more sophisticated model to reorder results, trading some speed for better relevance.
+
+### Filtering by Distance
+
+Limit results to those within a semantic distance threshold:
+
+```bash
+curl "https://app.khoj.dev/api/search?q=query&max_distance=0.3" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+Lower distance values mean more similar content. Typical ranges:
+- `0.0 - 0.3`: Very similar content
+- `0.3 - 0.5`: Moderately similar
+- `0.5 - 0.7`: Somewhat related
+- `> 0.7`: Less related
+
+### Disable Deduplication
+
+Get all matching results including similar duplicates:
+
+```bash
+curl "https://app.khoj.dev/api/search?q=query&dedupe=false" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+## Use Cases
+
+### Personal Knowledge Base
+
+Search your personal notes and documents:
+
+```python
+query = "How do I configure my development environment?"
+results = search(q=query, n=5, t="markdown")
+```
+
+### Research Assistant
+
+Find relevant passages in research papers:
+
+```python
+query = "neural network architectures for NLP"
+results = search(q=query, n=10, t="pdf", r=True)
+```
+
+### Code Search
+
+Search through your GitHub repositories:
+
+```python
+query = "authentication middleware implementation"
+results = search(q=query, n=15, t="github")
+```
+
+### Meeting Notes
+
+Find information from past meetings:
+
+```python
+query = "Q4 roadmap discussion"
+results = search(q=query, n=10, t="notion")
+```
+
+## Error Handling
+
+### 401 Unauthorized
+
+```json
+{
+  "detail": "Not authenticated"
+}
+```
+
+Ensure you're including a valid API token in the Authorization header.
+
+### 400 Bad Request
+
+```json
+{
+  "detail": "Invalid search type specified"
+}
+```
+
+Check that your search type (`t` parameter) is one of the supported values.
+
+### 500 Internal Server Error
+
+```json
+{
+  "detail": "Search failed due to internal error"
+}
+```
+
+The search index may be unavailable. Try again later or contact support.
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Use Specific Queries" icon="bullseye">
+    More specific queries return more relevant results. Instead of "python", try "python async await patterns".
+  </Card>
+  
+  <Card title="Choose Right Content Type" icon="filter">
+    Filter by content type when you know where information should be (e.g., code in GitHub, docs in Markdown).
+  </Card>
+  
+  <Card title="Enable Reranking Selectively" icon="arrows-rotate">
+    Use reranking for important queries where accuracy matters more than speed.
+  </Card>
+  
+  <Card title="Adjust Result Count" icon="list-ol">
+    Start with 5-10 results. Increase if needed, but more results means more data to process.
+  </Card>
+</CardGroup>
+
+## Rate Limits
+
+- **Free tier**: 50 searches per day
+- **Premium tier**: Unlimited searches
+
+Rate limits reset daily at midnight UTC.
+
+## Next Steps
+
+<Card title="Update Content" icon="refresh" href="/api/update">
+  Learn how to index new content for search
+</Card>

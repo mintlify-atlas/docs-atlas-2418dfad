@@ -1,0 +1,631 @@
+---
+title: Self-Hosting Khoj
+description: Run Khoj on your own hardware for complete privacy and customization
+---
+
+Self-hosting Khoj gives you complete control over your data and AI infrastructure. Run it on your laptop, home server, or private cloud.
+
+## Why Self-Host?
+
+<CardGroup cols={2}>
+  <Card title="Complete Privacy" icon="lock">
+    Your data never leaves your network. Use Khoj entirely offline if needed.
+  </Card>
+  
+  <Card title="Full Customization" icon="sliders">
+    Choose any AI model, customize features, and configure everything to your needs.
+  </Card>
+  
+  <Card title="No Limits" icon="infinity">
+    Unlimited usage with no rate limits or subscription costs.
+  </Card>
+  
+  <Card title="Local AI Models" icon="microchip">
+    Run completely offline with local models like Llama, Qwen, or Mistral.
+  </Card>
+</CardGroup>
+
+<Note>
+  First time self-hosting? Restart your Khoj server after the first run to ensure all settings are applied correctly.
+</Note>
+
+## Choose Your Installation Method
+
+<Tabs>
+  <Tab title="Docker (Recommended)">
+    Docker provides the easiest setup with all dependencies included. Perfect for most users.
+    
+    ### Prerequisites
+    
+    <AccordionGroup>
+      <Accordion title="MacOS">
+        Install Docker Desktop or use Homebrew:
+        
+        **Option 1: Docker Desktop**
+        
+        Download from [Docker's website](https://docs.docker.com/desktop/install/mac-install/)
+        
+        **Option 2: Homebrew**
+        
+        ```bash
+        brew install --cask docker
+        brew install docker-compose
+        ```
+      </Accordion>
+      
+      <Accordion title="Windows">
+        1. Install [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install):
+        
+        ```powershell
+        # Run in PowerShell as Administrator
+        wsl --install
+        ```
+        
+        2. Restart your machine
+        
+        3. Install [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/) with WSL2 backend (default)
+        
+        <Warning>
+          All commands below should be run in your WSL2 terminal, not PowerShell or CMD.
+        </Warning>
+      </Accordion>
+      
+      <Accordion title="Linux">
+        Install Docker Engine and Docker Compose:
+        
+        ```bash
+        # Ubuntu/Debian
+        sudo apt-get update
+        sudo apt-get install docker.io docker-compose
+        
+        # Fedora
+        sudo dnf install docker docker-compose
+        
+        # Arch Linux
+        sudo pacman -S docker docker-compose
+        ```
+        
+        Or install [Docker Desktop for Linux](https://docs.docker.com/desktop/install/linux/).
+      </Accordion>
+    </AccordionGroup>
+    
+    ### Installation Steps
+    
+    <Steps>
+      <Step title="Download Docker Compose File">
+        ```bash
+        mkdir ~/.khoj && cd ~/.khoj
+        wget https://raw.githubusercontent.com/khoj-ai/khoj/master/docker-compose.yml
+        ```
+        
+        Or download manually from [GitHub](https://github.com/khoj-ai/khoj/blob/master/docker-compose.yml)
+      </Step>
+      
+      <Step title="Configure Environment Variables">
+        Open `docker-compose.yml` and set these essential variables:
+        
+        ```yaml docker-compose.yml
+        environment:
+          # Required: Set secure admin credentials
+          - KHOJ_ADMIN_EMAIL=admin@example.com
+          - KHOJ_ADMIN_PASSWORD=your-secure-password-here
+          - KHOJ_DJANGO_SECRET_KEY=your-secret-key-here
+          
+          # Optional: Add API keys for online models
+          - OPENAI_API_KEY=sk-...
+          - ANTHROPIC_API_KEY=sk-ant-...
+          - GEMINI_API_KEY=...
+          
+          # Optional: Use local models with Ollama
+          # - OPENAI_BASE_URL=http://host.docker.internal:11434/v1/
+          # - KHOJ_DEFAULT_CHAT_MODEL=qwen3
+        ```
+        
+        <Tip>
+          Generate a secure Django secret key using: `python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'`
+        </Tip>
+      </Step>
+      
+      <Step title="Start Khoj">
+        ```bash
+        cd ~/.khoj
+        docker-compose up
+        ```
+        
+        Wait for the message: `🌖 Khoj is ready to engage`
+        
+        <Note>
+          First startup takes 2-5 minutes to download models and initialize the database.
+        </Note>
+      </Step>
+      
+      <Step title="Access Khoj">
+        Open your browser and navigate to:
+        
+        ```
+        http://localhost:42110
+        ```
+        
+        Login with the admin credentials you set in step 2.
+      </Step>
+    </Steps>
+    
+    ### Docker Architecture
+    
+    The Docker setup includes multiple containers:
+    
+    | Container | Purpose | Port |
+    |-----------|---------|------|
+    | **server** | Main Khoj application | 42110 |
+    | **database** | PostgreSQL with pgvector | 5432 |
+    | **sandbox** | Python code execution (Terrarium) | 8080 |
+    | **search** | SearxNG web search engine | 8080 |
+    | **computer** | Optional VNC desktop for automation | 5900 |
+    
+    ### Advanced Docker Configuration
+    
+    <AccordionGroup>
+      <Accordion title="Use Local Ollama Models">
+        To use Ollama running on your host machine:
+        
+        1. Start Ollama on your host: `ollama serve`
+        2. Uncomment these lines in `docker-compose.yml`:
+        
+        ```yaml
+        - OPENAI_BASE_URL=http://host.docker.internal:11434/v1/
+        - KHOJ_DEFAULT_CHAT_MODEL=qwen3
+        ```
+        
+        3. Restart: `docker-compose restart`
+        
+        See [Ollama integration guide](https://docs.khoj.dev/advanced/openai-proxy#ollama) for details.
+      </Accordion>
+      
+      <Accordion title="Enable Remote Access">
+        To access Khoj from other devices on your network:
+        
+        ```yaml
+        environment:
+          - KHOJ_DOMAIN=192.168.1.100  # Your server's IP
+          - KHOJ_NO_HTTPS=True          # Disable HTTPS for local network
+        ```
+        
+        Read the [Remote Access guide](/advanced/remote-access) for secure setup.
+      </Accordion>
+      
+      <Accordion title="Disable Telemetry">
+        Khoj collects anonymous usage data to improve the product. To opt out:
+        
+        ```yaml
+        environment:
+          - KHOJ_TELEMETRY_DISABLE=True
+        ```
+      </Accordion>
+    </AccordionGroup>
+  </Tab>
+  
+  <Tab title="Pip Install">
+    Install Khoj as a Python package. Gives you more control but requires manual dependency management.
+    
+    ### Prerequisites
+    
+    - Python 3.10, 3.11, or 3.12
+    - pip package manager
+    - 8GB RAM minimum (16GB recommended for local models)
+    - 5GB free disk space
+    
+    ### Installation Steps
+    
+    <Steps>
+      <Step title="Install Khoj Package">
+        <Tabs>
+          <Tab title="MacOS">
+            <Tabs>
+              <Tab title="Apple Silicon (M1/M2/M3)">
+                ```bash
+                CMAKE_ARGS="-DGGML_METAL=on" python -m pip install 'khoj[local]'
+                ```
+              </Tab>
+              
+              <Tab title="Intel Mac">
+                ```bash
+                python -m pip install 'khoj[local]'
+                ```
+              </Tab>
+            </Tabs>
+          </Tab>
+          
+          <Tab title="Windows">
+            <Tabs>
+              <Tab title="CPU">
+                ```powershell
+                py -m pip install 'khoj[local]'
+                ```
+              </Tab>
+              
+              <Tab title="NVIDIA GPU">
+                ```powershell
+                $env:CMAKE_ARGS = "-DGGML_CUDA=on"
+                py -m pip install 'khoj[local]'
+                ```
+              </Tab>
+              
+              <Tab title="AMD GPU">
+                ```powershell
+                $env:CMAKE_ARGS = "-DGGML_HIPBLAS=on"
+                py -m pip install 'khoj[local]'
+                ```
+              </Tab>
+            </Tabs>
+          </Tab>
+          
+          <Tab title="Linux">
+            <Tabs>
+              <Tab title="CPU">
+                ```bash
+                python -m pip install 'khoj[local]'
+                ```
+              </Tab>
+              
+              <Tab title="NVIDIA GPU">
+                ```bash
+                CMAKE_ARGS="-DGGML_CUDA=on" FORCE_CMAKE=1 python -m pip install 'khoj[local]'
+                ```
+              </Tab>
+              
+              <Tab title="AMD GPU">
+                ```bash
+                CMAKE_ARGS="-DGGML_HIPBLAS=on" FORCE_CMAKE=1 python -m pip install 'khoj[local]'
+                ```
+              </Tab>
+            </Tabs>
+          </Tab>
+        </Tabs>
+        
+        <Note>
+          The `[local]` extra installs pgserver for a self-contained PostgreSQL database.
+        </Note>
+      </Step>
+      
+      <Step title="Start Khoj Server">
+        ```bash
+        USE_EMBEDDED_DB="true" khoj --anonymous-mode
+        ```
+        
+        <Info>
+          `--anonymous-mode` disables authentication for single-user local setups. Remove it if you need login protection.
+        </Info>
+      </Step>
+      
+      <Step title="Initial Configuration">
+        On first run, you'll be prompted to:
+        
+        1. **Create admin account** with email and password
+        2. **Configure chat models** with API keys:
+           - [OpenAI API key](https://platform.openai.com/api-keys)
+           - [Anthropic API key](https://console.anthropic.com/account/keys)
+           - [Gemini API key](https://aistudio.google.com/app/apikey)
+           - Or local model names like `llama3`, `qwen3`, `mistral`
+        
+        Wait for: `🌖 Khoj is ready to engage`
+      </Step>
+      
+      <Step title="Access Khoj">
+        Open your browser:
+        
+        ```
+        http://localhost:42110
+        ```
+      </Step>
+    </Steps>
+    
+    ### Auto-Start on Boot
+    
+    <Tabs>
+      <Tab title="Windows Task Scheduler">
+        1. Open Task Scheduler
+        2. Create Basic Task: "Start Khoj"
+        3. Trigger: "When the computer starts"
+        4. Action: "Start a program"
+        5. Program: `py` with arguments `-m khoj --anonymous-mode`
+      </Tab>
+      
+      <Tab title="MacOS/Linux (Cron)">
+        ```bash
+        crontab -e
+        ```
+        
+        Add:
+        ```cron
+        @reboot USE_EMBEDDED_DB="true" khoj --anonymous-mode
+        ```
+      </Tab>
+    </Tabs>
+  </Tab>
+</Tabs>
+
+## Configure Chat Models
+
+After installation, configure which AI models to use.
+
+### Access Admin Panel
+
+1. Navigate to: `http://localhost:42110/server/admin`
+2. Login with your admin credentials
+
+<Warning>
+  Use `localhost`, not `127.0.0.1`, to avoid CSRF errors.
+</Warning>
+
+### Add Chat Models
+
+<Steps>
+  <Step title="Create AI Model API Configuration">
+    Go to **AI Model API** → **Add AI Model API**
+    
+    <Tabs>
+      <Tab title="OpenAI">
+        - **Name**: `OpenAI`
+        - **API Key**: Your [OpenAI API key](https://platform.openai.com/api-keys)
+        - **API Base URL**: Leave empty (or set for proxy/Ollama)
+        
+        <img src="/img/example_openai_processor_config.png" alt="OpenAI configuration" />
+      </Tab>
+      
+      <Tab title="Anthropic">
+        - **Name**: `Anthropic`
+        - **API Key**: Your [Anthropic API key](https://console.anthropic.com/account/keys)
+        - **API Base URL**: Leave empty
+      </Tab>
+      
+      <Tab title="Google Gemini">
+        - **Name**: `Gemini`
+        - **API Key**: Your [Gemini API key](https://aistudio.google.com/app/apikey)
+        - **API Base URL**: Leave empty
+      </Tab>
+      
+      <Tab title="Local (Ollama)">
+        - **Name**: `Ollama`
+        - **API Key**: `ollama` (any value works)
+        - **API Base URL**: `http://localhost:11434/v1/`
+        
+        <Note>
+          Ensure Ollama is running: `ollama serve`
+        </Note>
+      </Tab>
+    </Tabs>
+  </Step>
+  
+  <Step title="Create Chat Model">
+    Go to **Chat Model** → **Add Chat Model**
+    
+    <Tabs>
+      <Tab title="OpenAI">
+        - **Chat Model**: `gpt-4o` or `gpt-4o-mini`
+        - **Model Type**: `OpenAI`
+        - **AI Model API**: Select your OpenAI config
+        - **Vision Enabled**: ✓ (for image support)
+        - **Max Prompt Size**: `128000` (optional)
+      </Tab>
+      
+      <Tab title="Anthropic">
+        - **Chat Model**: `claude-3-5-sonnet-20240620`
+        - **Model Type**: `Anthropic`
+        - **AI Model API**: Select your Anthropic config
+      </Tab>
+      
+      <Tab title="Google Gemini">
+        - **Chat Model**: `gemini-2.5-flash`
+        - **Model Type**: `Google`
+        - **AI Model API**: Select your Gemini config
+      </Tab>
+      
+      <Tab title="Local Model">
+        - **Chat Model**: `qwen3`, `llama3`, etc.
+        - **Model Type**: `OpenAI`
+        - **AI Model API**: Select your Ollama config
+        
+        <Tip>
+          Download models first: `ollama pull qwen3`
+        </Tip>
+      </Tab>
+    </Tabs>
+    
+    <img src="/img/example_chatmodel_option.png" alt="Chat model configuration" />
+  </Step>
+  
+  <Step title="Set Default Models">
+    Go to **Server Chat Settings** → Select your default models:
+    
+    - **Default**: Used for general chat
+    - **Advanced**: Used for complex reasoning and research
+    
+    Save changes.
+  </Step>
+</Steps>
+
+### Local Model Requirements
+
+For offline AI models:
+
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
+| RAM | 8GB | 16GB+ |
+| VRAM | - | 8GB+ (GPU) |
+| Storage | 5GB | 20GB+ |
+| CPU | 4 cores | 8+ cores |
+
+<Note>
+  NVIDIA/AMD GPUs or Apple Silicon significantly speed up local model inference.
+</Note>
+
+## Sync Your Data
+
+Connect your documents to Khoj:
+
+<CardGroup cols={2}>
+  <Card title="Desktop App" icon="desktop" href="/clients/desktop">
+    Auto-sync local folders continuously
+  </Card>
+  
+  <Card title="Obsidian Plugin" icon="book" href="/clients/obsidian">
+    Sync your Obsidian vault seamlessly
+  </Card>
+  
+  <Card title="Emacs Package" icon="code" href="/clients/emacs">
+    Native integration for Emacs users
+  </Card>
+  
+  <Card title="Web Upload" icon="upload" href="/clients/web">
+    Drag and drop files in the web interface
+  </Card>
+</CardGroup>
+
+### Configure Client Connection
+
+Set your self-hosted server URL in client settings:
+
+```
+http://localhost:42110
+```
+
+Or your server's IP for remote access:
+
+```
+http://192.168.1.100:42110
+```
+
+## Upgrade Khoj
+
+<Tabs>
+  <Tab title="Docker">
+    ```bash
+    cd ~/.khoj
+    docker-compose down
+    docker-compose pull
+    docker-compose up
+    ```
+  </Tab>
+  
+  <Tab title="Pip">
+    ```bash
+    pip install --upgrade khoj
+    ```
+  </Tab>
+</Tabs>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Dependency Conflicts (Pip)">
+    **Problem**: Conflicting Python package versions
+    
+    **Solution**: Use pipx or virtual environment
+    
+    ```bash
+    # Install pipx
+    python -m pip install pipx
+    python -m pipx ensurepath
+    
+    # Install Khoj with pipx
+    pipx install khoj
+    ```
+  </Accordion>
+  
+  <Accordion title="Docker 'Killed' Error">
+    **Problem**: Container exits with "Killed" message
+    
+    **Solution**: Increase Docker memory limit
+    
+    - **Docker Desktop**: Settings → Resources → Memory → 4GB minimum
+  </Accordion>
+  
+  <Accordion title="CSRF Error on Admin Panel">
+    **Problem**: CSRF verification failed
+    
+    **Solutions**:
+    - Use `localhost` instead of `127.0.0.1`
+    - Set `KHOJ_DOMAIN` in environment variables
+    - Clear browser cookies and cache
+  </Accordion>
+  
+  <Accordion title="Tokenizer Build Fails">
+    **Problem**: Cannot build `tokenizers` package
+    
+    **Solution**: Install Rust compiler
+    
+    ```bash
+    # MacOS
+    brew install rustup
+    rustup-init
+    source ~/.cargo/env
+    
+    # Linux
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    ```
+  </Accordion>
+  
+  <Accordion title="Ollama Not Connecting">
+    **Problem**: Cannot connect to local Ollama
+    
+    **Solutions**:
+    - Ensure Ollama is running: `ollama serve`
+    - Check URL is correct: `http://localhost:11434/v1/`
+    - For Docker, use: `http://host.docker.internal:11434/v1/`
+  </Accordion>
+</AccordionGroup>
+
+## Uninstall
+
+<Tabs>
+  <Tab title="Docker">
+    Remove all Khoj containers, volumes, and data:
+    
+    ```bash
+    cd ~/.khoj
+    docker-compose down --volumes
+    rm -rf ~/.khoj
+    ```
+  </Tab>
+  
+  <Tab title="Pip">
+    ```bash
+    # Uninstall package
+    pip uninstall khoj
+    
+    # Remove database (if using embedded DB)
+    rm -rf ~/.khoj
+    
+    # Or drop PostgreSQL database
+    dropdb khoj -U postgres
+    ```
+  </Tab>
+</Tabs>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Remote Access" icon="globe" href="/advanced/remote-access">
+    Access Khoj securely from anywhere
+  </Card>
+  
+  <Card title="Use LiteLLM" icon="layer-group" href="/advanced/litellm">
+    Connect to 100+ AI models via proxy
+  </Card>
+  
+  <Card title="Admin Panel" icon="gear" href="/advanced/admin">
+    Advanced server configuration
+  </Card>
+  
+  <Card title="Tailscale Setup" icon="shield" href="/advanced/tailscale">
+    Secure private network access
+  </Card>
+</CardGroup>
+
+## Getting Help
+
+Run into issues? We're here to help:
+
+- **Discord**: [discord.gg/BDgyabRM6e](https://discord.gg/BDgyabRM6e) - Active community support
+- **GitHub Issues**: [github.com/khoj-ai/khoj/issues](https://github.com/khoj-ai/khoj/issues)
+- **Documentation**: Browse guides in the Advanced section

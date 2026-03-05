@@ -1,0 +1,316 @@
+---
+title: WhatsApp Bot
+description: Chat with Khoj directly from WhatsApp on your phone
+icon: whatsapp
+---
+
+# WhatsApp Bot
+
+Access Khoj's AI capabilities directly from WhatsApp. Chat with your second brain or get answers to general queries right from your messaging app.
+
+<CardGroup cols={1}>
+  <Card>
+    <img src="https://khoj-web-bucket.s3.amazonaws.com/khojwhatsapp.png" alt="WhatsApp QR Code" width="300" height="300" />
+  </Card>
+</CardGroup>
+
+## Quick Start
+
+Get started with Khoj on WhatsApp:
+
+<Steps>
+  <Step title="Open WhatsApp">
+    Launch WhatsApp on your phone.
+  </Step>
+  
+  <Step title="Contact Khoj">
+    Text [+1 (848) 800-4242](https://wa.me/18488004242) or scan the QR code above.
+  </Step>
+  
+  <Step title="Start Chatting">
+    Begin asking questions immediately. The bot works right away for generic queries!
+  </Step>
+</Steps>
+
+<Info>
+  The WhatsApp bot works immediately for general questions. To access your personal knowledge base, you'll need to connect it to your Khoj Cloud account.
+</Info>
+
+## Connect Your Account
+
+To chat with your own notes and documents:
+
+<Steps>
+  <Step title="Create Khoj Cloud Account">
+    Sign up at [app.khoj.dev](https://app.khoj.dev) if you haven't already.
+  </Step>
+  
+  <Step title="Upload Your Data">
+    Use the [Desktop app](/clients/desktop) or [Obsidian plugin](/clients/obsidian) to sync your files with Khoj.
+  </Step>
+  
+  <Step title="Connect WhatsApp">
+    Go to the [Khoj Cloud Settings page](https://app.khoj.dev/settings) and follow the instructions to link your WhatsApp account.
+  </Step>
+  
+  <Step title="Start Using Your Data">
+    Once connected, the WhatsApp bot can access and search your personal knowledge base!
+  </Step>
+</Steps>
+
+<Note>
+  You need one of the desktop clients (Desktop app, Obsidian, or Emacs) to share and sync your data with Khoj before using it via WhatsApp.
+</Note>
+
+## Features
+
+<CardGroup cols={2}>
+  <Card title="Slash Commands" icon="slash">
+    Quick access to specific Khoj features using simple commands.
+  </Card>
+  
+  <Card title="Online Search" icon="globe">
+    Get responses powered by real-time web search.
+  </Card>
+  
+  <Card title="Image Generation" icon="image">
+    Create images from text descriptions.
+  </Card>
+  
+  <Card title="Personal Knowledge" icon="brain">
+    Query your own notes and documents (after connecting account).
+  </Card>
+</CardGroup>
+
+## Slash Commands
+
+Use these commands to access specific features:
+
+<AccordionGroup>
+  <Accordion title="/online - Online Search" icon="globe">
+    Get responses from Khoj powered by real-time online search.
+    
+    **Example:**
+    ```
+    /online What's the latest news about AI?
+    ```
+    
+    ```
+    /online Current weather in San Francisco
+    ```
+  </Accordion>
+  
+  <Accordion title="/dream - Image Generation" icon="image">
+    Generate an image based on your text description.
+    
+    **Example:**
+    ```
+    /dream A serene mountain landscape at sunset
+    ```
+    
+    ```
+    /dream Futuristic city with flying cars
+    ```
+    
+    <Note>
+      Image generation may have usage limits depending on your Khoj plan.
+    </Note>
+  </Accordion>
+  
+  <Accordion title="/notes - Search Your Notes" icon="book">
+    Explicitly force Khoj to retrieve context from your personal notes.
+    
+    **Example:**
+    ```
+    /notes What did I write about project planning?
+    ```
+    
+    ```
+    /notes Meeting notes from last week
+    ```
+    
+    <Warning>
+      This command requires your WhatsApp account to be connected to a Khoj Cloud account with uploaded data.
+    </Warning>
+  </Accordion>
+</AccordionGroup>
+
+## Usage Examples
+
+<CodeGroup>
+```text General Chat
+What is the capital of France?
+```
+
+```text Online Search
+/online Latest developments in quantum computing
+```
+
+```text Generate Image
+/dream A cozy coffee shop in autumn
+```
+
+```text Search Notes
+/notes My goals for 2024
+```
+</CodeGroup>
+
+## Pricing and Limits
+
+<Info>
+  The WhatsApp bot has usage limits on the free tier.
+</Info>
+
+### Free Tier
+- Limited number of messages per day
+- Basic access to chat and search
+- Image generation limits
+
+### Paid Plans
+
+Upgrade to [a paid plan](https://khoj.dev/#pricing) on Khoj Cloud for:
+
+<CardGroup cols={2}>
+  <Card title="Higher Limits" icon="arrow-up">
+    Increased daily message quotas
+  </Card>
+  <Card title="More Images" icon="image">
+    Generate more images per day
+  </Card>
+  <Card title="Faster Responses" icon="bolt">
+    Priority processing for your queries
+  </Card>
+  <Card title="Advanced Features" icon="star">
+    Access to premium AI models
+  </Card>
+</CardGroup>
+
+## Upcoming Features
+
+<Info>
+  We're actively developing new WhatsApp bot capabilities.
+</Info>
+
+Features under development:
+
+<CardGroup cols={2}>
+  <Card title="/share" icon="upload">
+    Upload documents directly to your Khoj account from WhatsApp.
+  </Card>
+  
+  <Card title="/speak" icon="volume">
+    Receive voice responses from Khoj.
+  </Card>
+</CardGroup>
+
+<Tip>
+  Have ideas for new commands? [Raise an issue](https://github.com/khoj-ai/flint/issues) on the Flint repository!
+</Tip>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Bot not responding">
+    1. Verify you've sent a message to the correct number: +1 (848) 800-4242
+    2. Check your internet connection
+    3. Wait a moment - the bot might be processing your request
+    4. Try sending a simple message like "hello"
+  </Accordion>
+  
+  <Accordion title="Cannot access my notes">
+    This usually means:
+    1. Your WhatsApp account isn't connected to Khoj Cloud
+    2. You haven't uploaded any data to Khoj yet
+    
+    **Solution:**
+    - Connect your account via [Khoj Settings](https://app.khoj.dev/settings)
+    - Use the [Desktop app](/clients/desktop) or [Obsidian plugin](/clients/obsidian) to sync your data
+    - Try the `/notes` command explicitly
+  </Accordion>
+  
+  <Accordion title="Usage limit reached">
+    You've hit your daily quota. Options:
+    1. Wait until tomorrow when limits reset
+    2. [Upgrade to a paid plan](https://khoj.dev/#pricing)
+    3. Use the [web client](/clients/web) or other clients for unlimited access
+  </Accordion>
+  
+  <Accordion title="Image generation not working">
+    Possible reasons:
+    1. Daily image generation limit reached
+    2. Prompt violates content policy
+    3. Temporary service issue
+    
+    Try:
+    - Rephrasing your prompt
+    - Checking your usage limits
+    - Trying again later
+  </Accordion>
+</AccordionGroup>
+
+## Privacy and Security
+
+<CardGroup cols={2}>
+  <Card title="Message Privacy" icon="lock">
+    Messages are encrypted in transit between WhatsApp and Khoj's servers.
+  </Card>
+  
+  <Card title="Data Usage" icon="database">
+    Your queries are processed to provide responses but are not used for training AI models without consent.
+  </Card>
+  
+  <Card title="Account Linking" icon="link">
+    Linking your WhatsApp to Khoj Cloud allows the bot to access your personal knowledge base securely.
+  </Card>
+  
+  <Card title="Privacy Policy" icon="shield">
+    See our [Privacy Policy](https://khoj.dev/privacy) for full details.
+  </Card>
+</CardGroup>
+
+## Source Code
+
+<Info>
+  The WhatsApp bot is open source and available for review and contribution.
+</Info>
+
+Find the code in the [Flint repository](https://github.com/khoj-ai/flint):
+
+<CardGroup cols={2}>
+  <Card title="View Source" icon="github" href="https://github.com/khoj-ai/flint">
+    Browse the WhatsApp bot source code
+  </Card>
+  
+  <Card title="Contribute" icon="code-pull-request" href="https://github.com/khoj-ai/flint/issues">
+    Report issues or contribute features
+  </Card>
+</CardGroup>
+
+## Comparison with Other Clients
+
+| Feature | WhatsApp | Web | Desktop | Obsidian | Emacs |
+|---------|----------|-----|---------|----------|-------|
+| Setup Required | None | None | Medium | Medium | Medium |
+| File Sync | ❌ | ✅ (manual) | ✅ (auto) | ✅ (auto) | ✅ (auto) |
+| Chat | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Search | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Image Generation | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Mobile Access | ✅ | ✅ (PWA) | ❌ | ✅ (mobile) | ❌ |
+| Usage Limits | ✅ | ❌ | ❌ | ❌ | ❌ |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Desktop App" icon="desktop" href="/clients/desktop">
+    Sync your files to use them in WhatsApp
+  </Card>
+  <Card title="Web Client" icon="globe" href="/clients/web">
+    Access Khoj from any browser
+  </Card>
+  <Card title="Pricing" icon="dollar-sign" href="https://khoj.dev/#pricing">
+    Upgrade for higher limits
+  </Card>
+  <Card title="Chat Features" icon="comment" href="/features/chat">
+    Learn about chat capabilities
+  </Card>
+</CardGroup>

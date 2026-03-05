@@ -1,0 +1,238 @@
+---
+title: Notion
+description: Connect and sync your Notion workspace with Khoj
+---
+
+The Notion integration allows you to search and chat with content from your Notion workspaces. [Notion](https://notion.so/) is a popular platform for taking notes and collaborating with teams.
+
+![Notion integration demo](https://assets.khoj.dev/notion_integration.gif)
+
+## Khoj Cloud Setup
+
+Connecting Notion to Khoj Cloud is quick and easy with OAuth authentication.
+
+<Steps>
+  <Step title="Navigate to Settings">
+    Go to [app.khoj.dev/settings](https://app.khoj.dev/settings)
+  </Step>
+  
+  <Step title="Find the Notion Integration">
+    Scroll to the Data Sources section and locate the Notion integration
+  </Step>
+  
+  <Step title="Authorize Khoj">
+    Click the "Connect" button to authorize Khoj to access your Notion workspace(s)
+  </Step>
+  
+  <Step title="Select Workspaces">
+    In the Notion authorization flow, select which pages and databases you want to share with Khoj
+  </Step>
+  
+  <Step title="Complete Authorization">
+    Click "Allow" in Notion to complete the connection
+  </Step>
+  
+  <Step title="Automatic Sync">
+    Khoj will automatically index your Notion content. This may take a few minutes depending on the amount of content.
+  </Step>
+</Steps>
+
+<Note>
+  Your Notion content will be automatically synced in the background. You don't need to manually trigger syncing.
+</Note>
+
+## Self-Hosted Setup
+
+If you're running a self-hosted instance of Khoj, you'll need to create a Notion integration manually.
+
+<Steps>
+  <Step title="Create Notion Integration">
+    Go to [notion.so/my-integrations](https://www.notion.so/my-integrations) and click "New integration"
+  </Step>
+  
+  <Step title="Configure Integration">
+    - Give your integration a name (e.g., "Khoj")
+    - Select the workspace you want to connect
+    - Click "Submit" to create the integration
+    
+    ![Setup new Notion integration](https://github.com/khoj-ai/khoj/assets/65192171/b056e057-d4dc-47dc-aad3-57b59a22c68b)
+  </Step>
+  
+  <Step title="Copy API Key">
+    After creating the integration, copy the "Internal Integration Token" - this is your API key
+  </Step>
+  
+  <Step title="Share Pages with Integration">
+    For each page or database you want to index:
+    - Open the page in Notion
+    - Click the "..." menu in the top right
+    - Select "Add connections"
+    - Find and select your Khoj integration
+    
+    ![Enable workspace access](https://github.com/khoj-ai/khoj/assets/65192171/98290303-b5b8-4cb0-b32c-f68c6923a3d0)
+  </Step>
+  
+  <Step title="Add API Key to Khoj">
+    In your Khoj settings (default: [localhost:42110/settings#notion](http://localhost:42110/settings#notion)):
+    - Paste the API key from Step 3
+    - Click "Save"
+  </Step>
+  
+  <Step title="Index Your Content">
+    Click "Configure" in [localhost:42110/settings](http://localhost:42110/settings) to start indexing your Notion workspace(s)
+  </Step>
+</Steps>
+
+<Warning>
+  You must explicitly share each page or database with your Notion integration. Only shared content will be accessible to Khoj.
+</Warning>
+
+## What Gets Indexed
+
+Khoj indexes the following content types from Notion:
+
+### Supported Content
+
+<CardGroup cols={2}>
+  <Card title="Text Blocks" icon="paragraph">
+    Paragraphs, headings, quotes, and callouts
+  </Card>
+  <Card title="Lists" icon="list">
+    Bulleted lists, numbered lists, and to-do items
+  </Card>
+  <Card title="Toggles" icon="chevron-down">
+    Toggle blocks and their nested content
+  </Card>
+  <Card title="Links" icon="link">
+    Hyperlinks and linked content
+  </Card>
+  <Card title="Page Properties" icon="tags">
+    Page titles and metadata
+  </Card>
+  <Card title="Nested Content" icon="sitemap">
+    Child pages and nested blocks
+  </Card>
+</CardGroup>
+
+### Not Currently Indexed
+
+The following Notion content types are not yet supported:
+
+- Databases (tables, boards, galleries)
+- Embedded files and attachments
+- Images and media
+- Code blocks
+- Equations
+
+<Note>
+  Text content is extracted from complex block types when possible. For example, text within a callout block will be indexed even though callouts themselves are in the unsupported list.
+</Note>
+
+## How Notion Content is Processed
+
+Khoj processes your Notion content in a specific way:
+
+1. **Hierarchical Structure**: Headings are used to maintain document structure and context
+2. **Page Titles**: Each entry includes the page title for better context
+3. **Chunking**: Large pages are split into sections based on headings to fit the model's token limit (~256 tokens per chunk)
+4. **Nested Children**: Content within nested blocks (like toggles and bulleted lists) is preserved with its parent context
+
+## Syncing and Updates
+
+<Info>
+  **Khoj Cloud**: Your Notion content syncs automatically in the background. Changes in Notion will be reflected in Khoj within a few hours.
+  
+  **Self-Hosted**: Click "Configure" in the settings page to manually trigger a sync.
+</Info>
+
+### What Happens During Sync
+
+- New pages are added to the index
+- Modified pages are updated
+- Deleted pages are removed from the index
+- Shared pages that you later unshare are automatically removed
+
+## Searching Notion Content
+
+Once indexed, you can:
+
+- **Search across all workspaces**: Find information across multiple Notion workspaces if you've connected more than one
+- **Get page references**: Search results include links back to the original Notion pages
+- **Chat with your notes**: Ask questions about your Notion content and get answers with proper context
+
+<Card title="Chat with Khoj" icon="comments" href="/features/chat">
+  Learn how to have conversations with your Notion content
+</Card>
+
+## Privacy and Permissions
+
+<Note>
+  Khoj only has access to pages and databases that you explicitly share with the integration. It cannot access your entire Notion workspace unless you choose to share everything.
+</Note>
+
+### Security Best Practices
+
+- Only share the pages and databases you need indexed
+- Regularly review which pages are shared with the Khoj integration
+- Use Notion's permission system to control what team members can share
+- For sensitive data, consider using a self-hosted Khoj instance
+
+## Troubleshooting
+
+### No content appears after connecting
+
+<Steps>
+  <Step title="Verify Page Sharing">
+    Make sure you've shared pages with the Khoj integration (self-hosted only)
+  </Step>
+  
+  <Step title="Check Authorization">
+    Ensure you completed the OAuth flow and granted the necessary permissions (Khoj Cloud)
+  </Step>
+  
+  <Step title="Wait for Processing">
+    Initial indexing can take several minutes for large workspaces
+  </Step>
+  
+  <Step title="Trigger Manual Sync">
+    For self-hosted instances, click "Configure" in settings to force a sync
+  </Step>
+</Steps>
+
+### Some pages are missing
+
+- Verify that those specific pages are shared with your Khoj integration
+- Check that the pages aren't in the unsupported content type list
+- For self-hosted: Ensure your API token has access to the workspace containing those pages
+
+### Search results seem outdated
+
+- **Khoj Cloud**: Wait a few hours for the automatic sync to update content
+- **Self-Hosted**: Manually trigger a sync by clicking "Configure" in settings
+- Recent changes (within the last few hours) may not appear immediately
+
+### Authentication errors (self-hosted)
+
+- Verify your API token is correct and hasn't been revoked
+- Check that the integration still has access to your workspace
+- Try regenerating the integration token in Notion and updating it in Khoj
+
+## Disconnecting Notion
+
+To remove the Notion integration:
+
+### Khoj Cloud
+1. Go to [app.khoj.dev/settings](https://app.khoj.dev/settings)
+2. Find the Notion integration
+3. Click "Disconnect"
+4. Your Notion content will be removed from the index
+
+### Self-Hosted
+1. Go to your Khoj settings page
+2. Remove the Notion API token
+3. Click "Save"
+4. Optionally, revoke the integration in [Notion settings](https://www.notion.so/my-integrations)
+
+<Note>
+  Disconnecting Notion will remove all indexed content from Khoj's search index. This action cannot be undone.
+</Note>

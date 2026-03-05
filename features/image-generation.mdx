@@ -1,0 +1,509 @@
+---
+title: Image Generation
+description: Create stunning visuals from text descriptions
+icon: image
+---
+
+Khoj can generate custom images from text prompts using state-of-the-art AI image models. From illustrations to concept art, create visuals that bring your ideas to life.
+
+<CardGroup cols={2}>
+  <Card>
+    **Prompt:** Paint a picture of the plants I got last month, pixar-animation
+    
+    <Frame>
+      <img src="/img/plants_i_got.png" alt="Pixar-style plants illustration" />
+    </Frame>
+  </Card>
+  <Card>
+    **Prompt:** Create a picture of my dream house, based on my interests
+    
+    <Frame>
+      <img src="/img/dream_house.png" alt="Dream house illustration" />
+    </Frame>
+  </Card>
+</CardGroup>
+
+## How to Generate Images
+
+<Tabs>
+  <Tab title="Natural Language" icon="message">
+    Just describe what you want in your chat message:
+    
+    ```text
+    Create an image of a serene mountain landscape at sunset
+    ```
+    
+    ```text
+    Draw a diagram showing the water cycle
+    ```
+    
+    ```text
+    Make a logo for my coffee shop called "Bean There"
+    ```
+    
+    Khoj automatically detects image generation intent and creates the image.
+  </Tab>
+  
+  <Tab title="/image Command" icon="slash">
+    Explicitly trigger image generation:
+    
+    ```text
+    /image A futuristic city with flying cars
+    ```
+    
+    ```text
+    /image Portrait of a wise old wizard, oil painting style
+    ```
+    
+    <Tip>Use `/image` when your prompt might be ambiguous</Tip>
+  </Tab>
+</Tabs>
+
+## Prompt Engineering
+
+Craft better prompts for higher quality images:
+
+<AccordionGroup>
+  <Accordion title="Be Specific" icon="bullseye">
+    **Instead of:**
+    ```text
+    A dog
+    ```
+    
+    **Try:**
+    ```text
+    A golden retriever puppy playing in a meadow, sunny day, 
+    photorealistic style
+    ```
+    
+    Include:
+    - Subject details
+    - Setting/environment
+    - Lighting conditions
+    - Art style
+    - Mood/atmosphere
+  </Accordion>
+  
+  <Accordion title="Specify Art Style" icon="palette">
+    Reference artistic styles for consistent results:
+    
+    - **Photorealistic:** "professional photography", "DSLR", "8k"
+    - **Illustration:** "digital art", "concept art", "artstation"
+    - **Painting:** "oil painting", "watercolor", "impressionist"
+    - **3D:** "3D render", "octane render", "unreal engine"
+    - **Cartoon:** "pixar style", "anime", "comic book art"
+    - **Vintage:** "1970s photography", "retro poster", "film grain"
+    
+    **Example:**
+    ```text
+    /image A spaceship, retro 1950s sci-fi poster style
+    ```
+  </Accordion>
+  
+  <Accordion title="Use Descriptive Language" icon="spell-check">
+    Add adjectives for atmosphere:
+    
+    ```text
+    A cozy cottage in an enchanted forest, warm golden hour light, 
+    mist rising from the ground, magical atmosphere, fantasy art
+    ```
+    
+    - **Lighting:** golden hour, dramatic shadows, soft diffused light
+    - **Mood:** peaceful, energetic, mysterious, whimsical
+    - **Colors:** vibrant, muted, pastel, monochromatic
+    - **Quality:** detailed, intricate, minimalist, abstract
+  </Accordion>
+  
+  <Accordion title="Reference Your Notes" icon="file">
+    Khoj can use context from your documents:
+    
+    ```text
+    Based on my travel journal entry about Kyoto, create an 
+    illustration of the temple I visited
+    ```
+    
+    ```text
+    Generate a character portrait based on the description in 
+    my story notes
+    ```
+  </Accordion>
+  
+  <Accordion title="Iterate and Refine" icon="arrows-rotate">
+    Follow up to improve results:
+    
+    1. "Create a mountain landscape"
+    2. "Make it more dramatic with storm clouds"
+    3. "Add a small cabin in the foreground"
+    4. "Change the time to sunset"
+    
+    Each iteration refines the image.
+  </Accordion>
+</AccordionGroup>
+
+## Use Cases
+
+<Tabs>
+  <Tab title="Creative Projects">
+    **Character Design:**
+    ```text
+    /image A space explorer character, orange spacesuit, 
+    friendly face, concept art style
+    ```
+    
+    **Scene Visualization:**
+    ```text
+    Create a scene from my novel: a bustling medieval marketplace 
+    at dawn, merchants setting up stalls, fantasy illustration
+    ```
+    
+    **Mood Boards:**
+    ```text
+    Generate 4 different color palette concepts for my website, 
+    modern and professional
+    ```
+  </Tab>
+  
+  <Tab title="Professional">
+    **Presentations:**
+    ```text
+    /image An infographic showing the stages of product development, 
+    clean modern design
+    ```
+    
+    **Marketing:**
+    ```text
+    Create a hero image for a blog post about sustainable living, 
+    bright and inspiring
+    ```
+    
+    **Logos & Branding:**
+    ```text
+    Design a minimalist logo for a tech startup called "CloudVault"
+    ```
+  </Tab>
+  
+  <Tab title="Personal">
+    **Gift Ideas:**
+    ```text
+    Create a birthday card design with balloons and confetti, 
+    cheerful and colorful
+    ```
+    
+    **Home Decor:**
+    ```text
+    /image Abstract art with blues and greens, calming ocean theme, 
+    suitable for a living room
+    ```
+    
+    **Visualization:**
+    ```text
+    Based on my fitness goals notes, create a motivational poster
+    ```
+  </Tab>
+  
+  <Tab title="Educational">
+    **Diagrams:**
+    ```text
+    /image Cross-section diagram of the Earth's layers, labeled, 
+    educational illustration
+    ```
+    
+    **Historical Scenes:**
+    ```text
+    Create an illustration of ancient Rome's Colosseum during a 
+    gladiator event, historically accurate
+    ```
+    
+    **Concept Visualization:**
+    ```text
+    Visualize the concept of machine learning, abstract geometric 
+    style with networks and data
+    ```
+  </Tab>
+</Tabs>
+
+## Self-Hosting Setup
+
+Configure image generation for your self-hosted Khoj:
+
+### Option 1: Replicate (Recommended)
+
+<Steps>
+  <Step title="Get API Key">
+    Sign up at [replicate.com](https://replicate.com) and get your API token from [account settings](https://replicate.com/account/api-tokens)
+  </Step>
+  
+  <Step title="Choose a Model">
+    Replicate supports multiple image models. Recommended:
+    
+    - **Flux 1.1 Pro** (best quality): `black-forest-labs/flux-1.1-pro`
+    - **Flux Schnell** (fastest): `black-forest-labs/flux-schnell`
+    - **Stable Diffusion XL** (balanced): `stability-ai/sdxl`
+    - **Ideogram** (text in images): `ideogram-ai/ideogram-v2`
+    
+    [Browse all models →](https://replicate.com/pricing#image-models)
+  </Step>
+  
+  <Step title="Create Model Config">
+    Navigate to: `http://localhost:42110/server/admin/database/texttoimagemodelconfig/`
+    
+    Click **"Add Text to Image Model Config"**
+  </Step>
+  
+  <Step title="Configure Settings">
+    - **Model name:** `black-forest-labs/flux-1.1-pro` (or your choice)
+    - **Type:** `Replicate`
+    - **Api key:** Your Replicate API token
+    - **Ai model api:** Select your configured AI model API (or leave blank for default)
+  </Step>
+  
+  <Step title="Save and Test">
+    Save the configuration and try generating an image in chat
+  </Step>
+</Steps>
+
+<Info>
+  **Pricing:** Replicate charges per image generation. See [pricing details](https://replicate.com/pricing#image-models).
+</Info>
+
+### Option 2: OpenAI DALL-E
+
+<Steps>
+  <Step title="Get OpenAI API Key">
+    Generate an API key at [platform.openai.com](https://platform.openai.com/settings/organization/api-keys)
+  </Step>
+  
+  <Step title="Configure OpenAI API">
+    Ensure you have an OpenAI API configured in Khoj.
+    
+    [See setup guide →](/get-started/setup#add-chat-models)
+  </Step>
+  
+  <Step title="Create Image Model Config">
+    Navigate to: `http://localhost:42110/server/admin/database/texttoimagemodelconfig/`
+    
+    Add new configuration:
+    - **Model name:** `dall-e-3`
+    - **Type:** `OpenAI`
+    - **Ai model api:** Select your OpenAI API config
+  </Step>
+  
+  <Step title="Save">
+    Save and restart Khoj if needed
+  </Step>
+</Steps>
+
+<Note>
+  DALL-E 3 is simpler to set up if you already use OpenAI for chat, but may be more expensive per image than Replicate.
+</Note>
+
+### Model Comparison
+
+| Model | Quality | Speed | Cost | Best For |
+|-------|---------|-------|------|----------|
+| **Flux 1.1 Pro** | Excellent | Medium | $$$ | Professional work |
+| **Flux Schnell** | Good | Very Fast | $ | Quick iterations |
+| **DALL-E 3** | Excellent | Medium | $$$ | Text in images |
+| **SDXL** | Good | Fast | $$ | General use |
+| **Ideogram** | Very Good | Medium | $$ | Typography |
+
+## Advanced Techniques
+
+<AccordionGroup>
+  <Accordion title="Multi-Step Generation" icon="stairs">
+    Refine images through conversation:
+    
+    ```text
+    You: Create a forest scene
+    Khoj: [generates image]
+    
+    You: Add a deer in the clearing
+    Khoj: [generates updated image]
+    
+    You: Make it autumn with orange leaves
+    Khoj: [generates final version]
+    ```
+  </Accordion>
+  
+  <Accordion title="Style Transfer" icon="wand-magic-sparkles">
+    Apply artistic styles to concepts:
+    
+    ```text
+    /image My office space, but in the style of Van Gogh's Starry Night
+    ```
+    
+    ```text
+    The Eiffel Tower as a cyberpunk scene with neon lights
+    ```
+  </Accordion>
+  
+  <Accordion title="Combining with Research" icon="magnifying-glass">
+    Use online search for reference:
+    
+    ```text
+    /online What does a bioluminescent jellyfish look like?
+    [Review results]
+    /image Create an illustration of a bioluminescent jellyfish, 
+    realistic underwater photography style
+    ```
+  </Accordion>
+  
+  <Accordion title="Batch Generation" icon="layer-group">
+    Request variations:
+    
+    ```text
+    Generate 3 different logo concepts for a bakery called 
+    "The Bread Basket" - one vintage, one modern minimalist, 
+    one playful and colorful
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Image Generation in Workflows
+
+<Tabs>
+  <Tab title="Content Creation">
+    <Steps>
+      <Step>Write article or blog post</Step>
+      <Step>Ask Khoj to suggest image concepts</Step>
+      <Step>Generate hero image and supporting visuals</Step>
+      <Step>Download and use in publication</Step>
+    </Steps>
+  </Tab>
+  
+  <Tab title="Brainstorming">
+    <Steps>
+      <Step>Describe concept in text</Step>
+      <Step>Generate visual representation</Step>
+      <Step>Iterate based on image feedback</Step>
+      <Step>Use visuals to communicate ideas to team</Step>
+    </Steps>
+  </Tab>
+  
+  <Tab title="Learning">
+    <Steps>
+      <Step>Study a concept from your notes</Step>
+      <Step>Request visual diagram or illustration</Step>
+      <Step>Use image to reinforce understanding</Step>
+      <Step>Save to notes for future reference</Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card icon="list-check" title="Clear Descriptions">
+    Be specific about subjects, style, and mood
+  </Card>
+  <Card icon="rotate" title="Iterate">
+    Refine through conversation rather than one perfect prompt
+  </Card>
+  <Card icon="bookmark" title="Save Prompts">
+    Keep track of prompts that work well for reuse
+  </Card>
+  <Card icon="scale-balanced" title="Ethical Use">
+    Respect copyrights and use generated images responsibly
+  </Card>
+</CardGroup>
+
+## Limitations
+
+<Warning>
+  **Current constraints:**
+</Warning>
+
+- **Text in images:** Can be inconsistent (use Ideogram or DALL-E 3 for better text)
+- **Specific people:** Cannot reliably generate real individuals
+- **Complex scenes:** Very detailed multi-element scenes may need iteration
+- **Fine details:** Small text or intricate patterns may be imperfect
+- **Consistency:** Generated images of same subject will vary
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Image generation not working">
+    **Self-hosted:**
+    - Verify API key is correct
+    - Check model config exists and is active
+    - Review server logs for errors
+    - Ensure sufficient API credits
+    
+    **Cloud:**
+    - Feature should work automatically
+    - Try explicit `/image` command
+    - Report issue if persistent
+  </Accordion>
+  
+  <Accordion title="Poor quality results">
+    **Try:**
+    - Use more descriptive prompts
+    - Specify art style explicitly
+    - Reference high-quality examples
+    - Switch to higher-quality model (Flux Pro, DALL-E 3)
+  </Accordion>
+  
+  <Accordion title="Slow generation">
+    **Reasons:**
+    - High-quality models take longer
+    - API service load
+    
+    **Solutions:**
+    - Use faster model (Flux Schnell)
+    - Be patient (typically 10-30 seconds)
+  </Accordion>
+  
+  <Accordion title="Unexpected style">
+    **Solutions:**
+    - Be more explicit about desired style
+    - Include negative prompts ("not cartoonish")
+    - Reference specific artists or movements
+    - Try different model better suited to your style
+  </Accordion>
+</AccordionGroup>
+
+## Ethical Considerations
+
+<Info>
+  **Please use image generation responsibly:**
+  
+  - Don't create misleading or deceptive content
+  - Respect copyright and don't replicate specific artworks
+  - Avoid generating harmful or offensive imagery
+  - Give credit when sharing AI-generated art
+  - Follow platform guidelines and laws
+</Info>
+
+## Saving and Using Images
+
+<Steps>
+  <Step title="Download">
+    Right-click the generated image and select "Save Image As..."
+  </Step>
+  
+  <Step title="Edit (Optional)">
+    Use image editing software to refine or adjust
+  </Step>
+  
+  <Step title="Attribution">
+    When sharing publicly, consider noting it's AI-generated
+  </Step>
+  
+  <Step title="Integration">
+    Use in documents, presentations, websites, or social media
+  </Step>
+</Steps>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Create Diagrams" icon="diagram-project" href="/features/chat">
+    Use `/diagram` command for Excalidraw-style diagrams
+  </Card>
+  <Card title="Automate Image Tasks" icon="calendar-clock" href="/features/automations">
+    Schedule automated image generation
+  </Card>
+  <Card title="Learn More Prompting" icon="book" href="https://blog.khoj.dev/posts/how-khoj-generates-images/">
+    Read the detailed blog post about image generation
+  </Card>
+</CardGroup>

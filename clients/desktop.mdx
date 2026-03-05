@@ -1,0 +1,283 @@
+---
+title: Desktop App
+description: Sync local files and folders with Khoj using the desktop companion app
+icon: desktop
+---
+
+# Desktop App
+
+The Khoj Desktop app is a companion application that automatically syncs your local files and folders with Khoj, enabling you to chat with and search your entire knowledge base.
+
+<Info>
+  The Desktop app keeps your files in sync automatically, so Khoj always has access to your latest documents, notes, and files.
+</Info>
+
+## Features
+
+<CardGroup cols={2}>
+  <Card title="Automatic Sync" icon="rotate">
+    Continuously syncs selected files and folders to keep Khoj up-to-date with your latest content.
+  </Card>
+  
+  <Card title="File Management" icon="folder">
+    Easily add or remove files and folders from the Khoj index through a simple settings interface.
+  </Card>
+  
+  <Card title="Background Operation" icon="circle-play">
+    Runs quietly in the background, ensuring your knowledge base is always current.
+  </Card>
+  
+  <Card title="Cross-Platform" icon="laptop">
+    Available for Windows, macOS, and Linux.
+  </Card>
+</CardGroup>
+
+## Installation
+
+<Steps>
+  <Step title="Download the App">
+    Download the Khoj Desktop app for your operating system from [khoj.dev/downloads](https://khoj.dev/downloads).
+    
+    <CardGroup cols={3}>
+      <Card title="Windows" icon="windows">
+        `.exe` installer
+      </Card>
+      <Card title="macOS" icon="apple">
+        `.dmg` installer
+      </Card>
+      <Card title="Linux" icon="linux">
+        `.AppImage` or `.deb`
+      </Card>
+    </CardGroup>
+  </Step>
+  
+  <Step title="Install the Application">
+    Run the installer and follow the on-screen instructions to complete the installation.
+  </Step>
+  
+  <Step title="Launch Khoj">
+    Open the Khoj Desktop app from your applications menu or desktop shortcut.
+  </Step>
+</Steps>
+
+## Configuration
+
+### Khoj Cloud Setup
+
+<Steps>
+  <Step title="Generate API Key">
+    Navigate to the [Khoj Web App Settings](https://app.khoj.dev/settings#clients) and generate a new API key.
+  </Step>
+  
+  <Step title="Open Desktop Settings">
+    Click the settings icon in the Khoj Desktop app.
+  </Step>
+  
+  <Step title="Enter API Key">
+    Paste your API key in the **Khoj API Key** field and click **Save**.
+  </Step>
+  
+  <Step title="Add Files and Folders" optional>
+    Click **Add Files** or **Add Folders** to select content you want Khoj to index.
+    
+    These files and folders will be automatically kept in sync.
+  </Step>
+</Steps>
+
+<Tip>
+  You can add as many files and folders as you want. Khoj will handle the indexing and syncing automatically.
+</Tip>
+
+### Self-Hosted Setup
+
+<Info>
+  If you're running your own Khoj server, follow these additional configuration steps.
+</Info>
+
+<Steps>
+  <Step title="Open Settings">
+    Open the Settings page in the Khoj Desktop app.
+  </Step>
+  
+  <Step title="Configure Server URL">
+    Set the **Khoj URL** field to your self-hosted server URL.
+    
+    <CodeGroup>
+    ```text Default Local Server
+    http://127.0.0.1:42110
+    ```
+    
+    ```text Custom Server
+    http://your-server-domain:port
+    ```
+    </CodeGroup>
+  </Step>
+  
+  <Step title="API Key (Optional)">
+    If your Khoj server is **not** running in anonymous mode, generate and enter an API key.
+    
+    Leave the **Khoj API Key** field empty if running with anonymous mode:
+    
+    ```bash
+    khoj --anonymous-mode
+    ```
+  </Step>
+  
+  <Step title="Add Content">
+    Add files and folders you want to sync, then click **Save**.
+  </Step>
+</Steps>
+
+## Using the Desktop App
+
+### Adding Content
+
+<Tabs>
+  <Tab title="Add Folders">
+    1. Open the Khoj Desktop app settings
+    2. Click **Add Folders**
+    3. Select the folder(s) you want to sync
+    4. Click **Save** to start syncing
+    
+    <Note>
+      All files within the selected folders will be recursively indexed and kept in sync.
+    </Note>
+  </Tab>
+  
+  <Tab title="Add Individual Files">
+    1. Open the Khoj Desktop app settings
+    2. Click **Add Files**
+    3. Select specific files to sync
+    4. Click **Save** to start syncing
+  </Tab>
+</Tabs>
+
+### Removing Content
+
+To remove files or folders from Khoj:
+
+1. Open the Desktop app settings
+2. Find the file or folder in the list
+3. Click the **Remove** button next to it
+4. Click **Save** to apply changes
+
+<Warning>
+  Removing content from the Desktop app will remove it from Khoj's index, but it will **not** delete the files from your computer.
+</Warning>
+
+### Sync Status
+
+The Desktop app shows the current sync status:
+
+- **Syncing**: Files are currently being uploaded and indexed
+- **Up to date**: All files are synced with the latest version
+- **Error**: There was an issue syncing (check your connection or API key)
+
+## Progressive Web App Alternative
+
+You can also install the Khoj web interface as a Progressive Web App (PWA) on your desktop:
+
+<Steps>
+  <Step title="Open Khoj in Chrome">
+    Navigate to [app.khoj.dev](https://app.khoj.dev) in Chrome or Edge.
+  </Step>
+  
+  <Step title="Install the App">
+    Click the install button in the address bar or use the menu:
+    
+    ![PWA Install Desktop](https://assets.khoj.dev/pwa_install_desktop.png)
+  </Step>
+  
+  <Step title="Alternative Installation">
+    Or via menu:
+    1. Click the three-dot menu
+    2. Go to 'Cast, Save, and Share'
+    3. Click "Install Khoj"
+    
+    ![Chrome PWA Alternative](https://assets.khoj.dev/chrome_pwa_alt.png)
+  </Step>
+</Steps>
+
+<Note>
+  The PWA provides the web interface only. To sync local files and folders, you still need the Desktop companion app.
+</Note>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Sync not working">
+    1. Verify your API key is correct
+    2. Check your internet connection
+    3. Ensure the Khoj server URL is correct
+    4. Try removing and re-adding the problematic files/folders
+  </Accordion>
+  
+  <Accordion title="Cannot connect to server">
+    **For Khoj Cloud users:**
+    - Check your internet connection
+    - Verify the server URL is `https://app.khoj.dev`
+    
+    **For self-hosted users:**
+    - Ensure your Khoj server is running
+    - Verify the server URL and port are correct
+    - Check firewall settings
+  </Accordion>
+  
+  <Accordion title="API key not working">
+    1. Generate a new API key from the [Settings page](https://app.khoj.dev/settings#clients)
+    2. Copy the entire key (check for extra spaces)
+    3. Paste it into the Desktop app settings
+    4. Click Save and restart the app
+  </Accordion>
+  
+  <Accordion title="High CPU or memory usage">
+    This is normal during initial indexing of large file collections. Once indexing is complete, resource usage will decrease significantly.
+    
+    If the issue persists:
+    - Try syncing folders in smaller batches
+    - Exclude large binary files or databases
+    - Check for file permission issues
+  </Accordion>
+</AccordionGroup>
+
+## Supported File Types
+
+The Desktop app can sync and index various file types:
+
+<CardGroup cols={3}>
+  <Card title="Documents" icon="file-lines">
+    - Markdown (`.md`)
+    - PDF (`.pdf`)
+    - Text (`.txt`)
+    - Org mode (`.org`)
+  </Card>
+  
+  <Card title="Office Files" icon="file-word">
+    - Word (`.docx`)
+    - Excel (`.xlsx`)
+    - PowerPoint (`.pptx`)
+  </Card>
+  
+  <Card title="Other" icon="file">
+    - Images (with OCR)
+    - Code files
+    - HTML files
+  </Card>
+</CardGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Web Client" icon="globe" href="/clients/web">
+    Access Khoj from any browser
+  </Card>
+  <Card title="Chat Features" icon="comment" href="/features/chat">
+    Learn about chat capabilities
+  </Card>
+  <Card title="Obsidian Plugin" icon="book" href="/clients/obsidian">
+    Integrate with Obsidian
+  </Card>
+  <Card title="Search" icon="magnifying-glass" href="/features/search">
+    Master natural language search
+  </Card>
+</CardGroup>

@@ -1,0 +1,494 @@
+---
+title: Share Conversations
+description: Create public links to share your chat sessions
+icon: share
+---
+
+Share your Khoj conversations with colleagues, friends, or the community by creating public links. Perfect for collaboration, showing your work, or getting help.
+
+<Frame>
+  <img src="https://assets.khoj.dev/share_side_panel_conversation.gif" alt="Sharing a conversation demo" />
+</Frame>
+
+## What is Conversation Sharing?
+
+Create a **public, read-only snapshot** of any chat conversation:
+
+<CardGroup cols={2}>
+  <Card icon="camera" title="Snapshot in Time">
+    Shared link shows conversation exactly as it was when shared
+  </Card>
+  <Card icon="eye" title="View-Only">
+    Others can read but not modify or continue the conversation
+  </Card>
+  <Card icon="lock-open" title="Public Link">
+    Anyone with the link can access - no Khoj account required
+  </Card>
+  <Card icon="clock" title="Static Content">
+    Future messages you send won't appear in the shared version
+  </Card>
+</CardGroup>
+
+## How to Share a Conversation
+
+<Steps>
+  <Step title="Open Conversation Menu">
+    In the chat interface, click the **three-dot menu** (⋯) in the conversation header or sidebar
+  </Step>
+  
+  <Step title="Select 'Share'">
+    Click the **"Share"** option from the menu
+  </Step>
+  
+  <Step title="Copy Link">
+    A shareable URL is generated instantly. Click to copy:
+    
+    ```
+    https://app.khoj.dev/share/chat/[unique-id]
+    ```
+  </Step>
+  
+  <Step title="Share the Link">
+    Send the URL via:
+    - Email
+    - Slack or other messaging apps
+    - Social media
+    - Documentation or blog posts
+    - Anywhere you can share links!
+  </Step>
+</Steps>
+
+<Tip>
+  You can share a conversation at any point - early for collaboration, or after completion to showcase results.
+</Tip>
+
+## Use Cases
+
+<Tabs>
+  <Tab title="Getting Help" icon="circle-question">
+    **Troubleshooting with support:**
+    
+    Instead of copying and pasting your entire conversation:
+    
+    1. Chat with Khoj about your problem
+    2. Share the conversation link
+    3. Support can see the full context
+    
+    **Example message:**
+    ```
+    Hey team, I'm having trouble with X. Here's my conversation 
+    with Khoj where I explored the issue: [share link]
+    ```
+  </Tab>
+  
+  <Tab title="Collaboration" icon="users">
+    **Working together:**
+    
+    - Share research findings with teammates
+    - Show how you solved a problem
+    - Discuss approaches before implementing
+    - Get feedback on ideas
+    
+    **Example:**
+    ```
+    I asked Khoj to analyze our user feedback. Check out what 
+    it found: [share link]
+    
+    What do you think about the suggested priorities?
+    ```
+  </Tab>
+  
+  <Tab title="Documentation" icon="book">
+    **Creating guides:**
+    
+    - Show example queries and responses
+    - Demonstrate Khoj capabilities
+    - Create tutorials with real interactions
+    - Document decision-making processes
+    
+    Embed shared links in:
+    - Internal wikis
+    - README files
+    - Blog posts
+    - Training materials
+  </Tab>
+  
+  <Tab title="Showcasing Work" icon="trophy">
+    **Demonstrating expertise:**
+    
+    - Share impressive research you conducted
+    - Show complex problem-solving
+    - Demonstrate data analysis
+    - Highlight creative projects
+    
+    **Example:**
+    ```
+    Here's how I used Khoj to analyze market trends and 
+    generate visualizations: [share link]
+    ```
+  </Tab>
+  
+  <Tab title="Teaching" icon="graduation-cap">
+    **Educational purposes:**
+    
+    - Show students how to research effectively
+    - Demonstrate proper prompt engineering
+    - Share worked examples
+    - Create study resources
+    
+    Share as:
+    - Course materials
+    - Assignment examples
+    - Study guides
+    - Reference conversations
+  </Tab>
+  
+  <Tab title="Reporting Issues" icon="bug">
+    **Bug reports:**
+    
+    When you find unexpected behavior:
+    
+    1. Document the issue in a conversation
+    2. Share the link in your bug report
+    3. Developers can see exact reproduction steps
+    
+    Much better than screenshots!
+  </Tab>
+</Tabs>
+
+## What Gets Shared
+
+<Accordion title="Included in Shared Conversation" icon="check">
+  - All messages in the conversation up to the sharing moment
+  - Your questions and Khoj's responses
+  - Images generated during the chat
+  - Code blocks and output
+  - Citations and source references
+  - Timestamps
+</Accordion>
+
+<Accordion title="NOT Included" icon="xmark">
+  - Your personal documents or knowledge base content
+  - Messages sent after sharing
+  - Your account information
+  - Other conversations
+  - Ability to continue the conversation
+</Accordion>
+
+<Warning>
+  **Before sharing, review the conversation** to ensure it doesn't contain:
+  - Sensitive personal information
+  - Passwords or API keys
+  - Private business data
+  - Confidential information
+</Warning>
+
+## Managing Shared Conversations
+
+<Tabs>
+  <Tab title="Finding Your Shares">
+    Currently, shared conversations are managed through:
+    
+    1. Bookmark the share link yourself
+    2. Keep track of shared URLs
+    3. Access through browser history
+    
+    <Note>A dedicated "My Shares" dashboard is planned for future releases</Note>
+  </Tab>
+  
+  <Tab title="Updating Shared Content">
+    **Shares are static snapshots** - you cannot update them.
+    
+    If you need to share updated content:
+    1. Continue the conversation
+    2. Create a new share
+    3. Send the new link
+    
+    The old link remains unchanged.
+  </Tab>
+  
+  <Tab title="Removing Shares">
+    Currently, shared links cannot be deleted or made private again.
+    
+    <Warning>
+      Treat shared links as permanent. Only share conversations you're comfortable being public.
+    </Warning>
+    
+    <Note>
+      Share management features (delete, expire, password-protect) are planned for future releases.
+    </Note>
+  </Tab>
+</Tabs>
+
+## Privacy & Security
+
+<Info>
+  **Important privacy considerations:**
+</Info>
+
+<AccordionGroup>
+  <Accordion title="Public Access" icon="globe">
+    Anyone with the link can view the conversation - no authentication required.
+    
+    **This means:**
+    - Can be shared widely
+    - May be indexed by search engines
+    - Could be accessed by unintended viewers
+    - Treat as public information
+  </Accordion>
+  
+  <Accordion title="Personal Data Protection" icon="shield">
+    **Your documents are NOT shared:**
+    - Only the conversation content is visible
+    - Source documents remain private
+    - Personal knowledge base not accessible
+    - Citations show references but not full content
+  </Accordion>
+  
+  <Accordion title="Link Security" icon="key">
+    **Unique URLs:**
+    - Each share has a unique, hard-to-guess ID
+    - Links are not easily discoverable
+    - However, anyone with the URL can access
+    
+    **Don't share links containing:**
+    - Personal identifiable information (PII)
+    - Credentials or secrets
+    - Sensitive business data
+    - Private communications
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card icon="eye" title="Review Before Sharing">
+    Read through the entire conversation to verify content is appropriate
+  </Card>
+  <Card icon="pen" title="Clean Up First">
+    Start a new conversation if current one has sensitive info mixed in
+  </Card>
+  <Card icon="tag" title="Add Context">
+    When sharing, include a message explaining what the link shows
+  </Card>
+  <Card icon="user-group" title="Know Your Audience">
+    Consider who might see the link (public vs small team)
+  </Card>
+</CardGroup>
+
+## Viewing Shared Conversations
+
+When someone shares a link with you:
+
+<Steps>
+  <Step title="Click the Link">
+    Open the shared URL in your browser
+  </Step>
+  
+  <Step title="View Conversation">
+    Read through the chat history:
+    - Scroll to see all messages
+    - Click citations to see sources
+    - View embedded images or charts
+  </Step>
+  
+  <Step title="Try it Yourself (Optional)">
+    At the bottom, you can click **"Try this in Khoj"** to:
+    - Start your own conversation
+    - Ask follow-up questions
+    - Explore related topics
+    
+    <Note>This creates a NEW conversation in your account, not a continuation of the shared one</Note>
+  </Step>
+</Steps>
+
+<Tip>
+  **Example shared conversation:** Check out [this sample](http://app.khoj.dev/share/chat/in-particular-assess-the-prospect-for-brazil-/) to see how shared conversations look.
+</Tip>
+
+## Technical Details
+
+<AccordionGroup>
+  <Accordion title="Link Format">
+    Shared conversation URLs follow this pattern:
+    
+    ```
+    https://app.khoj.dev/share/chat/[unique-conversation-id]
+    ```
+    
+    - **Unique ID:** Random string identifying the conversation
+    - **Non-sequential:** IDs are not predictable
+    - **Permanent:** Links don't expire (currently)
+  </Accordion>
+  
+  <Accordion title="Self-Hosted Sharing">
+    Sharing works on self-hosted instances:
+    
+    ```
+    https://your-khoj-domain.com/share/chat/[unique-id]
+    ```
+    
+    **Requirements:**
+    - Khoj server must be accessible at the shared URL
+    - If behind firewall, recipients need access
+    - Consider network security policies
+  </Accordion>
+  
+  <Accordion title="Data Storage">
+    **What's stored:**
+    - Conversation messages and metadata
+    - Generated images (embedded)
+    - Citations and references
+    
+    **What's NOT stored:**
+    - Your source documents
+    - Personal knowledge base
+    - Account credentials
+  </Accordion>
+</AccordionGroup>
+
+## Limitations & Future Features
+
+**Current Limitations:**
+- Cannot delete or expire shared links
+- No password protection
+- Cannot update shared content
+- No analytics on who viewed
+
+**Planned Features:**
+- Share management dashboard
+- Ability to delete shares
+- Expiration dates
+- Password-protected shares
+- View analytics
+- Share collections of conversations
+- Export to PDF or other formats
+
+<Note>
+  Feature requests welcome! Join [Discord](https://discord.gg/BDgyabRM6e) to suggest improvements.
+</Note>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Share button not appearing">
+    **Possible causes:**
+    - Conversation is empty (no messages yet)
+    - Feature not enabled on self-hosted instance
+    - Browser compatibility issue
+    
+    **Try:**
+    - Refresh the page
+    - Ensure at least one message exchange exists
+    - Try different browser
+    - Check self-hosted configuration
+  </Accordion>
+  
+  <Accordion title="Shared link not working">
+    **Check:**
+    - URL was copied completely
+    - No extra characters or spaces
+    - Server is accessible (self-hosted)
+    - Not blocked by firewall
+    
+    **Try:**
+    - Copy link again
+    - Test in incognito/private window
+    - Try different browser or device
+  </Accordion>
+  
+  <Accordion title="Images not showing in shared link">
+    **Possible causes:**
+    - Image generation in progress when shared
+    - Network issue during sharing
+    - Image hosting problem
+    
+    **Try:**
+    - Create new share after images fully load
+    - Refresh the shared page
+    - Report issue if persistent
+  </Accordion>
+</AccordionGroup>
+
+## Examples of Good Shares
+
+<Tabs>
+  <Tab title="Research Session">
+    **Shareable:**
+    ```
+    Conversation exploring the history of artificial intelligence, 
+    with citations to academic papers and a timeline visualization.
+    ```
+    
+    **Why:** Educational, factual, no personal information.
+  </Tab>
+  
+  <Tab title="Problem Solving">
+    **Shareable:**
+    ```
+    Debugging a Python error with code examples and solutions. 
+    Shows the troubleshooting process step by step.
+    ```
+    
+    **Why:** Helpful for others, demonstrates methodology, no sensitive code.
+  </Tab>
+  
+  <Tab title="Creative Work">
+    **Shareable:**
+    ```
+    Brainstorming session for a short story with plot ideas, 
+    character development, and generated cover art concepts.
+    ```
+    
+    **Why:** Creative, interesting, no personal information.
+  </Tab>
+</Tabs>
+
+## Examples of What NOT to Share
+
+<Warning>
+  **Do not share conversations containing:**
+</Warning>
+
+- Passwords, API keys, or credentials
+- Personal health information
+- Financial account details
+- Private business strategies
+- Confidential documents or data
+- Personal conversations about others
+- Anything you wouldn't post publicly
+
+## Alternatives to Sharing
+
+If you need to collaborate without making content public:
+
+<CardGroup cols={2}>
+  <Card icon="copy" title="Copy-Paste">
+    Manually copy relevant parts of the conversation to share privately
+  </Card>
+  <Card icon="camera" title="Screenshot">
+    Take screenshots for specific messages (less ideal for long chats)
+  </Card>
+  <Card icon="building" title="Enterprise Features">
+    Khoj Enterprise offers team workspaces with private sharing
+    
+    [Learn more →](https://khoj.dev/teams)
+  </Card>
+</CardGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Create Great Conversations" icon="message" href="/features/chat">
+    Learn chat features to create share-worthy conversations
+  </Card>
+  <Card title="Use Agents" icon="robot" href="/features/agents">
+    Specialized agents create more interesting shareable content
+  </Card>
+  <Card title="Online Research" icon="globe" href="/features/online-search">
+    Share well-researched conversations with citations
+  </Card>
+  <Card title="Generate Visuals" icon="image" href="/features/image-generation">
+    Add images and charts to make shares more engaging
+  </Card>
+</CardGroup>

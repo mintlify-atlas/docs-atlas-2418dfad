@@ -1,0 +1,73 @@
+---
+title: LM Studio
+description: Use LM Studio to run local LLMs with Khoj (currently unsupported)
+---
+
+<Warning>
+  **Unsupported**: Khoj does not work with LM Studio anymore. Khoj leverages [json mode](https://platform.openai.com/docs/guides/structured-outputs#json-mode) extensively but LM Studio's API seems to have dropped support for JSON mode. [Reference 1](https://x.com/lmstudio/status/1770135858709975547), [Reference 2](https://lmstudio.ai/docs/api/structured-output)
+</Warning>
+
+<Info>
+  This is only helpful for self-hosted users. If you're using [Khoj Cloud](https://app.khoj.dev), you're limited to our first-party models.
+</Info>
+
+<Note>
+  Khoj natively supports local LLMs [available on HuggingFace in GGUF format](https://huggingface.co/models?library=gguf). Using an OpenAI API proxy with Khoj may be useful for ease of setup, trying new models or using commercial LLMs via API.
+</Note>
+
+## Overview
+
+[LM Studio](https://lmstudio.ai/) is a desktop app to chat with open-source LLMs on your local machine. LM Studio provides a neat interface for folks comfortable with a GUI.
+
+LM Studio can expose an [OpenAI API compatible server](https://lmstudio.ai/docs/local-server). This makes it possible to turn chat models from LM Studio into your personal AI agents with Khoj.
+
+## Setup (Deprecated)
+
+<Warning>
+  The following setup instructions are provided for historical reference only. This integration is no longer functional due to LM Studio's API changes.
+</Warning>
+
+<Steps>
+  <Step title="Install LM Studio">
+    Install [LM Studio](https://lmstudio.ai/) and download your preferred Chat Model.
+  </Step>
+  
+  <Step title="Start Local Server">
+    Go to the Server Tab on LM Studio, select your preferred Chat Model and click the green Start Server button.
+  </Step>
+  
+  <Step title="Create AI Model API">
+    Create a new [AI Model API](http://localhost:42110/server/admin/database/aimodelapi/add/) on your Khoj admin panel:
+    
+    - **Name**: `lmstudio`
+    - **Api Key**: `any string`
+    - **Api Base Url**: `http://localhost:1234/v1/` (default for LM Studio)
+  </Step>
+  
+  <Step title="Create Chat Model">
+    Create a new [Chat Model](http://localhost:42110/server/admin/database/chatmodel/add) on your Khoj admin panel:
+    
+    - **Name**: `llama3.1` (replace with the name of your local model)
+    - **Model Type**: `Openai`
+    - **Ai Model Api**: *the lmstudio AI Model API you created in step 3*
+    - **Max prompt size**: `20000` (replace with the max prompt size of your model)
+    - **Tokenizer**: *Do not set for OpenAI, Mistral, Llama3 based models*
+  </Step>
+  
+  <Step title="Select Model">
+    Go to [your config](http://localhost:42110/settings) and select the model you just created in the chat model dropdown.
+  </Step>
+</Steps>
+
+## Alternatives
+
+Since LM Studio integration is no longer supported, consider these alternatives:
+
+<CardGroup cols={2}>
+  <Card title="Ollama" icon="robot" href="/advanced/ollama">
+    Use Ollama to run local LLMs with full JSON mode support
+  </Card>
+  <Card title="LiteLLM" icon="layer-group" href="/advanced/litellm">
+    Proxy requests to various LLM providers through a unified API
+  </Card>
+</CardGroup>

@@ -1,0 +1,309 @@
+---
+title: Chat
+description: Converse with AI using your knowledge and the web
+icon: message
+---
+
+Khoj Chat is your intelligent conversation partner that combines the power of advanced language models with your personal knowledge base. Ask questions, brainstorm ideas, or get research assistance - all grounded in your documents when relevant.
+
+<Frame>
+  <img src="https://assets.khoj.dev/vision_chat_example.png" alt="Khoj Chat Interface" />
+</Frame>
+
+## What Makes Khoj Chat Special
+
+<CardGroup cols={2}>
+  <Card icon="brain" title="Context-Aware">
+    Automatically retrieves relevant information from your documents using semantic search
+  </Card>
+  <Card icon="arrows-rotate" title="Multi-Turn Conversations">
+    Maintains context across messages for natural, flowing discussions
+  </Card>
+  <Card icon="quote-left" title="Source Citations">
+    Shows exact references from your notes that informed each response
+  </Card>
+  <Card icon="toggle-on" title="Online or Offline">
+    Choose between cloud-based or local AI models based on your needs
+  </Card>
+</CardGroup>
+
+## Getting Started
+
+<Steps>
+  <Step title="Open Khoj Chat">
+    <Tabs>
+      <Tab title="Web">
+        Navigate to [app.khoj.dev/chat](https://app.khoj.dev/chat) in your browser
+      </Tab>
+      <Tab title="Obsidian">
+        Open Command Palette (Cmd/Ctrl + P) and search for **Khoj: Chat**
+      </Tab>
+      <Tab title="Emacs">
+        Run `M-x khoj` and type your query
+      </Tab>
+      <Tab title="Desktop">
+        Click the chat icon in the application toolbar
+      </Tab>
+    </Tabs>
+  </Step>
+  
+  <Step title="Ask Your Question">
+    Type naturally - Khoj understands context and nuance. Try:
+    - "What did I learn about machine learning last week?"
+    - "Summarize my meeting notes from yesterday"
+    - "Help me draft an email about project updates"
+  </Step>
+  
+  <Step title="Review Sources">
+    Click on any citation to see the exact document section Khoj referenced
+  </Step>
+</Steps>
+
+## Slash Commands
+
+Control how Khoj responds by prefixing your message with these commands:
+
+<AccordionGroup>
+  <Accordion title="/notes - Use Only Your Documents" icon="file">
+    Forces Khoj to answer exclusively using your knowledge base, ignoring general knowledge.
+    
+    **Example:** `/notes What did my dentist say about my treatment plan?`
+    
+    <Tip>Use this when you want to be certain the answer comes from your notes</Tip>
+  </Accordion>
+  
+  <Accordion title="/general - Use Only AI Knowledge" icon="brain">
+    Prevents Khoj from searching your documents, relying only on the model's training.
+    
+    **Example:** `/general Explain quantum entanglement`
+    
+    <Tip>Useful for factual questions unrelated to your personal information</Tip>
+  </Accordion>
+  
+  <Accordion title="/default - Automatic Choice" icon="wand-magic-sparkles">
+    Lets Khoj decide whether to use your notes or general knowledge (default behavior).
+    
+    **Example:** `/default What are the best practices for documentation?`
+  </Accordion>
+  
+  <Accordion title="/online - Search the Internet" icon="globe">
+    Researches current information online and incorporates it into the response.
+    
+    **Example:** `/online What's the latest news on AI regulation?`
+    
+    [Learn more about Online Search →](/features/online-search)
+  </Accordion>
+  
+  <Accordion title="/image - Generate Images" icon="image">
+    Creates images based on your text description.
+    
+    **Example:** `/image A serene mountain landscape at sunset`
+    
+    [Learn more about Image Generation →](/features/image-generation)
+  </Accordion>
+  
+  <Accordion title="/diagram - Create Diagrams" icon="diagram-project">
+    Generates visual diagrams using Excalidraw format.
+    
+    **Example:** `/diagram Show the architecture of a microservices system`
+  </Accordion>
+  
+  <Accordion title="/code - Execute Python Code" icon="code">
+    Generates and runs Python code for calculations or data analysis.
+    
+    **Example:** `/code Calculate compound interest on $10,000 at 5% for 10 years`
+    
+    [Learn more about Code Execution →](/features/code-execution)
+  </Accordion>
+  
+  <Accordion title="/research - Deep Research Mode" icon="microscope">
+    Performs comprehensive research with multiple sources and deeper analysis.
+    
+    **Example:** `/research What are the implications of quantum computing on cryptography?`
+    
+    <Warning>Research mode takes longer but provides more thorough, well-sourced answers</Warning>
+  </Accordion>
+  
+  <Accordion title="/help - Get Assistance" icon="circle-question">
+    Shows available commands and tips for using Khoj effectively.
+  </Accordion>
+</AccordionGroup>
+
+## File Filters
+
+Limit which documents Khoj searches for relevant context.
+
+### Using the Sidebar (Web)
+
+<Frame>
+  <img src="/img/file_filters_conversation.png" alt="File Filters Panel" />
+</Frame>
+
+<Steps>
+  <Step title="Open Filters Panel">
+    Click the filter icon in the left sidebar of the chat interface
+  </Step>
+  
+  <Step title="Select Documents">
+    Check or uncheck specific files, folders, or document types
+  </Step>
+  
+  <Step title="Chat Normally">
+    Your filter selections apply to all messages in the current conversation
+  </Step>
+</Steps>
+
+### Using Query Filters
+
+Add filter syntax directly in your message:
+
+```text
+file:"project-notes.md" What were the action items?
+```
+
+```text
+dt>="last week" dt<="yesterday" Summarize my work
+```
+
+[Full Query Filter Reference →](#query-filters)
+
+## How It Works
+
+<Steps>
+  <Step title="Query Processing">
+    Your question is analyzed to understand intent and extract key concepts
+  </Step>
+  
+  <Step title="Retrieval (RAG)">
+    Khoj searches your knowledge base using semantic similarity, finding contextually relevant passages even if they don't contain exact keywords
+  </Step>
+  
+  <Step title="Context Assembly">
+    Retrieved notes, recent conversation history, and metadata are packaged together
+  </Step>
+  
+  <Step title="Response Generation">
+    The AI model generates a response using the assembled context and your query
+  </Step>
+  
+  <Step title="Citation">
+    Source documents are linked so you can verify and explore further
+  </Step>
+</Steps>
+
+<Note>
+  **RAG (Retrieval-Augmented Generation)** means Khoj first retrieves relevant information, then uses it to generate more accurate, grounded responses.
+</Note>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Be Specific with Context">
+    Instead of: *"Tell me about the meeting"*
+    
+    Try: *"What decisions were made in yesterday's product planning meeting?"*
+  </Accordion>
+  
+  <Accordion title="Use File Filters for Focused Searches">
+    When you know which documents are relevant, filter to just those files for faster, more accurate results.
+  </Accordion>
+  
+  <Accordion title="Iterate and Refine">
+    Follow up with clarifying questions. Khoj maintains conversation context:
+    
+    1. "Summarize my notes on machine learning"
+    2. "What did I learn about neural networks specifically?"
+    3. "Show me examples I saved"
+  </Accordion>
+  
+  <Accordion title="Combine Commands">
+    Use multiple techniques in sequence:
+    
+    1. Start with `/research` for comprehensive information
+    2. Ask `/notes` to see what you already know
+    3. Use `/code` to perform calculations
+  </Accordion>
+</AccordionGroup>
+
+## Advanced Features
+
+### Vision Support
+
+Khoj can analyze images you share in the conversation:
+
+<Steps>
+  <Step title="Upload Image">
+    Click the image icon or drag and drop
+  </Step>
+  
+  <Step title="Ask Questions">
+    "What's in this image?", "Read the text from this screenshot", "Describe this diagram"
+  </Step>
+</Steps>
+
+<Note>Vision capabilities require compatible chat models (GPT-4V, Claude 3, Gemini Pro Vision, etc.)</Note>
+
+### Multi-Modal Conversations
+
+Combine text, voice, and images in a single conversation:
+
+```text
+You: [Image of whiteboard] What does this diagram show?
+Khoj: This appears to be a system architecture diagram...
+You: Can you convert this to a proper /diagram?
+Khoj: [Generates Excalidraw diagram]
+```
+
+## Self-Hosting Configuration
+
+<Accordion title="Configure Chat Models">
+  Self-hosted users can customize which AI models to use.
+  
+  [See Setup Guide →](/self-hosting)
+</Accordion>
+
+<Accordion title="Adjust RAG Settings">
+  Fine-tune how many documents are retrieved and relevance thresholds.
+  
+  Navigate to: `http://localhost:42110/server/admin/database/searchmodelconfig/`
+</Accordion>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Khoj isn't finding my documents">
+    - Ensure documents are synced (check the data sources page)
+    - Try more specific queries
+    - Use `/notes` to force document search
+    - Verify file filters aren't excluding relevant documents
+  </Accordion>
+  
+  <Accordion title="Responses seem generic">
+    - Use the `/notes` command to focus on your knowledge
+    - Add file filters to narrow the search scope
+    - Provide more context in your question
+  </Accordion>
+  
+  <Accordion title="Slow response times">
+    - Check your internet connection (for cloud models)
+    - Consider using faster models in settings
+    - Reduce the number of documents being searched with filters
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Create Custom Agents" icon="robot" href="/features/agents">
+    Build specialized AI assistants for different tasks
+  </Card>
+  <Card title="Try Voice Chat" icon="microphone" href="/features/voice-chat">
+    Have spoken conversations with Khoj
+  </Card>
+  <Card title="Automate Research" icon="calendar-clock" href="/features/automations">
+    Schedule recurring chats and receive insights via email
+  </Card>
+  <Card title="Share Conversations" icon="share" href="/features/share">
+    Create public links to your chat sessions
+  </Card>
+</CardGroup>

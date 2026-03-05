@@ -1,0 +1,186 @@
+---
+title: Contributing Overview
+description: Welcome to the Khoj contributor community
+icon: heart
+---
+
+Welcome to the Khoj contributor community! We're excited to have you here. Open source contributors are a cornerstone of the Khoj community, and we welcome all contributions, big or small.
+
+## Why Contribute?
+
+<CardGroup cols={2}>
+  <Card title="Make an Impact" icon="rocket">
+    Help build, test, and improve a tool used by thousands to boost productivity and extend their capabilities with AI.
+  </Card>
+  <Card title="Learn & Grow" icon="graduation-cap">
+    Work on cutting-edge AI, LLMs, semantic search, and modern web technologies while collaborating with experienced developers.
+  </Card>
+  <Card title="Join the Community" icon="users">
+    Connect with developers, designers, and AI enthusiasts who share your passion for building better tools.
+  </Card>
+  <Card title="Shape the Future" icon="wand-magic-sparkles">
+    Influence the direction of an open-source personal AI platform that's always evolving.
+  </Card>
+</CardGroup>
+
+## Getting Started
+
+<Steps>
+  <Step title="Join the Discord Community">
+    Join our [Discord server](https://discord.gg/WaxF3SkFPU) and click the ✅ for the question "Are you interested in becoming a contributor?" in the `#welcome-and-rules` channel. This gives you access to the `#contributors` channel where you can ask questions and get help.
+  </Step>
+  
+  <Step title="Read the Contributing Guide">
+    Familiarize yourself with the official GitHub docs on [contributing to an open-source project](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).
+  </Step>
+  
+  <Step title="Find Your First Issue">
+    Browse [GitHub Issues](https://github.com/khoj-ai/khoj/issues) with the `good first issue` tag to find beginner-friendly tasks. These are carefully selected to help new contributors get started.
+  </Step>
+  
+  <Step title="Set Up Your Development Environment">
+    Follow our [Development Setup Guide](/contributing/development) to get Khoj running locally on your machine.
+  </Step>
+</Steps>
+
+## Ways to Contribute
+
+### Code Contributions
+
+- **New Features**: Implement new capabilities and extend Khoj's functionality
+- **Bug Fixes**: Identify and fix issues in the codebase
+- **Performance Improvements**: Optimize existing code for better speed and efficiency
+- **Refactoring**: Improve code quality, readability, and maintainability
+- **Testing**: Add unit tests, integration tests, and improve test coverage
+
+### Non-Code Contributions
+
+- **Documentation**: Improve guides, fix typos, add examples, or create tutorials
+- **Design**: Contribute UI/UX improvements, icons, or visual assets
+- **Bug Reports**: Report issues with detailed reproduction steps
+- **Feature Requests**: Propose new features and improvements
+- **Community Support**: Help other users in Discord, GitHub discussions, or forums
+- **Translations**: Help make Khoj accessible in more languages
+
+## Technology Stack
+
+<CardGroup cols={2}>
+  <Card title="Backend" icon="server">
+    - **Python 3.10-3.12**: Core application logic
+    - **FastAPI**: Modern web framework
+    - **Django**: Database ORM and admin interface
+    - **PostgreSQL + pgvector**: Database with vector embeddings
+    - **PyTorch**: Machine learning framework
+    - **Sentence Transformers**: Text embeddings
+  </Card>
+  
+  <Card title="Frontend" icon="browser">
+    - **Next.js 14**: React framework with SSR
+    - **TypeScript**: Type-safe JavaScript
+    - **Tailwind CSS**: Utility-first styling
+    - **Radix UI**: Accessible component primitives
+    - **Bun**: Fast JavaScript runtime and package manager
+  </Card>
+</CardGroup>
+
+<CardGroup cols={2}>
+  <Card title="Clients" icon="desktop">
+    - **Obsidian Plugin**: TypeScript/JavaScript
+    - **Emacs Package**: Emacs Lisp
+    - **Desktop App**: Electron (TypeScript)
+    - **Android App**: Kotlin
+  </Card>
+  
+  <Card title="Infrastructure" icon="cloud">
+    - **Docker**: Containerization
+    - **GitHub Actions**: CI/CD pipelines
+    - **pytest**: Testing framework
+    - **pre-commit**: Code quality hooks
+  </Card>
+</CardGroup>
+
+## Contribution Workflow
+
+<Steps>
+  <Step title="Discuss First">
+    Before starting work on a significant change, create or comment on a GitHub issue to discuss your approach. Tag a maintainer to get feedback. This helps ensure your PR aligns with project goals and gets merged faster.
+  </Step>
+  
+  <Step title="Fork and Branch">
+    Fork the repository and create a feature branch from `master`. Use descriptive branch names like `feature/add-search-filters` or `fix/memory-leak`.
+  </Step>
+  
+  <Step title="Make Changes">
+    Write clean, well-documented code following the project's style guidelines. Add tests for new functionality.
+  </Step>
+  
+  <Step title="Test Locally">
+    Run the test suite and linter to ensure your changes don't break existing functionality:
+    ```bash
+    pytest              # Run tests
+    mypy                # Type checking
+    pre-commit run --all  # Format and lint
+    ```
+  </Step>
+  
+  <Step title="Create Pull Request">
+    Submit a PR with a clear title and description. Link to the related issue and explain what your changes do and why.
+  </Step>
+  
+  <Step title="Address Review Feedback">
+    Maintainers will review your PR and may request changes. Be responsive to feedback and make necessary updates.
+  </Step>
+</Steps>
+
+## Code of Conduct
+
+<Note>
+  We're committed to providing a welcoming and inclusive environment. Be respectful, constructive, and collaborative. Harassment, discrimination, or any form of negative behavior won't be tolerated.
+</Note>
+
+### Community Guidelines
+
+- **Be Respectful**: Treat others with kindness and empathy
+- **Be Constructive**: Provide helpful feedback and suggestions
+- **Be Patient**: Remember that everyone is learning and growing
+- **Be Collaborative**: Work together to solve problems
+- **Be Open-Minded**: Consider different perspectives and approaches
+
+## Maintainer Response Times
+
+- **Critical bugs**: Within 24-48 hours
+- **Feature requests**: Within 1 week
+- **Pull request reviews**: Within 1-2 weeks
+- **Community questions**: Within 2-3 days
+
+<Note>
+  Response times may vary based on maintainer availability and project workload. We appreciate your patience!
+</Note>
+
+## Recognition
+
+All contributors are recognized in our:
+- [GitHub Contributors Graph](https://github.com/khoj-ai/khoj/graphs/contributors)
+- Release notes for significant contributions
+- Community shoutouts in Discord
+
+<Card title="Ready to Contribute?" icon="code">
+  Head over to the [Development Setup Guide](/contributing/development) to get started with setting up your local environment!
+</Card>
+
+## Additional Resources
+
+<CardGroup cols={2}>
+  <Card title="Development Setup" icon="code" href="/contributing/development">
+    Complete guide to setting up Khoj locally
+  </Card>
+  <Card title="Architecture" icon="sitemap" href="/contributing/architecture">
+    Understand Khoj's system design and structure
+  </Card>
+  <Card title="Performance" icon="gauge" href="/contributing/performance">
+    Learn about optimization and benchmarking
+  </Card>
+  <Card title="GitHub Issues" icon="github" href="https://github.com/khoj-ai/khoj/issues">
+    Find issues to work on
+  </Card>
+</CardGroup>

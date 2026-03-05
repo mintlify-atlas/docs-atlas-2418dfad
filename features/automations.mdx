@@ -1,0 +1,533 @@
+---
+title: Automations
+description: Schedule AI tasks and receive insights via email
+icon: calendar-clock
+---
+
+Automations let you schedule recurring research, analysis, or content generation tasks. Khoj runs your queries automatically and delivers results to your inbox - perfect for newsletters, daily briefings, and monitoring.
+
+<CardGroup cols={2}>
+  <Frame caption="Create Automation">
+    <img src="/img/khoj_create_automation.png" alt="Automation Creation Interface" />
+  </Frame>
+  <Frame caption="Receive Email">
+    <img src="/img/khoj_automation_email.png" alt="Automation Email Result" />
+  </Frame>
+</CardGroup>
+
+## What Can Automations Do?
+
+<AccordionGroup>
+  <Accordion title="Personal Newsletters" icon="newspaper">
+    Create custom newsletters tailored to your interests:
+    
+    **Example:** Weekly tech roundup
+    ```text
+    Subject: Weekly Tech Digest
+    
+    Query: Compile a newsletter with:
+    1. Top 3 AI news stories from this week
+    2. Interesting GitHub projects I might like
+    3. Summary of articles I saved but haven't read
+    
+    Schedule: Every Monday at 9:00 AM
+    ```
+  </Accordion>
+  
+  <Accordion title="Daily Briefings" icon="sun">
+    Start your day informed:
+    
+    **Example:** Morning briefing
+    ```text
+    Subject: Today's Priorities
+    
+    Query: Provide:
+    1. Weather forecast for my location
+    2. Top news headlines
+    3. My calendar for today from my notes
+    4. Motivational quote
+    
+    Schedule: Every day at 7:00 AM
+    ```
+  </Accordion>
+  
+  <Accordion title="Research Monitoring" icon="microscope">
+    Track topics automatically:
+    
+    **Example:** Competition analysis
+    ```text
+    Subject: Competitor Updates
+    
+    Query: Research and summarize:
+    1. Latest product launches from [competitors]
+    2. News mentions of [competitor names]
+    3. Industry trends in [your sector]
+    
+    Schedule: Every Friday at 5:00 PM
+    ```
+  </Accordion>
+  
+  <Accordion title="Personal Tracking" icon="chart-line">
+    Monitor your own data:
+    
+    **Example:** Weekly review
+    ```text
+    Subject: Week in Review
+    
+    Query: Based on my notes from the past week:
+    1. What did I accomplish?
+    2. What challenges did I face?
+    3. What should I focus on next week?
+    
+    Schedule: Every Sunday at 6:00 PM
+    ```
+  </Accordion>
+  
+  <Accordion title="Learning & Development" icon="graduation-cap">
+    Continuous education:
+    
+    **Example:** Daily learning
+    ```text
+    Subject: Today I Learned
+    
+    Query: Teach me something interesting about [topic]. 
+    Include:
+    1. A concept explanation
+    2. A practical example
+    3. A question to test understanding
+    
+    Schedule: Every day at 8:00 PM
+    ```
+  </Accordion>
+  
+  <Accordion title="Health & Wellness" icon="heart-pulse">
+    Stay on track with health goals:
+    
+    **Example:** Workout planner
+    ```text
+    Subject: This Week's Workouts
+    
+    Query: Create a workout plan for this week based on:
+    1. My fitness level from my notes
+    2. Equipment I have available
+    3. Time constraints (30 min sessions)
+    
+    Schedule: Every Monday at 6:00 AM
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Creating an Automation
+
+<Steps>
+  <Step title="Access Automations Page">
+    Navigate to [app.khoj.dev/automations](https://app.khoj.dev/automations)
+  </Step>
+  
+  <Step title="Click 'New Automation'">
+    Or use the quick-create form on the automations page
+  </Step>
+  
+  <Step title="Configure Subject Line">
+    Set the email subject - this helps you identify automations in your inbox
+    
+    ```text
+    Weekly Newsletter - Tech & AI
+    ```
+    
+    <Tip>Use clear, searchable subjects so you can filter emails later</Tip>
+  </Step>
+  
+  <Step title="Write Your Query">
+    Craft the task you want Khoj to perform. Be specific:
+    
+    **Good query:**
+    ```text
+    Compile a message including:
+    1. A recap of AI news from the past week
+    2. An at-home workout I can do in 20 minutes
+    3. A quote to inspire me for the week ahead
+    4. Summary of any notes I tagged #important this week
+    ```
+    
+    **Too vague:**
+    ```text
+    Send me updates
+    ```
+  </Step>
+  
+  <Step title="Set Schedule">
+    Choose when and how often the automation runs:
+    
+    <Tabs>
+      <Tab title="Quick Presets">
+        - Daily at [time]
+        - Weekly on [day] at [time]
+        - Monthly on [date] at [time]
+      </Tab>
+      
+      <Tab title="Custom Cron">
+        Use cron syntax for advanced scheduling:
+        
+        ```
+        0 9 * * 1        # Every Monday at 9 AM
+        0 7 * * 1-5      # Weekdays at 7 AM
+        0 18 1 * *       # 1st of month at 6 PM
+        0 */6 * * *      # Every 6 hours
+        ```
+        
+        [Cron syntax reference →](https://crontab.guru/)
+      </Tab>
+    </Tabs>
+    
+    <Note>
+      All times use your local timezone (detected automatically)
+    </Note>
+  </Step>
+  
+  <Step title="Choose Agent (Optional)">
+    Select a specific agent to run the automation, or use the default assistant
+  </Step>
+  
+  <Step title="Enable Tools (Optional)">
+    Toggle capabilities for this automation:
+    - **Online Search:** Include real-time web research
+    - **Document Search:** Access your knowledge base
+    - **Image Generation:** Include images in emails
+    - **Code Execution:** Run calculations or analysis
+  </Step>
+  
+  <Step title="Save Automation">
+    Click **"Create"** - Khoj will run at the next scheduled time
+  </Step>
+</Steps>
+
+## Managing Automations
+
+<Tabs>
+  <Tab title="View All Automations">
+    The [automations page](https://app.khoj.dev/automations) shows:
+    
+    - **Subject & Query:** What the automation does
+    - **Schedule:** When it runs
+    - **Next Run:** Countdown to next execution
+    - **Status:** Active, paused, or failed
+  </Tab>
+  
+  <Tab title="Edit Automation">
+    Click any automation to modify:
+    - Change query or subject
+    - Update schedule
+    - Toggle tools
+    - Switch agents
+    
+    Changes apply to the next run.
+  </Tab>
+  
+  <Tab title="Pause/Resume">
+    Toggle the status switch to:
+    - **Pause:** Stop running (preserves settings)
+    - **Resume:** Restart on schedule
+    
+    <Tip>Pause automations during vacations or when testing</Tip>
+  </Tab>
+  
+  <Tab title="Delete Automation">
+    Click the delete icon and confirm
+    
+    <Warning>Deleted automations cannot be recovered</Warning>
+  </Tab>
+</Tabs>
+
+## Email Delivery
+
+### What to Expect
+
+<Steps>
+  <Step title="Scheduled Execution">
+    At the scheduled time, Khoj processes your query in the background
+  </Step>
+  
+  <Step title="Email Sent">
+    Results are sent to your account email address within a few minutes
+  </Step>
+  
+  <Step title="Review Results">
+    The email contains:
+    - Subject line you configured
+    - Full response from Khoj
+    - Any images or diagrams generated
+    - Links to referenced documents
+    - Footer with automation management link
+  </Step>
+</Steps>
+
+### Email Formatting
+
+Automation emails are formatted for readability:
+
+- **Markdown rendered:** Headings, lists, and formatting preserved
+- **Images embedded:** Generated images appear inline
+- **Links active:** Citations and references are clickable
+- **Mobile-friendly:** Readable on all devices
+
+## Writing Effective Automation Queries
+
+<AccordionGroup>
+  <Accordion title="Be Specific and Structured" icon="list-ol">
+    Use numbered lists or sections:
+    
+    **Good:**
+    ```text
+    Create a weekly summary with:
+    1. Top 3 news stories in renewable energy
+    2. Summary of my journal entries this week
+    3. Recommended article to read based on my interests
+    4. Inspirational quote
+    ```
+    
+    **Less effective:**
+    ```text
+    Give me a weekly summary of stuff
+    ```
+  </Accordion>
+  
+  <Accordion title="Include Time References" icon="clock">
+    Specify relevant time periods:
+    
+    ```text
+    Summarize news from the past 7 days...
+    ```
+    
+    ```text
+    Based on my notes from yesterday...
+    ```
+    
+    ```text
+    What are this week's priorities from my calendar?
+    ```
+  </Accordion>
+  
+  <Accordion title="Leverage Your Knowledge Base" icon="database">
+    Reference your documents:
+    
+    ```text
+    Review notes tagged #work from the past week and 
+    highlight action items
+    ```
+    
+    ```text
+    Based on my reading list, recommend which book to 
+    start next and why
+    ```
+  </Accordion>
+  
+  <Accordion title="Request Actionable Output" icon="bullseye">
+    Ask for practical results:
+    
+    ```text
+    End with 3 specific actions I should take this week
+    ```
+    
+    ```text
+    Format as a checklist I can copy to my task manager
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Example Automations
+
+<CodeGroup>
+```text Daily Standup
+Subject: Daily Standup Prep
+
+Query:
+Based on my notes and calendar:
+1. What did I accomplish yesterday?
+2. What's on my schedule today?
+3. Any blockers or issues I noted?
+4. Top 3 priorities for today
+
+Schedule: Every weekday at 8:00 AM
+```
+
+```text Market Research
+Subject: Competitor Intelligence Digest
+
+Query:
+Research the following companies: [Company A, Company B, Company C]
+
+1. Recent product launches or announcements
+2. News mentions or press releases
+3. Hiring trends (are they expanding?)
+4. Social media sentiment
+5. Key takeaways for our strategy
+
+Schedule: Every Friday at 4:00 PM
+```
+
+```text Content Ideas
+Subject: Weekly Content Inspiration
+
+Query:
+Generate 5 blog post ideas for [your topic] based on:
+1. Trending topics this week
+2. Questions people are asking online
+3. Gaps in existing content
+
+For each idea, include:
+- Catchy headline
+- Target audience
+- Key points to cover
+- Estimated reading time
+
+Schedule: Every Monday at 10:00 AM
+```
+
+```text Learning Path
+Subject: This Week in Learning
+
+Query:
+Based on my goal to learn [topic]:
+
+1. Recap what I studied in my notes last week
+2. Suggest the next concept to learn
+3. Provide a 20-minute learning exercise
+4. Recommend one resource (article/video)
+5. Quiz me with 3 questions on last week's topic
+
+Schedule: Every Sunday at 7:00 PM
+```
+</CodeGroup>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card icon="clock" title="Time Zones">
+    Automations use your local time - verify before scheduling
+  </Card>
+  <Card icon="vial" title="Test First">
+    Run the query manually in chat before automating
+  </Card>
+  <Card icon="inbox" title="Manage Email">
+    Create filters to organize automation emails
+  </Card>
+  <Card icon="rotate" title="Review & Refine">
+    Adjust queries based on what you receive
+  </Card>
+</CardGroup>
+
+## Self-Hosting Requirements
+
+<Warning>
+  Self-hosted Khoj requires additional setup for automations:
+</Warning>
+
+<Steps>
+  <Step title="Configure Authentication">
+    Automations require user authentication to be enabled.
+    
+    [Authentication Setup Guide →](/api/authentication)
+  </Step>
+  
+  <Step title="Setup Email Service">
+    Configure Resend for email delivery:
+    
+    1. Create account at [resend.com](https://resend.com)
+    2. Generate API key
+    3. Set environment variable:
+       ```bash
+       RESEND_API_KEY=your_api_key_here
+       ```
+    4. Configure sender email in Khoj settings
+  </Step>
+  
+  <Step title="Restart Server">
+    Restart Khoj to apply email configuration
+  </Step>
+  
+  <Step title="Verify Setup">
+    Create a test automation to confirm email delivery
+  </Step>
+</Steps>
+
+<Note>
+  Cloud Khoj users ([app.khoj.dev](https://app.khoj.dev)) have automations fully configured - no setup needed.
+</Note>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Not receiving emails">
+    **Possible causes:**
+    - Email in spam folder
+    - Self-hosting without Resend configured
+    - Incorrect email address in account settings
+    
+    **Solutions:**
+    - Check spam/junk folders
+    - Whitelist noreply@khoj.dev
+    - Verify account email in settings
+    - Check Resend configuration (self-hosted)
+  </Accordion>
+  
+  <Accordion title="Automation didn't run">
+    **Possible causes:**
+    - Automation paused
+    - Server downtime during scheduled time
+    - Timezone confusion
+    
+    **Solutions:**
+    - Check automation status (active vs paused)
+    - Verify schedule in your local timezone
+    - Check "Last Run" timestamp
+  </Accordion>
+  
+  <Accordion title="Results are empty or generic">
+    **Possible causes:**
+    - Query too vague
+    - Required tools not enabled
+    - No relevant documents in knowledge base
+    
+    **Solutions:**
+    - Make query more specific
+    - Enable online search if needed
+    - Verify documents are synced
+    - Test query manually in chat first
+  </Accordion>
+  
+  <Accordion title="Emails too long">
+    **Solutions:**
+    - Ask for summaries or bullet points
+    - Limit number of items requested
+    - Be more specific about scope
+    
+    **Example:**
+    ```text
+    Summarize in 5 bullet points or less...
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Privacy & Data
+
+<Info>
+  - Automation emails are sent only to your account email
+  - You can share automation results by forwarding emails
+  - Queries run with your permissions and data access
+  - Delete automations anytime to stop future runs
+</Info>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Use Agents in Automations" icon="robot" href="/features/agents">
+    Assign specialized agents to automations for better results
+  </Card>
+  <Card title="Advanced Queries" icon="message" href="/features/chat">
+    Learn slash commands and query techniques
+  </Card>
+  <Card title="Share Results" icon="share" href="/features/share">
+    Share automation insights with your team
+  </Card>
+</CardGroup>

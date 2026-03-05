@@ -1,0 +1,465 @@
+---
+title: Agents
+description: Create custom AI assistants with specialized knowledge and personalities
+icon: robot
+---
+
+Agents in Khoj are specialized AI assistants you can customize with unique personalities, knowledge bases, and capabilities. Whether you need a research assistant, creative writing partner, or domain expert, agents adapt to any role.
+
+<Frame>
+  <img src="/img/agents_page_full.png" alt="Khoj Agents Gallery" />
+</Frame>
+
+## What are Agents?
+
+Think of agents as AI personas you create for specific tasks:
+
+<CardGroup cols={2}>
+  <Card icon="book-open" title="Custom Knowledge">
+    Give agents access to specific documents or your entire knowledge base
+  </Card>
+  <Card icon="masks-theater" title="Unique Personality">
+    Define behavior, tone, and expertise through custom system prompts
+  </Card>
+  <Card icon="wrench" title="Specialized Tools">
+    Enable specific capabilities like code execution, image generation, or web search
+  </Card>
+  <Card icon="share-nodes" title="Shareable">
+    Share agents with teammates or the community
+  </Card>
+</CardGroup>
+
+## Example Use Cases
+
+<Tabs>
+  <Tab title="Research Assistant">
+    **Agent Name:** Academic Researcher
+    
+    **Personality:**
+    ```
+    You are a meticulous research assistant with expertise in 
+    academic literature. Always cite sources, present multiple 
+    perspectives, and highlight areas needing further investigation.
+    ```
+    
+    **Knowledge:** Research papers, academic notes, journal articles
+    
+    **Tools:** Online search, code execution for data analysis
+  </Tab>
+  
+  <Tab title="Creative Writing Partner">
+    **Agent Name:** Story Weaver
+    
+    **Personality:**
+    ```
+    You are a creative writing coach specializing in fiction. 
+    Provide constructive feedback, suggest plot developments, 
+    and help develop compelling characters. Be encouraging 
+    and imaginative.
+    ```
+    
+    **Knowledge:** Writing guides, story ideas, character notes
+    
+    **Tools:** Image generation for character concepts
+  </Tab>
+  
+  <Tab title="Code Reviewer">
+    **Agent Name:** Code Mentor
+    
+    **Personality:**
+    ```
+    You are an experienced software engineer focused on code 
+    quality, best practices, and mentorship. Review code for 
+    bugs, suggest improvements, and explain your reasoning.
+    ```
+    
+    **Knowledge:** Project documentation, coding standards, past code reviews
+    
+    **Tools:** Code execution, online search for technical docs
+  </Tab>
+  
+  <Tab title="Personal Tutor">
+    **Agent Name:** Patient Teacher
+    
+    **Personality:**
+    ```
+    You are a patient tutor who explains complex concepts simply. 
+    Use analogies, break down problems step-by-step, and ask 
+    questions to check understanding. Never give direct answers 
+    to homework.
+    ```
+    
+    **Knowledge:** Course materials, textbooks, study notes
+    
+    **Tools:** Image generation for diagrams, code execution for math
+  </Tab>
+</Tabs>
+
+## Exploring Existing Agents
+
+Khoj Cloud provides pre-built agents you can use immediately:
+
+<Steps>
+  <Step title="Visit Agents Page">
+    Navigate to [app.khoj.dev/agents](https://app.khoj.dev/agents)
+  </Step>
+  
+  <Step title="Browse Available Agents">
+    Explore agents by category:
+    - **Productivity:** Task planners, email assistants, meeting summarizers
+    - **Learning:** Tutors, quiz generators, concept explainers
+    - **Creative:** Writers, brainstormers, ideation partners
+    - **Technical:** Code helpers, debuggers, documentation writers
+  </Step>
+  
+  <Step title="Try an Agent">
+    Click any agent to start a conversation with it immediately
+  </Step>
+</Steps>
+
+<Tip>
+  Public agents created by the Khoj team and community are marked with badges indicating their specialties.
+</Tip>
+
+## Creating Your Own Agent (Cloud)
+
+<Note>
+  Agent creation on Khoj Cloud may require a subscription. Check [pricing](https://khoj.dev) for details.
+</Note>
+
+<Steps>
+  <Step title="Access Agent Builder">
+    On the [agents page](https://app.khoj.dev/agents), click **"Create New Agent"**
+  </Step>
+  
+  <Step title="Configure Basic Details">
+    **Name:** Choose a descriptive name
+    
+    **Avatar:** Upload an image or use an emoji
+    
+    **Description:** Brief summary of what the agent does
+  </Step>
+  
+  <Step title="Define Personality">
+    Write a system prompt that describes:
+    - The agent's role and expertise
+    - How it should communicate (tone, style)
+    - What it should prioritize or avoid
+    - Any specific behaviors or constraints
+    
+    <Accordion title="Example Personality Prompt">
+      ```text
+      You are a fitness and nutrition coach with a holistic approach 
+      to health. You provide personalized advice based on the user's 
+      goals, current fitness level, and dietary preferences.
+      
+      Guidelines:
+      - Always ask about medical conditions before giving advice
+      - Emphasize sustainable habits over quick fixes
+      - Use encouraging, non-judgmental language
+      - Cite scientific research when making claims
+      - Suggest exercises with proper form descriptions
+      
+      Avoid:
+      - Diagnosing medical conditions
+      - Extreme diets or dangerous practices
+      - One-size-fits-all recommendations
+      ```
+    </Accordion>
+  </Step>
+  
+  <Step title="Select Knowledge Base">
+    Choose which documents the agent can access:
+    - **All files:** Agent can search your entire knowledge base
+    - **Specific folders:** Limit to relevant document collections
+    - **No files:** Agent relies only on general knowledge
+  </Step>
+  
+  <Step title="Enable Tools">
+    Toggle capabilities:
+    - ☑️ **Online Search:** Real-time web research
+    - ☑️ **Image Generation:** Create visuals
+    - ☑️ **Code Execution:** Run Python scripts
+    - ☑️ **Document Search:** Access knowledge base
+  </Step>
+  
+  <Step title="Choose AI Model">
+    Select the underlying language model:
+    - **GPT-4:** Most capable, best reasoning
+    - **Claude:** Strong at analysis and writing
+    - **GPT-3.5:** Faster, more economical
+    - **Gemini:** Good balance of speed and quality
+  </Step>
+  
+  <Step title="Set Visibility">
+    - **Private:** Only you can use this agent
+    - **Public:** Share with the Khoj community
+    - **Team:** Share with workspace members (Enterprise)
+  </Step>
+  
+  <Step title="Save and Test">
+    Click **"Create Agent"** then start a conversation to test behavior
+  </Step>
+</Steps>
+
+## Creating Agents (Self-Hosted)
+
+Self-hosted users create agents via the admin panel:
+
+<Steps>
+  <Step title="Access Admin Panel">
+    Navigate to: `http://localhost:42110/server/admin/database/agent`
+  </Step>
+  
+  <Step title="Add New Agent">
+    Click **"Add Agent"** in the top right
+  </Step>
+  
+  <Step title="Configure Agent">
+    **Required fields:**
+    - **Name:** Agent identifier
+    - **Personality:** Your custom system prompt
+    - **Chat model:** Select configured chat model
+    
+    **Optional fields:**
+    - **Public:** Check to make available to all server users
+    - **Creator:** Set to limit access to specific user
+    - **Managed by admin:** Check if admin-controlled
+  </Step>
+  
+  <Step title="Save Agent">
+    Click **"Save"** - the agent is now available in your Khoj interface
+  </Step>
+</Steps>
+
+<Warning>
+  On self-hosted instances, agents marked as **public** are visible to all users on your server. Leave unchecked and set a specific **Creator** for private agents.
+</Warning>
+
+## Writing Effective Personalities
+
+Craft system prompts that guide agent behavior:
+
+<AccordionGroup>
+  <Accordion title="Be Specific About Role" icon="user-tie">
+    **Instead of:**
+    ```text
+    You are helpful.
+    ```
+    
+    **Try:**
+    ```text
+    You are a senior product manager specializing in SaaS products. 
+    You help users define features, write requirements, and prioritize 
+    roadmaps using frameworks like RICE and Kano model.
+    ```
+  </Accordion>
+  
+  <Accordion title="Define Communication Style" icon="comment">
+    **Examples:**
+    ```text
+    Use a friendly, conversational tone. Keep responses concise.
+    ```
+    
+    ```text
+    Communicate formally and precisely, like an academic paper.
+    ```
+    
+    ```text
+    Be encouraging and patient. Use lots of examples and analogies.
+    ```
+  </Accordion>
+  
+  <Accordion title="Set Clear Boundaries" icon="shield">
+    Specify what the agent should NOT do:
+    
+    ```text
+    Do not:
+    - Provide medical diagnoses
+    - Write complete code solutions for homework
+    - Make financial investment recommendations
+    - Share personal opinions on political topics
+    ```
+  </Accordion>
+  
+  <Accordion title="Include Process Guidelines" icon="list-check">
+    Tell the agent HOW to approach tasks:
+    
+    ```text
+    When reviewing code:
+    1. First, summarize what the code does
+    2. Identify any bugs or errors
+    3. Suggest improvements for readability
+    4. Note performance considerations
+    5. Highlight security concerns if any
+    ```
+  </Accordion>
+  
+  <Accordion title="Use Examples" icon="lightbulb">
+    Show desired output format:
+    
+    ```text
+    When explaining concepts, use this format:
+    
+    **Simple Definition:** One sentence explanation
+    **Analogy:** Real-world comparison
+    **Example:** Concrete instance
+    **Common Misconceptions:** What people often get wrong
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Agent Best Practices
+
+<CardGroup cols={2}>
+  <Card icon="target" title="Single Purpose">
+    Create focused agents for specific tasks rather than generalists
+  </Card>
+  <Card icon="vial" title="Test Thoroughly">
+    Have multiple conversations to ensure consistent behavior
+  </Card>
+  <Card icon="rotate" title="Iterate">
+    Refine personality based on actual usage and edge cases
+  </Card>
+  <Card icon="book" title="Document Usage">
+    Include usage instructions in the agent description
+  </Card>
+</CardGroup>
+
+## Switching Between Agents
+
+<Tabs>
+  <Tab title="Web">
+    <Steps>
+      <Step>Click the agent icon/name in the chat header</Step>
+      <Step>Select a different agent from the dropdown</Step>
+      <Step>The conversation continues with the new agent</Step>
+    </Steps>
+  </Tab>
+  
+  <Tab title="Obsidian">
+    <Steps>
+      <Step>Open Command Palette (Cmd/Ctrl + P)</Step>
+      <Step>Search for "Khoj: Select Agent"</Step>
+      <Step>Choose from your available agents</Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+<Note>
+  Each agent maintains separate conversation history. Switching agents starts fresh context.
+</Note>
+
+## Agent vs. Slash Commands
+
+When to use each:
+
+| Feature | Agents | Slash Commands |
+|---------|--------|----------------|
+| **Customization** | Full personality control | Fixed behavior |
+| **Persistence** | Consistent across conversations | One-time modifier |
+| **Knowledge** | Can have specific document access | Uses default search |
+| **Best For** | Ongoing specialized tasks | Quick one-off changes |
+
+<Tip>
+  **Combine both:** Use agents for specialized roles, then use slash commands within that agent for specific tasks (e.g., research agent using `/code` for analysis).
+</Tip>
+
+## Advanced: Agent Chaining
+
+Use multiple agents in sequence for complex workflows:
+
+<Steps>
+  <Step title="Agent 1: Research">
+    Use a research agent to gather information
+    
+    ```text
+    Research the latest trends in renewable energy
+    ```
+  </Step>
+  
+  <Step title="Agent 2: Analysis">
+    Switch to an analyst agent to process findings
+    
+    ```text
+    [Copy research results]
+    Analyze these trends and identify the top 3 opportunities
+    ```
+  </Step>
+  
+  <Step title="Agent 3: Writing">
+    Use a writing agent to create content
+    
+    ```text
+    [Copy analysis]
+    Write a blog post about these renewable energy opportunities
+    ```
+  </Step>
+</Steps>
+
+## Troubleshooting Agents
+
+<AccordionGroup>
+  <Accordion title="Agent not following instructions">
+    **Solutions:**
+    - Make personality more explicit and detailed
+    - Add examples of desired behavior
+    - Include negative examples ("Don't do X")
+    - Try a more capable base model (GPT-4 vs GPT-3.5)
+  </Accordion>
+  
+  <Accordion title="Agent responses too generic">
+    **Solutions:**
+    - Ensure agent has access to relevant knowledge base
+    - Add more specific domain expertise to personality
+    - Include technical terminology in system prompt
+  </Accordion>
+  
+  <Accordion title="Agent can't access my documents">
+    **Solutions:**
+    - Verify document search is enabled in agent settings
+    - Check that knowledge base is configured correctly
+    - Ensure documents are synced and indexed
+  </Accordion>
+</AccordionGroup>
+
+## Sharing Agents
+
+<Steps>
+  <Step title="Make Public">
+    Edit your agent and set visibility to "Public"
+  </Step>
+  
+  <Step title="Add Description">
+    Write clear description of:
+    - What the agent does
+    - Who should use it
+    - Example queries to try
+  </Step>
+  
+  <Step title="Share Link">
+    Copy the agent URL to share directly:
+    
+    ```
+    https://app.khoj.dev/agents/<agent-id>
+    ```
+  </Step>
+</Steps>
+
+<Note>
+  Public agents are searchable in the Khoj agent directory. Well-documented agents get more usage!
+</Note>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Automate with Agents" icon="calendar-clock" href="/features/automations">
+    Schedule agents to run research and send reports
+  </Card>
+  <Card title="Advanced Chat" icon="message" href="/features/chat">
+    Combine agents with chat features like file filters
+  </Card>
+  <Card title="Share Conversations" icon="share" href="/features/share">
+    Share agent conversations with colleagues
+  </Card>
+</CardGroup>

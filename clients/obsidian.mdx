@@ -1,0 +1,357 @@
+---
+title: Obsidian Plugin
+description: Query your second brain directly from Obsidian with the Khoj plugin
+icon: book
+---
+
+# Obsidian Plugin
+
+The Khoj plugin for Obsidian lets you chat with and search your notes directly from your Obsidian vault. Your notes are automatically synced and indexed for instant access.
+
+![Obsidian Khoj Demo](https://assets.khoj.dev/obsidian_khoj_side_panel_pak_telemedicine.gif)
+
+## Features
+
+<CardGroup cols={2}>
+  <Card title="Chat" icon="comment">
+    - **Faster answers**: Find answers quickly from your private notes or the public internet
+    - **Assisted creativity**: Smoothly weave across retrieving answers and generating content
+    - **Iterative discovery**: Iteratively explore and re-discover your notes
+  </Card>
+  
+  <Card title="Search" icon="magnifying-glass">
+    - **Natural language**: Advanced natural language understanding using Transformer-based ML models
+    - **Incremental search**: Fast, search-as-you-type experience
+    - **Context-aware**: Searches within your Obsidian vault
+  </Card>
+  
+  <Card title="Find Similar Notes" icon="clone">
+    Discover notes similar to the one you're currently reading.
+  </Card>
+  
+  <Card title="Auto-Sync" icon="rotate">
+    Your Obsidian vault is automatically synced periodically with Khoj.
+  </Card>
+</CardGroup>
+
+## Installation
+
+<Steps>
+  <Step title="Open Community Plugins">
+    In Obsidian, navigate to **Settings** → **Community plugins**.
+  </Step>
+  
+  <Step title="Search for Khoj">
+    Click **Browse** and search for "Khoj" or visit the [Khoj plugin page](https://obsidian.md/plugins?id=khoj).
+  </Step>
+  
+  <Step title="Install and Enable">
+    1. Click **Install** on the Khoj plugin page
+    2. Click **Enable** to activate the plugin
+  </Step>
+</Steps>
+
+<Info>
+  See the official [Obsidian Plugin Docs](https://help.obsidian.md/Extending+Obsidian/Community+plugins) for more details on installing community plugins.
+</Info>
+
+## Configuration
+
+### Khoj Cloud Setup
+
+<Steps>
+  <Step title="Generate API Key">
+    Go to the [Khoj Web App Settings](https://app.khoj.dev/settings#clients) and generate an API key.
+  </Step>
+  
+  <Step title="Open Plugin Settings">
+    In Obsidian, go to **Settings** → **Community plugins** → **Khoj** settings.
+  </Step>
+  
+  <Step title="Enter API Key">
+    Paste your API key in the **Khoj API Key** field and save.
+  </Step>
+  
+  <Step title="Force Sync (Optional)">
+    Click **Force Sync** to immediately sync your vault with Khoj.
+    
+    <Note>
+      By default, your vault is automatically synced periodically. Force sync is useful for immediate indexing after installation.
+    </Note>
+  </Step>
+</Steps>
+
+### Self-Hosted Setup
+
+<Info>
+  If you're running your own Khoj server, follow these configuration steps.
+</Info>
+
+<Steps>
+  <Step title="Open Plugin Settings">
+    Navigate to **Settings** → **Community plugins** → **Khoj**.
+  </Step>
+  
+  <Step title="Set Server URL">
+    Configure the **Khoj URL** field:
+    
+    <CodeGroup>
+    ```text Default Local Server
+    http://127.0.0.1:42110
+    ```
+    
+    ```text Custom Server
+    http://your-server-domain:port
+    ```
+    </CodeGroup>
+  </Step>
+  
+  <Step title="API Key (Optional)">
+    Leave the **Khoj API Key** field empty if your server runs in anonymous mode:
+    
+    ```bash
+    khoj --anonymous-mode
+    ```
+    
+    Otherwise, generate and enter an API key from your self-hosted instance.
+  </Step>
+</Steps>
+
+## Usage
+
+### Chat
+
+Access Khoj chat directly from Obsidian:
+
+<Tabs>
+  <Tab title="Via Ribbon">
+    Click the **Khoj chat** icon 💬 on the [Ribbon](https://help.obsidian.md/User+interface/Workspace/Ribbon) (left sidebar).
+  </Tab>
+  
+  <Tab title="Via Command Palette">
+    1. Press `Ctrl/Cmd + P` to open the [Command Palette](https://help.obsidian.md/Plugins/Command+palette)
+    2. Type "Khoj: Chat"
+    3. Press Enter
+  </Tab>
+</Tabs>
+
+Ask questions in a natural, conversational style:
+
+<CodeGroup>
+```text Example Query 1
+When did I file my taxes last year?
+```
+
+```text Example Query 2
+Summarize my meeting notes from this week
+```
+
+```text Example Query 3
+What are the main themes in my research notes?
+```
+</CodeGroup>
+
+<Tip>
+  See the [Chat Features documentation](/features/chat) for advanced chat capabilities and tips.
+</Tip>
+
+### Search
+
+Perform natural language search across your vault:
+
+<Steps>
+  <Step title="Open Search">
+    Press `Ctrl/Cmd + P` and run **Khoj: Search**.
+  </Step>
+  
+  <Step title="Enter Query">
+    Type your search query in natural language.
+    
+    Examples:
+    - "My life goals for 2023"
+    - "Notes about machine learning"
+    - "What is the meaning of life?"
+  </Step>
+  
+  <Step title="View Results">
+    Khoj will display relevant notes and sections from your vault.
+  </Step>
+</Steps>
+
+#### Query Filters
+
+Use advanced filters to refine your search:
+
+<CodeGroup>
+```text File Filter
+"project ideas" file:"work"
+```
+
+```text Tag Filter
+"meeting notes" #important
+```
+
+```text Date Filter
+"journal entries" dt:"last week"
+```
+
+```text Combined Filters
+"research" +"AI" -"draft" dt:"last month"
+```
+</CodeGroup>
+
+<Info>
+  Learn more about query filters in the [Query Filters documentation](#query-filters).
+</Info>
+
+### Find Similar Notes
+
+Discover related content while reading:
+
+<Steps>
+  <Step title="Open a Note">
+    Navigate to any note in your vault.
+  </Step>
+  
+  <Step title="Run Command">
+    Press `Ctrl/Cmd + P` and run **Khoj: Find Similar Notes**.
+  </Step>
+  
+  <Step title="Browse Results">
+    Khoj will display notes with similar content or themes.
+  </Step>
+</Steps>
+
+<Tip>
+  This is great for discovering connections between notes and exploring your knowledge graph.
+</Tip>
+
+## Keyboard Shortcuts
+
+Set up custom keyboard shortcuts for quick access:
+
+1. Go to **Settings** → **Hotkeys**
+2. Search for "Khoj"
+3. Assign shortcuts to your preferred commands:
+
+| Command | Suggested Shortcut | Description |
+|---------|-------------------|-------------|
+| Khoj: Chat | `Ctrl/Cmd + K, C` | Open chat |
+| Khoj: Search | `Ctrl/Cmd + K, S` | Open search |
+| Khoj: Find Similar Notes | `Ctrl/Cmd + K, F` | Find similar |
+
+## Sync Behavior
+
+<Info>
+  Understanding how sync works helps you get the most out of the Khoj plugin.
+</Info>
+
+### Automatic Sync
+
+- Your vault is automatically synced **periodically** in the background
+- New notes and changes are detected and indexed automatically
+- No manual intervention required for day-to-day use
+
+### Manual Sync
+
+Use **Force Sync** when you need immediate indexing:
+
+1. Open plugin settings
+2. Click **Force Sync**
+3. Wait for confirmation
+
+Useful scenarios:
+- After installing the plugin
+- After importing many new notes
+- When search results seem stale
+
+<Warning>
+  Force syncing a large vault may take several minutes. The plugin will notify you when complete.
+</Warning>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Plugin not working">
+    1. Open the Khoj plugin settings
+    2. Verify your API key is correct
+    3. Toggle **Disable** then **Enable** on the plugin
+    4. Try restarting Obsidian
+  </Accordion>
+  
+  <Accordion title="Search results are outdated or missing">
+    1. Open plugin settings
+    2. Click **Force Sync** to refresh the index
+    3. Wait for sync to complete
+    4. Try your search again
+  </Accordion>
+  
+  <Accordion title="Cannot connect to server">
+    **For Khoj Cloud:**
+    - Verify the Khoj URL is set to `https://app.khoj.dev`
+    - Check your internet connection
+    - Verify your API key is valid
+    
+    **For self-hosted:**
+    - Ensure your Khoj server is running
+    - Verify the server URL and port
+    - Check firewall settings
+  </Accordion>
+  
+  <Accordion title="Sync is slow or hanging">
+    For large vaults (1000+ notes):
+    - Initial sync may take several minutes
+    - Subsequent syncs are incremental and faster
+    - Close and reopen Obsidian if sync appears stuck
+    - Check the Obsidian developer console for errors (Ctrl/Cmd + Shift + I)
+  </Accordion>
+</AccordionGroup>
+
+## Updating the Plugin
+
+<Steps>
+  <Step title="Check for Updates">
+    Go to **Settings** → **Community plugins** and click **Check for updates**.
+  </Step>
+  
+  <Step title="Update Khoj">
+    If an update is available, click **Update** next to the Khoj plugin.
+  </Step>
+  
+  <Step title="Restart (Optional)">
+    Restart Obsidian if prompted to complete the update.
+  </Step>
+</Steps>
+
+<Tip>
+  Enable automatic updates in Obsidian settings to always have the latest features and bug fixes.
+</Tip>
+
+## Privacy and Data
+
+<CardGroup cols={2}>
+  <Card title="Khoj Cloud" icon="cloud">
+    Your notes are encrypted in transit (HTTPS) and indexed securely on Khoj's servers. See our [Privacy Policy](https://khoj.dev/privacy) for details.
+  </Card>
+  
+  <Card title="Self-Hosted" icon="server">
+    When self-hosting, all data remains on your infrastructure. You have complete control over your notes and index.
+  </Card>
+</CardGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Chat Features" icon="comment" href="/features/chat">
+    Explore advanced chat capabilities
+  </Card>
+  <Card title="Search" icon="magnifying-glass" href="/features/search">
+    Master natural language search
+  </Card>
+  <Card title="Query Filters" icon="filter" href="/features/search#query-filters">
+    Learn advanced search syntax
+  </Card>
+  <Card title="Desktop App" icon="desktop" href="/clients/desktop">
+    Sync other files and folders
+  </Card>
+</CardGroup>

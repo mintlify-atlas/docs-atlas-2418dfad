@@ -1,0 +1,659 @@
+---
+title: Performance & Optimization
+description: Guidelines for optimizing Khoj and understanding performance characteristics
+icon: gauge
+---
+
+## Performance Overview
+
+Khoj is designed to scale from personal use on a laptop to enterprise deployment serving thousands of users. Understanding performance characteristics helps you optimize both your local development environment and production deployments.
+
+<Note>
+  Performance metrics vary based on hardware, data size, and configuration. The benchmarks below are representative examples, not guarantees.
+</Note>
+
+## Search Performance
+
+### Semantic Search
+
+<CardGroup cols={2}>
+  <Card title="Embedding Generation" icon="brain">
+    **< 100ms** per query
+    
+    Using the default `sentence-transformers` model, query embedding generation is fast and happens in real-time.
+  </Card>
+  
+  <Card title="Vector Search" icon="magnifying-glass">
+    **< 50ms** for 100K entries
+    
+    pgvector performs cosine similarity search efficiently using HNSW or IVFFlat indexes.
+  </Card>
+  
+  <Card title="Re-ranking" icon="ranking-star">
+    **< 2s** for 15 results
+    
+    Cross-encoder models provide accuracy improvements but add latency. Adjust `top_k` to balance speed vs quality.
+  </Card>
+  
+  <Card title="Filter Application" icon="filter">
+    **< 20ms** overhead
+    
+    Date, file, and word filters add minimal latency when properly indexed.
+  </Card>
+</CardGroup>
+
+### Optimization Strategies
+
+<AccordionGroup>
+  <Accordion title="Vector Indexing" icon="database">
+    **Configure pgvector indexes** for optimal search performance:
+    
+    ```sql
+    -- HNSW index (better for accuracy)
+    CREATE INDEX ON khoj_entry USING hnsw (embeddings vector_cosine_ops);
+    
+    -- IVFFlat index (better for speed)
+    CREATE INDEX ON khoj_entry USING ivfflat (embeddings vector_cosine_ops)
+    WITH (lists = 100);
+    ```
+    
+    **Trade-offs**:
+    - HNSW: Better recall, slower inserts, higher memory
+    - IVFFlat: Faster inserts, lower memory, slightly lower recall
+  </Accordion>
+  
+  <Accordion title="Batch Processing" icon="layer-group">
+    When indexing multiple documents, batch embed and insert operations:
+    
+    ```python
+    # Bad: One at a time
+    for doc in documents:
+        embedding = generate_embedding(doc)
+        save_to_db(embedding)
+    
+    # Good: Batch processing
+    embeddings = generate_embeddings_batch(documents, batch_size=32)
+    save_to_db_batch(embeddings)
+    ```
+    
+    **Benefits**:
+    - 3-5x faster embedding generation
+    - Reduced database connection overhead
+    - Better GPU utilization
+  </Accordion>
+  
+  <Accordion title="Cache Embeddings" icon="box-archive">
+    Avoid recomputing embeddings for unchanged content:
+    
+    - Store content hash alongside embeddings
+    - Only regenerate if content changes
+    - Use incremental indexing for large corpora
+    
+    ```python
+    content_hash = hashlib.sha256(content.encode()).hexdigest()
+    if existing_entry.content_hash != content_hash:
+        # Content changed, regenerate embedding
+        embedding = generate_embedding(content)
+    ```
+  </Accordion>
+  
+  <Accordion title="Limit Result Set" icon="list-ol">
+    Reduce re-ranking overhead by limiting results:
+    
+    ```python
+    # Get top 100 from vector search
+    candidates = vector_search(query, limit=100)
+    
+    # Re-rank only top 15
+    results = rerank(candidates, limit=15)
+    ```
+    
+    Adjust based on your accuracy requirements.
+  </Accordion>
+</AccordionGroup>
+
+## Indexing Performance
+
+### Baseline Metrics
+
+<CardGroup cols={3}>
+  <Card title="First Run" icon="play">
+    **~10 minutes** for 100K lines
+    
+    Initial indexing processes all content and generates embeddings.
+  </Card>
+  
+  <Card title="Incremental Updates" icon="rotate">
+    **< 1 minute** for 100 changes
+    
+    Only modified content is reprocessed.
+  </Card>
+  
+  <Card title="Real-time Sync" icon="bolt">
+    **< 5 seconds** per file
+    
+    Small files indexed immediately after upload.
+  </Card>
+</CardGroup>
+
+### Factors Affecting Indexing Speed
+
+<Steps>
+  <Step title="Content Type">
+    - **Plaintext/Markdown**: Fastest (direct processing)
+    - **PDF**: Medium (OCR for images, text extraction)
+    - **Images**: Slowest (OCR with Tesseract/OCR models)
+  </Step>
+  
+  <Step title="Content Size">
+    Larger files take longer to:
+    - Parse and extract text
+    - Split into chunks
+    - Generate embeddings
+  </Step>
+  
+  <Step title="Hardware">
+    - **CPU**: Single-core performance matters for parsing
+    - **GPU**: Accelerates embedding generation (optional)
+    - **RAM**: 4GB minimum, 8GB+ recommended for large corpora
+    - **Disk I/O**: SSD significantly faster than HDD
+  </Step>
+  
+  <Step title="Embedding Model">
+    - Default: `sentence-transformers/all-MiniLM-L6-v2` (fast, 384 dims)
+    - Larger models: Better accuracy, slower speed
+    - Custom models: Variable performance
+  </Step>
+</Steps>
+
+### Optimization Strategies
+
+<AccordionGroup>
+  <Accordion title="Parallel Processing" icon="microchip">
+    Use multiprocessing for CPU-bound tasks:
+    
+    ```python
+    from multiprocessing import Pool
+    
+    def process_file(file_path):
+        content = extract_content(file_path)
+        return generate_embedding(content)
+    
+    with Pool(processes=4) as pool:
+        embeddings = pool.map(process_file, file_paths)
+    ```
+    
+    **Note**: Be mindful of memory usage with large models.
+  </Accordion>
+  
+  <Accordion title="GPU Acceleration" icon="bolt">
+    Enable GPU for faster embedding generation:
+    
+    ```bash
+    # Install CUDA-enabled PyTorch
+    pip install torch --index-url https://download.pytorch.org/whl/cu118
+    ```
+    
+    Models automatically use GPU if available. Expect **2-10x speedup** depending on batch size.
+  </Accordion>
+  
+  <Accordion title="Incremental Indexing" icon="clock-rotate-left">
+    Only reindex changed files:
+    
+    - Track file modification timestamps
+    - Store content hashes in database
+    - Skip unchanged files during sync
+    
+    This reduces 10-minute full indexes to seconds for typical updates.
+  </Accordion>
+  
+  <Accordion title="Background Processing" icon="clock">
+    Offload indexing to background workers:
+    
+    - Use Celery or APScheduler for task queues
+    - Process uploads asynchronously
+    - Return immediate response to users
+    
+    ```python
+    @app.post("/upload")
+    async def upload_file(file: UploadFile):
+        task_id = queue_indexing_task(file)
+        return {"task_id": task_id, "status": "processing"}
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Chat Performance
+
+### Response Latency Breakdown
+
+<Steps>
+  <Step title="Context Retrieval" icon="database">
+    **< 100ms**
+    
+    Semantic search to find relevant documents for chat context.
+  </Step>
+  
+  <Step title="Tool Execution" icon="wrench">
+    **Variable** (0-5s)
+    
+    Depends on tools used (web search, code execution, etc.)
+  </Step>
+  
+  <Step title="Prompt Construction" icon="file-lines">
+    **< 50ms**
+    
+    Building the prompt from system message, history, and context.
+  </Step>
+  
+  <Step title="LLM Generation" icon="brain">
+    **1-10s** (streaming)
+    
+    Time to first token: ~500ms. Total time depends on response length and model.
+  </Step>
+</Steps>
+
+### Model Comparison
+
+<Tabs>
+  <Tab title="OpenAI">
+    | Model | Speed | Quality | Cost |
+    |-------|-------|---------|------|
+    | GPT-4o | ⚡⚡⚡ Fast | ⭐⭐⭐⭐⭐ Excellent | 💰💰 Medium |
+    | GPT-4 Turbo | ⚡⚡ Medium | ⭐⭐⭐⭐⭐ Excellent | 💰💰💰 High |
+    | GPT-3.5 Turbo | ⚡⚡⚡⚡ Very Fast | ⭐⭐⭐⭐ Good | 💰 Low |
+  </Tab>
+  
+  <Tab title="Anthropic">
+    | Model | Speed | Quality | Cost |
+    |-------|-------|---------|------|
+    | Claude 3.5 Sonnet | ⚡⚡⚡ Fast | ⭐⭐⭐⭐⭐ Excellent | 💰💰 Medium |
+    | Claude 3 Opus | ⚡⚡ Medium | ⭐⭐⭐⭐⭐ Excellent | 💰💰💰 High |
+    | Claude 3 Haiku | ⚡⚡⚡⚡ Very Fast | ⭐⭐⭐⭐ Good | 💰 Low |
+  </Tab>
+  
+  <Tab title="Google">
+    | Model | Speed | Quality | Cost |
+    |-------|-------|---------|------|
+    | Gemini 2.0 Flash | ⚡⚡⚡⚡ Very Fast | ⭐⭐⭐⭐⭐ Excellent | 💰 Low |
+    | Gemini 1.5 Pro | ⚡⚡ Medium | ⭐⭐⭐⭐⭐ Excellent | 💰💰 Medium |
+  </Tab>
+  
+  <Tab title="Local Models">
+    | Model | Speed | Quality | Cost |
+    |-------|-------|---------|------|
+    | Llama 3.3 70B | ⚡ Slow (GPU required) | ⭐⭐⭐⭐⭐ Excellent | 💰 Free (hardware) |
+    | Llama 3.2 8B | ⚡⚡⚡ Fast | ⭐⭐⭐⭐ Good | 💰 Free (hardware) |
+    | Qwen 2.5 7B | ⚡⚡⚡ Fast | ⭐⭐⭐⭐ Good | 💰 Free (hardware) |
+  </Tab>
+</Tabs>
+
+### Optimization Strategies
+
+<AccordionGroup>
+  <Accordion title="Streaming Responses" icon="stream">
+    Always use streaming for better perceived performance:
+    
+    ```python
+    async def chat_stream(prompt):
+        async for chunk in llm.stream(prompt):
+            yield chunk
+    ```
+    
+    Users see responses immediately instead of waiting for completion.
+  </Accordion>
+  
+  <Accordion title="Context Window Management" icon="window-maximize">
+    Optimize prompt size to reduce latency:
+    
+    - Limit conversation history (last 10-20 messages)
+    - Truncate retrieved documents to relevant excerpts
+    - Remove redundant system prompts
+    
+    **Rule of thumb**: Keep prompts under 4K tokens for fastest responses.
+  </Accordion>
+  
+  <Accordion title="Tool Parallelization" icon="gears">
+    Execute independent tools in parallel:
+    
+    ```python
+    # Sequential (slow)
+    search_results = await web_search(query)
+    doc_results = await document_search(query)
+    
+    # Parallel (fast)
+    search_results, doc_results = await asyncio.gather(
+        web_search(query),
+        document_search(query)
+    )
+    ```
+  </Accordion>
+  
+  <Accordion title="Caching" icon="database">
+    Cache responses for common queries:
+    
+    - Store (query_hash, response) pairs
+    - Set TTL based on content volatility
+    - Invalidate on content updates
+    
+    Can reduce latency to **< 100ms** for cached hits.
+  </Accordion>
+</AccordionGroup>
+
+## Database Performance
+
+### PostgreSQL Optimization
+
+<Steps>
+  <Step title="Connection Pooling">
+    Configure Django database settings:
+    
+    ```python
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'CONN_MAX_AGE': 600,  # Reuse connections
+            'OPTIONS': {
+                'connect_timeout': 10,
+            }
+        }
+    }
+    ```
+  </Step>
+  
+  <Step title="Index Strategy">
+    Create indexes for common query patterns:
+    
+    ```sql
+    -- User queries
+    CREATE INDEX idx_entry_user ON khoj_entry(user_id);
+    
+    -- Date filters
+    CREATE INDEX idx_entry_created ON khoj_entry(created_at);
+    
+    -- File source lookups
+    CREATE INDEX idx_entry_source ON khoj_entry(file_source);
+    
+    -- Vector search (choose one)
+    CREATE INDEX idx_entry_embeddings_hnsw 
+      ON khoj_entry USING hnsw (embeddings vector_cosine_ops);
+    ```
+  </Step>
+  
+  <Step title="Query Optimization">
+    - Use `select_related()` and `prefetch_related()` to avoid N+1 queries
+    - Add `db_index=True` to frequently filtered fields
+    - Use `only()` and `defer()` to limit column fetches
+  </Step>
+  
+  <Step title="Maintenance">
+    Regular maintenance for optimal performance:
+    
+    ```sql
+    -- Analyze tables for query planner
+    ANALYZE khoj_entry;
+    
+    -- Vacuum to reclaim space
+    VACUUM ANALYZE;
+    
+    -- Reindex for fragmented indexes
+    REINDEX INDEX idx_entry_embeddings_hnsw;
+    ```
+  </Step>
+</Steps>
+
+### Scaling Considerations
+
+<CardGroup cols={2}>
+  <Card title="Vertical Scaling" icon="arrow-up">
+    Single-server improvements:
+    - Increase PostgreSQL `shared_buffers` (25% of RAM)
+    - Add more CPU cores for parallel queries
+    - Use faster NVMe storage
+    - Increase `max_connections` for high concurrency
+  </Card>
+  
+  <Card title="Horizontal Scaling" icon="arrows-left-right">
+    Multi-server architecture:
+    - Read replicas for search queries
+    - Separate database for vectors (if needed)
+    - Load balancer for FastAPI instances
+    - Redis for session/cache layer
+  </Card>
+</CardGroup>
+
+## Memory Management
+
+### Model Loading
+
+<Warning>
+  Embedding models are loaded into memory on startup. Plan for:
+  - **MiniLM-L6-v2**: ~100MB RAM
+  - **MPNet-base**: ~400MB RAM
+  - **Larger models**: 1-4GB+ RAM
+</Warning>
+
+### Optimization Strategies
+
+<AccordionGroup>
+  <Accordion title="Lazy Loading" icon="hourglass-half">
+    Load models only when needed:
+    
+    ```python
+    class EmbeddingModel:
+        _model = None
+        
+        @classmethod
+        def get_model(cls):
+            if cls._model is None:
+                cls._model = SentenceTransformer('model-name')
+            return cls._model
+    ```
+  </Accordion>
+  
+  <Accordion title="Model Quantization" icon="compress">
+    Use quantized models for lower memory:
+    
+    - INT8 quantization: 4x memory reduction
+    - Minimal accuracy loss (less than 1%)
+    - 2-3x faster inference
+    
+    ```python
+    model = SentenceTransformer('model-name')
+    model.half()  # FP16 precision
+    ```
+  </Accordion>
+  
+  <Accordion title="Batch Size Tuning" icon="layer-group">
+    Balance memory usage and throughput:
+    
+    ```python
+    # Small batch for low memory
+    embeddings = model.encode(texts, batch_size=8)
+    
+    # Larger batch for throughput
+    embeddings = model.encode(texts, batch_size=64)
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Monitoring & Profiling
+
+### Key Metrics to Track
+
+<CardGroup cols={2}>
+  <Card title="Response Time" icon="clock">
+    - P50, P95, P99 latencies
+    - Time-to-first-token for chat
+    - Search query duration
+  </Card>
+  
+  <Card title="Throughput" icon="gauge">
+    - Requests per second
+    - Concurrent users
+    - Indexing rate (docs/minute)
+  </Card>
+  
+  <Card title="Resource Usage" icon="microchip">
+    - CPU utilization
+    - Memory usage
+    - Database connections
+    - Disk I/O
+  </Card>
+  
+  <Card title="Error Rates" icon="triangle-exclamation">
+    - 4xx/5xx status codes
+    - Database timeouts
+    - LLM API errors
+  </Card>
+</CardGroup>
+
+### Profiling Tools
+
+<Tabs>
+  <Tab title="Python">
+    ```bash
+    # cProfile for CPU profiling
+    python -m cProfile -o profile.stats khoj_script.py
+    
+    # memory_profiler for memory usage
+    @profile
+    def expensive_function():
+        # your code
+    
+    # py-spy for production profiling
+    py-spy record -o profile.svg -- python -m khoj.main
+    ```
+  </Tab>
+  
+  <Tab title="Database">
+    ```sql
+    -- Enable query logging
+    SET log_statement = 'all';
+    
+    -- Explain query plans
+    EXPLAIN ANALYZE SELECT * FROM khoj_entry WHERE ...;
+    
+    -- Find slow queries
+    SELECT query, mean_exec_time, calls
+    FROM pg_stat_statements
+    ORDER BY mean_exec_time DESC
+    LIMIT 10;
+    ```
+  </Tab>
+  
+  <Tab title="API">
+    ```python
+    # FastAPI middleware for request timing
+    @app.middleware("http")
+    async def add_process_time_header(request, call_next):
+        start_time = time.time()
+        response = await call_next(request)
+        process_time = time.time() - start_time
+        response.headers["X-Process-Time"] = str(process_time)
+        return response
+    ```
+  </Tab>
+</Tabs>
+
+## Benchmarking
+
+### Running Performance Tests
+
+<Steps>
+  <Step title="Setup Test Data">
+    Create representative test corpus:
+    ```bash
+    python scripts/generate_test_data.py --size 100k
+    ```
+  </Step>
+  
+  <Step title="Run Benchmarks">
+    ```bash
+    # Search performance
+    pytest tests/benchmarks/test_search_performance.py
+    
+    # Indexing performance
+    pytest tests/benchmarks/test_indexing_performance.py -v
+    ```
+  </Step>
+  
+  <Step title="Compare Results">
+    ```bash
+    pytest-benchmark compare baseline.json current.json
+    ```
+  </Step>
+</Steps>
+
+### Load Testing
+
+Use tools like Locust or k6 for load testing:
+
+```python
+# locustfile.py
+from locust import HttpUser, task, between
+
+class KhojUser(HttpUser):
+    wait_time = between(1, 3)
+    
+    @task
+    def search(self):
+        self.client.get("/api/search?q=test query")
+    
+    @task(3)
+    def chat(self):
+        self.client.post("/api/chat", json={
+            "q": "What is Khoj?",
+            "conversation_id": "test"
+        })
+```
+
+Run load test:
+```bash
+locust -f locustfile.py --host http://localhost:42110
+```
+
+## Performance Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Use Async" icon="bolt">
+    Leverage async/await for I/O-bound operations to handle more concurrent requests.
+  </Card>
+  
+  <Card title="Cache Aggressively" icon="database">
+    Cache embeddings, search results, and LLM responses where appropriate.
+  </Card>
+  
+  <Card title="Batch Operations" icon="layer-group">
+    Process multiple items together to reduce overhead and improve throughput.
+  </Card>
+  
+  <Card title="Monitor Continuously" icon="chart-line">
+    Set up monitoring and alerting to catch performance regressions early.
+  </Card>
+  
+  <Card title="Profile Before Optimizing" icon="magnifying-glass-chart">
+    Measure to find actual bottlenecks instead of optimizing prematurely.
+  </Card>
+  
+  <Card title="Test at Scale" icon="scale-balanced">
+    Test with realistic data volumes to identify scaling issues before production.
+  </Card>
+</CardGroup>
+
+## Additional Resources
+
+<CardGroup cols={2}>
+  <Card title="Development Setup" icon="code" href="/contributing/development">
+    Set up your local environment
+  </Card>
+  <Card title="Architecture" icon="sitemap" href="/contributing/architecture">
+    Understand the system design
+  </Card>
+  <Card title="PostgreSQL Performance" icon="database" href="https://www.postgresql.org/docs/current/performance-tips.html">
+    Official PostgreSQL optimization guide
+  </Card>
+  <Card title="FastAPI Performance" icon="bolt" href="https://fastapi.tiangolo.com/async/">
+    FastAPI async best practices
+  </Card>
+</CardGroup>

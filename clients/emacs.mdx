@@ -1,0 +1,508 @@
+---
+title: Emacs Package
+description: Query your second brain directly from Emacs with khoj.el
+icon: code
+---
+
+# Emacs Package
+
+The `khoj.el` Emacs package brings the power of Khoj directly into your Emacs workflow. Search and chat with your org-mode notes, markdown files, and more without leaving your editor.
+
+<CardGroup cols={2}>
+  <Card>
+    ![Khoj Search in Emacs](https://assets.khoj.dev/khoj_search_on_emacs.png)
+  </Card>
+  <Card>
+    ![Khoj Chat in Emacs](https://assets.khoj.dev/khoj_chat_on_emacs.png)
+  </Card>
+</CardGroup>
+
+## Package Information
+
+<CardGroup cols={2}>
+  <Card title="MELPA Stable" icon="box">
+    ![MELPA Stable](https://stable.melpa.org/packages/khoj-badge.svg)
+  </Card>
+  <Card title="MELPA" icon="box">
+    ![MELPA](https://melpa.org/packages/khoj-badge.svg)
+  </Card>
+</CardGroup>
+
+## Features
+
+<CardGroup cols={2}>
+  <Card title="Chat" icon="comment">
+    - **Faster answers**: Find answers quickly from your private notes or the public internet
+    - **Assisted creativity**: Smoothly weave across retrieving answers and generating content
+    - **Iterative discovery**: Iteratively explore and re-discover your notes
+  </Card>
+  
+  <Card title="Search" icon="magnifying-glass">
+    - **Natural language**: Advanced natural language understanding using Transformer-based ML models
+    - **Incremental search**: Fast, search-as-you-type experience
+    - **Org-mode integration**: Seamlessly works with org-agenda files
+  </Card>
+</CardGroup>
+
+## Installation
+
+### Prerequisites
+
+<Info>
+  Requires Emacs 27.1 or higher
+</Info>
+
+### Generate API Key
+
+<Steps>
+  <Step title="Get API Key">
+    Generate an API key from the [Khoj Web App Settings](https://app.khoj.dev/settings#clients).
+  </Step>
+  
+  <Step title="Keep It Handy">
+    Copy the API key - you'll need it for the configuration step below.
+  </Step>
+</Steps>
+
+### Installation Methods
+
+<Tabs>
+  <Tab title="Direct Install">
+    Install directly from MELPA:
+    
+    ```elisp
+    M-x package-install RET khoj RET
+    ```
+    
+    Then add to your config file (`~/.emacs.d/init.el`):
+    
+    ```elisp
+    ;; Set your Khoj API key
+    (setq khoj-api-key "YOUR_KHOJ_CLOUD_API_KEY")
+    (setq khoj-server-url "https://app.khoj.dev")
+    ```
+    
+    <Note>
+      By default, Khoj will index your org-agenda files automatically.
+    </Note>
+  </Tab>
+  
+  <Tab title="use-package (Minimal)">
+    Add to your Emacs config (`~/.emacs.d/init.el`):
+    
+    ```elisp
+    ;; Install Khoj client from MELPA Stable
+    (use-package khoj
+      :ensure t
+      :pin melpa-stable
+      :bind ("C-c s" . 'khoj)
+      :config (setq khoj-api-key "YOUR_KHOJ_CLOUD_API_KEY"
+                    khoj-server-url "https://app.khoj.dev"))
+    ```
+    
+    <Note>
+      This minimal configuration indexes your org-agenda files by default.
+    </Note>
+  </Tab>
+  
+  <Tab title="use-package (Standard)">
+    For more control over indexed files and directories:
+    
+    ```elisp
+    ;; Install Khoj client from MELPA Stable
+    (use-package khoj
+      :ensure t
+      :pin melpa-stable
+      :bind ("C-c s" . 'khoj)
+      :config (setq khoj-api-key "YOUR_KHOJ_CLOUD_API_KEY"
+                    khoj-server-url "https://app.khoj.dev"
+                    khoj-index-directories '("~/docs/org-roam" "~/docs/notes")
+                    khoj-index-files '("~/docs/todo.org" "~/docs/work.org")))
+    ```
+    
+    <Tip>
+      Customize `khoj-index-directories` and `khoj-index-files` to specify exactly what Khoj should index.
+    </Tip>
+  </Tab>
+  
+  <Tab title="straight.el">
+    For users of straight.el:
+    
+    ```elisp
+    ;; Install Khoj client using Straight.el
+    (use-package khoj
+      :after org
+      :straight (khoj :type git :host github :repo "khoj-ai/khoj" 
+                      :files (:defaults "src/interface/emacs/khoj.el"))
+      :bind ("C-c s" . 'khoj)
+      :config (setq khoj-api-key "YOUR_KHOJ_CLOUD_API_KEY"
+                    khoj-server-url "https://app.khoj.dev"
+                    khoj-org-directories '("~/docs/org-roam" "~/docs/notes")
+                    khoj-org-files '("~/docs/todo.org" "~/docs/work.org")))
+    ```
+  </Tab>
+</Tabs>
+
+### Self-Hosted Configuration
+
+<Info>
+  If you're running your own Khoj server, modify the configuration accordingly.
+</Info>
+
+<CodeGroup>
+```elisp Default Local Server
+(setq khoj-server-url "http://127.0.0.1:42110")
+```
+
+```elisp Custom Server
+(setq khoj-server-url "http://your-server-domain:port")
+```
+
+```elisp Anonymous Mode
+;; Don't set khoj-api-key if server runs in anonymous mode
+(setq khoj-server-url "http://127.0.0.1:42110")
+;; (setq khoj-api-key nil)  ; or simply omit this line
+```
+</CodeGroup>
+
+## Usage
+
+### Opening Khoj Menu
+
+![Khoj Emacs Menu](https://assets.khoj.dev/khoj_emacs_menu.png)
+
+Access the Khoj menu:
+
+```elisp
+C-c s  or  M-x khoj
+```
+
+From the menu:
+- Press `t` to cycle through content types
+- Press `n` twice, then enter the number of results you want
+- Press `-f u` to force update the content index
+
+### Search
+
+Perform natural language search across your notes:
+
+<Steps>
+  <Step title="Open Search">
+    Press `C-c s s` or run `M-x khoj RET s`
+  </Step>
+  
+  <Step title="Enter Query">
+    Type your query in natural language:
+    
+    <CodeGroup>
+    ```text Example 1
+    What is the meaning of life?
+    ```
+    
+    ```text Example 2
+    My life goals for 2023
+    ```
+    
+    ```text Example 3
+    Meeting notes from last week
+    ```
+    </CodeGroup>
+  </Step>
+  
+  <Step title="View Results">
+    Khoj displays relevant entries from your indexed files.
+  </Step>
+</Steps>
+
+#### Advanced Search with Filters
+
+Add query filters for more precise results:
+
+```text
+What is the meaning of life? -"god" +"philosophy" dt:"last week"
+```
+
+<Info>
+  Learn more about query filters in the [Query Filters documentation](#query-filters).
+</Info>
+
+### Chat
+
+Chat with Khoj directly from Emacs:
+
+<Steps>
+  <Step title="Open Chat">
+    Press `C-c s c` or run `M-x khoj RET c`
+  </Step>
+  
+  <Step title="Ask Questions">
+    Ask questions in a natural, conversational style:
+    
+    ```text
+    When did I file my taxes last year?
+    ```
+    
+    ```text
+    Summarize my work notes from this month
+    ```
+  </Step>
+  
+  <Step title="Iterate">
+    Continue the conversation with follow-up questions and refinements.
+  </Step>
+</Steps>
+
+<Tip>
+  See the [Chat Features documentation](/features/chat) for advanced chat capabilities.
+</Tip>
+
+### Find Similar Entries
+
+Discover related content based on your current position:
+
+<Steps>
+  <Step title="Position Cursor">
+    Move your cursor to an org-mode entry, markdown section, or text paragraph.
+  </Step>
+  
+  <Step title="Run Command">
+    Press `C-c s f` or run `M-x khoj RET f`
+  </Step>
+  
+  <Step title="Browse Results">
+    Khoj displays similar entries from your knowledge base.
+  </Step>
+</Steps>
+
+### Opening Search Results
+
+Navigate directly to source files from search results:
+
+```elisp
+C-c C-o 2
+```
+
+This:
+1. Calls `org-open-at-point` on the current entry
+2. Opens the second link (the org-id or heading text)
+3. Takes you directly to the entry in its source file
+
+<Note>
+  If you have [speed keys](https://orgmode.org/manual/Speed-Keys.html) enabled, `o 2` also works.
+</Note>
+
+## Configuration Options
+
+### Index Configuration
+
+<CodeGroup>
+```elisp Directories
+(setq khoj-index-directories 
+      '("~/org-roam" 
+        "~/notes" 
+        "~/Documents/research"))
+```
+
+```elisp Specific Files
+(setq khoj-index-files 
+      '("~/todo.org" 
+        "~/work.org" 
+        "~/journal.md"))
+```
+
+```elisp Combined
+(setq khoj-index-directories '("~/org-roam" "~/notes")
+      khoj-index-files '("~/todo.org" "~/work.org"))
+```
+</CodeGroup>
+
+### Display Configuration
+
+```elisp
+;; Set image width for generated images
+(setq khoj-image-width 156)
+
+;; Set number of search results
+(setq khoj-results-count 10)
+```
+
+### Server Configuration
+
+```elisp
+;; Server URL
+(setq khoj-server-url "https://app.khoj.dev")
+
+;; API Key
+(setq khoj-api-key "YOUR_API_KEY")
+
+;; Local server indicator
+(setq khoj-server-is-local nil)  ; set to t for local servers
+```
+
+## Keyboard Shortcuts
+
+Default key bindings (when using `:bind ("C-c s" . 'khoj)`):
+
+| Command | Keybinding | Description |
+|---------|-----------|-------------|
+| `khoj` | `C-c s` | Open Khoj menu |
+| Search | `C-c s s` | Open search |
+| Chat | `C-c s c` | Open chat |
+| Find Similar | `C-c s f` | Find similar entries |
+| Update Index | `C-c s u` | Update content index |
+
+<Tip>
+  Customize these bindings by modifying the `:bind` section in your configuration.
+</Tip>
+
+## Updating
+
+<Tabs>
+  <Tab title="MELPA">
+    <Steps>
+      <Step title="Refresh Package List">
+        ```elisp
+        M-x package-refresh-contents
+        ```
+      </Step>
+      
+      <Step title="Reinstall Khoj">
+        ```elisp
+        M-x package-reinstall RET khoj RET
+        ```
+      </Step>
+      
+      <Step title="Restart Emacs">
+        Restart Emacs to ensure the new version loads correctly.
+      </Step>
+    </Steps>
+  </Tab>
+  
+  <Tab title="straight.el">
+    <Steps>
+      <Step title="Pull Updates">
+        ```elisp
+        M-x straight-pull-package RET khoj RET
+        ```
+      </Step>
+      
+      <Step title="Rebuild">
+        ```elisp
+        M-x straight-rebuild-package RET khoj RET
+        ```
+      </Step>
+      
+      <Step title="Restart Emacs">
+        Restart Emacs to load the updated package.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Package not loading">
+    1. Verify Emacs version is 27.1 or higher: `M-x emacs-version`
+    2. Check if dependencies are installed: `transient`, `dash`
+    3. Try refreshing packages: `M-x package-refresh-contents`
+    4. Restart Emacs with `--debug-init` to see error messages
+  </Accordion>
+  
+  <Accordion title="Cannot connect to server">
+    1. Verify `khoj-server-url` is correct
+    2. Check `khoj-api-key` is set properly
+    3. Test connection: `M-x khoj-server-status`
+    4. For self-hosted: ensure Khoj server is running
+  </Accordion>
+  
+  <Accordion title="Search returns no results">
+    1. Force update the index: `C-c s` then `-f u`
+    2. Check that files are being indexed: verify `khoj-index-directories` and `khoj-index-files`
+    3. Ensure files have content and are readable
+    4. Check `*Messages*` buffer for errors
+  </Accordion>
+  
+  <Accordion title="Keybindings not working">
+    1. Check for conflicts: `C-h k C-c s`
+    2. Verify khoj is loaded: `M-x khoj-mode`
+    3. Try calling commands directly: `M-x khoj`
+    4. Check your config for other packages binding `C-c s`
+  </Accordion>
+</AccordionGroup>
+
+## Supported Content Types
+
+The Emacs package can index and search:
+
+<CardGroup cols={3}>
+  <Card title="Org Mode" icon="list-tree">
+    - `.org` files
+    - org-agenda files
+    - org-roam notes
+  </Card>
+  
+  <Card title="Markdown" icon="markdown">
+    - `.md` files
+    - `.markdown` files
+  </Card>
+  
+  <Card title="Other" icon="file">
+    - Plain text (`.txt`)
+    - PDF files
+    - Images (via OCR)
+  </Card>
+</CardGroup>
+
+## Tips and Tricks
+
+<AccordionGroup>
+  <Accordion title="Speed up indexing">
+    - Use specific directories instead of your entire home folder
+    - Exclude large directories with many binary files
+    - Index only frequently accessed org files explicitly
+  </Accordion>
+  
+  <Accordion title="Improve search results">
+    - Use query filters to narrow results: `+include -exclude dt:"date"`
+    - Be specific in your queries
+    - Use natural language phrasing
+    - Try different wordings if first search doesn't return good results
+  </Accordion>
+  
+  <Accordion title="Integrate with org-roam">
+    ```elisp
+    (setq khoj-index-directories 
+          (list org-roam-directory))
+    ```
+    
+    This automatically indexes your entire org-roam knowledge base.
+  </Accordion>
+  
+  <Accordion title="Custom keybindings">
+    ```elisp
+    (use-package khoj
+      :ensure t
+      :bind (("C-c k s" . 'khoj-search)
+             ("C-c k c" . 'khoj-chat)
+             ("C-c k f" . 'khoj-find-similar)))
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Chat Features" icon="comment" href="/features/chat">
+    Explore advanced chat capabilities
+  </Card>
+  <Card title="Search" icon="magnifying-glass" href="/features/search">
+    Master natural language search
+  </Card>
+  <Card title="Query Filters" icon="filter" href="/features/search#query-filters">
+    Learn advanced search syntax
+  </Card>
+  <Card title="Desktop App" icon="desktop" href="/clients/desktop">
+    Sync additional files and folders
+  </Card>
+</CardGroup>

@@ -1,0 +1,485 @@
+---
+title: Agents API
+description: Create and manage custom AI agents with specialized capabilities
+---
+
+## Overview
+
+Agents in Khoj are customizable AI assistants with specific personalities, knowledge bases, and capabilities. You can create agents for different purposes like research, coding, writing, or domain-specific tasks.
+
+## Key Features
+
+- **Custom Personalities**: Define unique personas and communication styles
+- **Specialized Knowledge**: Attach specific files and documents
+- **Tool Selection**: Choose which input tools (search, web, code) and output modes (text, image) the agent can use
+- **Privacy Levels**: Control whether agents are private, public, or protected
+- **Model Selection**: Choose different chat models per agent
+
+## List All Agents
+
+Get all agents accessible to the user.
+
+```bash cURL
+curl "https://app.khoj.dev/api/agents" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+```python Python
+import requests
+
+headers = {"Authorization": "Bearer YOUR_API_TOKEN"}
+response = requests.get(
+    "https://app.khoj.dev/api/agents",
+    headers=headers
+)
+agents = response.json()
+```
+
+**Response**
+
+```json
+[
+  {
+    "slug": "khoj",
+    "name": "Khoj",
+    "persona": "You are Khoj, an advanced AI personal assistant...",
+    "creator": null,
+    "managed_by_admin": true,
+    "color": "#7C3AED",
+    "icon": "🦾",
+    "privacy_level": "public",
+    "chat_model": "gpt-4o-mini",
+    "files": [],
+    "input_tools": ["online", "notes", "webpage"],
+    "output_modes": ["text", "image"]
+  },
+  {
+    "slug": "research-assistant",
+    "name": "Research Assistant",
+    "persona": "You are a research assistant specializing in academic papers...",
+    "creator": "user@example.com",
+    "managed_by_admin": false,
+    "color": "#3B82F6",
+    "icon": "📚",
+    "privacy_level": "private",
+    "chat_model": "gpt-4o",
+    "files": ["research-methods.pdf"],
+    "input_tools": ["online", "notes"],
+    "output_modes": ["text"]
+  }
+]
+```
+
+## Get Agent by Slug
+
+Retrieve details for a specific agent.
+
+```bash
+curl "https://app.khoj.dev/api/agents/research-assistant" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+<ParamField path="agent_slug" type="string" required>
+  Unique slug identifier for the agent
+</ParamField>
+
+## Get Agent for Conversation
+
+Get the agent associated with a specific conversation.
+
+```bash
+curl "https://app.khoj.dev/api/agents/conversation?conversation_id=CONV_ID" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+<ParamField query="conversation_id" type="string" required>
+  Conversation ID to get the agent for
+</ParamField>
+
+**Response**
+
+```json
+{
+  "slug": "research-assistant",
+  "name": "Research Assistant",
+  "persona": "You are a research assistant...",
+  "creator": "user@example.com",
+  "managed_by_admin": false,
+  "color": "#3B82F6",
+  "icon": "📚",
+  "privacy_level": "private",
+  "chat_model": "gpt-4o",
+  "has_files": true,
+  "input_tools": ["online", "notes"],
+  "output_modes": ["text"],
+  "is_creator": true,
+  "is_hidden": false
+}
+```
+
+## Create Agent
+
+Create a new custom agent.
+
+```bash cURL
+curl -X POST "https://app.khoj.dev/api/agents" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Code Reviewer",
+    "persona": "You are an experienced code reviewer who provides constructive feedback on code quality, best practices, and potential bugs.",
+    "privacy_level": "private",
+    "icon": "👨‍💻",
+    "color": "#10B981",
+    "chat_model": "gpt-4o-mini",
+    "input_tools": ["online", "code"],
+    "output_modes": ["text"],
+    "files": []
+  }'
+```
+
+```python Python
+import requests
+
+headers = {"Authorization": "Bearer YOUR_API_TOKEN"}
+agent_data = {
+    "name": "Code Reviewer",
+    "persona": "You are an experienced code reviewer...",
+    "privacy_level": "private",
+    "icon": "👨‍💻",
+    "color": "#10B981",
+    "chat_model": "gpt-4o-mini",
+    "input_tools": ["online", "code"],
+    "output_modes": ["text"],
+    "files": []
+}
+
+response = requests.post(
+    "https://app.khoj.dev/api/agents",
+    headers=headers,
+    json=agent_data
+)
+agent = response.json()
+```
+
+### Request Body
+
+<ParamField body="name" type="string" required>
+  Display name for the agent
+</ParamField>
+
+<ParamField body="persona" type="string" required>
+  Detailed description of the agent's personality, expertise, and behavior. This is the system prompt.
+</ParamField>
+
+<ParamField body="privacy_level" type="string" required>
+  Agent visibility:
+  - `private` - Only you can use this agent
+  - `public` - Anyone can discover and use this agent
+  - `protected` - Only people you share with can use
+</ParamField>
+
+<ParamField body="icon" type="string" required>
+  Emoji icon for the agent (single emoji character)
+</ParamField>
+
+<ParamField body="color" type="string" required>
+  Hex color code for the agent's theme (e.g., "#7C3AED")
+</ParamField>
+
+<ParamField body="chat_model" type="string" required>
+  Chat model to use:
+  - `gpt-4o` - Most capable (premium)
+  - `gpt-4o-mini` - Fast and efficient
+  - `claude-3-5-sonnet-20241022` - Anthropic's latest
+  - `gemini-2.0-flash-exp` - Google's fast model
+</ParamField>
+
+<ParamField body="files" type="string[]" default="[]">
+  Array of filenames to include in the agent's knowledge base
+</ParamField>
+
+<ParamField body="input_tools" type="string[]" default="[]">
+  Tools the agent can use for gathering information:
+  - `online` - Search the web
+  - `notes` - Search user's notes/documents
+  - `webpage` - Read specific webpages
+  - `code` - Execute code
+</ParamField>
+
+<ParamField body="output_modes" type="string[]" default="[]">
+  Output formats the agent can generate:
+  - `text` - Text responses
+  - `image` - Generate images
+  - `diagram` - Create diagrams
+</ParamField>
+
+<ParamField body="slug" type="string" optional>
+  Custom URL-friendly identifier. Auto-generated from name if not provided.
+</ParamField>
+
+<ParamField body="is_hidden" type="boolean" default="false">
+  Whether the agent is hidden from public listing
+</ParamField>
+
+## Update Agent
+
+Update an existing agent you created.
+
+```bash cURL
+curl -X PATCH "https://app.khoj.dev/api/agents" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "slug": "code-reviewer",
+    "name": "Senior Code Reviewer",
+    "persona": "You are a senior code reviewer with 15 years of experience...",
+    "privacy_level": "private",
+    "icon": "👨‍💻",
+    "color": "#10B981",
+    "chat_model": "gpt-4o",
+    "input_tools": ["online", "code", "notes"],
+    "output_modes": ["text"],
+    "files": ["coding-standards.md"]
+  }'
+```
+
+<ParamField body="slug" type="string" required>
+  Slug of the agent to update
+</ParamField>
+
+<Note>
+  You can only update agents you created. All other parameters are the same as create.
+</Note>
+
+## Delete Agent
+
+Delete an agent you created.
+
+```bash
+curl -X DELETE "https://app.khoj.dev/api/agents/code-reviewer" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+<ParamField path="agent_slug" type="string" required>
+  Slug of the agent to delete
+</ParamField>
+
+**Response**
+
+```json
+{
+  "message": "Agent deleted."
+}
+```
+
+## Hidden Agents
+
+Hidden agents are conversation-specific and not listed publicly. They're useful for one-off custom configurations.
+
+### Create Hidden Agent
+
+Create a hidden agent for a specific conversation.
+
+```bash
+curl -X POST "https://app.khoj.dev/api/agents/hidden?conversation_id=CONV_ID" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "persona": "You are a debugging assistant...",
+    "chat_model": "gpt-4o",
+    "input_tools": ["code"],
+    "output_modes": ["text"]
+  }'
+```
+
+<ParamField query="conversation_id" type="string" required>
+  ID of conversation to attach this agent to
+</ParamField>
+
+<ParamField body="slug" type="string" optional>
+  Optional slug for the hidden agent
+</ParamField>
+
+<ParamField body="persona" type="string" optional>
+  Custom persona for this agent
+</ParamField>
+
+<ParamField body="chat_model" type="string" optional>
+  Chat model to use
+</ParamField>
+
+<ParamField body="input_tools" type="string[]" optional>
+  Available input tools
+</ParamField>
+
+<ParamField body="output_modes" type="string[]" optional>
+  Available output modes
+</ParamField>
+
+### Update Hidden Agent
+
+```bash
+curl -X PATCH "https://app.khoj.dev/api/agents/hidden" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "slug": "hidden-agent-slug",
+    "persona": "Updated persona..."
+  }'
+```
+
+## Agent Configuration Options
+
+Get available input tools and output modes for agent configuration.
+
+```bash
+curl "https://app.khoj.dev/api/agents/options" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+**Response**
+
+```json
+{
+  "input_tools": {
+    "online": "Search the web for up-to-date information",
+    "notes": "Search through user's personal notes and documents",
+    "webpage": "Read and extract content from specific webpages",
+    "code": "Execute code to perform calculations or data analysis"
+  },
+  "output_modes": {
+    "text": "Generate text responses",
+    "image": "Create images using AI image generation",
+    "diagram": "Create diagrams and flowcharts"
+  }
+}
+```
+
+## Use Cases
+
+### Research Assistant
+
+```json
+{
+  "name": "Research Assistant",
+  "persona": "You are a research assistant specialized in academic literature. You help users find relevant papers, summarize research, and identify key findings. Always cite sources and maintain academic rigor.",
+  "input_tools": ["online", "notes"],
+  "output_modes": ["text"],
+  "files": ["research-methodology.pdf"]
+}
+```
+
+### Creative Writer
+
+```json
+{
+  "name": "Creative Writer",
+  "persona": "You are a creative writing assistant who helps with storytelling, character development, and narrative structure. You provide constructive feedback and creative suggestions.",
+  "input_tools": ["notes"],
+  "output_modes": ["text"],
+  "files": ["writing-guides.md", "story-templates.md"]
+}
+```
+
+### Code Assistant
+
+```json
+{
+  "name": "Code Assistant",
+  "persona": "You are an expert programming assistant proficient in multiple languages. You help with code review, debugging, optimization, and explaining complex code concepts.",
+  "input_tools": ["online", "code", "notes"],
+  "output_modes": ["text"],
+  "files": ["coding-standards.md"]
+}
+```
+
+### Visual Designer
+
+```json
+{
+  "name": "Visual Designer",
+  "persona": "You are a visual design assistant who helps create images, illustrations, and visual concepts. You understand design principles, color theory, and composition.",
+  "input_tools": ["online"],
+  "output_modes": ["text", "image", "diagram"]
+}
+```
+
+## Best Practices
+
+<Steps>
+  <Step title="Clear Personas">
+    Write clear, detailed personas that define the agent's expertise, tone, and limitations.
+  </Step>
+  
+  <Step title="Relevant Files">
+    Attach only relevant files. Too many files can dilute the agent's focus.
+  </Step>
+  
+  <Step title="Tool Selection">
+    Only enable tools the agent actually needs. Fewer tools = more focused behavior.
+  </Step>
+  
+  <Step title="Test Thoroughly">
+    Test your agent with various queries to ensure it behaves as expected.
+  </Step>
+  
+  <Step title="Iterate">
+    Refine the persona and settings based on actual usage and feedback.
+  </Step>
+</Steps>
+
+## Privacy Levels Explained
+
+<Tabs>
+  <Tab title="Private">
+    - Only you can see and use the agent
+    - Perfect for personal assistants with sensitive context
+    - Not listed in public agent directory
+  </Tab>
+  
+  <Tab title="Public">
+    - Anyone can discover and use the agent
+    - Listed in public agent directory
+    - Good for general-purpose assistants you want to share
+  </Tab>
+  
+  <Tab title="Protected">
+    - Only people with the direct link can use it
+    - Not listed publicly
+    - Good for team-specific agents
+  </Tab>
+</Tabs>
+
+## Error Handling
+
+### 400 Bad Request
+
+```json
+{
+  "error": "Agent with name code-reviewer already exists"
+}
+```
+
+Agent with that slug already exists. Choose a different name/slug.
+
+### 404 Not Found
+
+```json
+{
+  "error": "Agent with name xyz not found."
+}
+```
+
+Agent doesn't exist or you don't have access to it.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Chat API" icon="comments" href="/api/chat">
+    Use agents in conversations
+  </Card>
+  <Card title="Automations" icon="clock" href="/api/automations">
+    Create scheduled tasks with agents
+  </Card>
+</CardGroup>

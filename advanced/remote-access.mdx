@@ -1,0 +1,67 @@
+---
+title: Remote Access
+description: Securely access your self-hosted Khoj from remote machines
+---
+
+By default, self-hosted Khoj is only accessible on the machine it is running. To securely access it from a remote machine, follow these steps:
+
+<Steps>
+  <Step title="Set Domain">
+    Set the `KHOJ_DOMAIN` environment variable to your remotely accessible IP or domain via shell or docker-compose.yml.
+    
+    Examples:
+    ```bash
+    KHOJ_DOMAIN=my.khoj-domain.com
+    KHOJ_DOMAIN=192.168.0.4
+    ```
+  </Step>
+  
+  <Step title="Secure Your Installation">
+    - Ensure the Khoj Admin password and `KHOJ_DJANGO_SECRET_KEY` environment variable are securely set.
+    - Setup [Authentication](/api/authentication).
+  </Step>
+  
+  <Step title="Configure Firewall">
+    Open access to the Khoj port (default: 42110) from your OS and Network firewall.
+  </Step>
+</Steps>
+
+## SSL Configuration
+
+<Warning>
+  To expose Khoj on a custom domain over the public internet, use of an SSL certificate is strongly recommended. You can use [Let's Encrypt](https://letsencrypt.org/) to get a free SSL certificate for your domain.
+</Warning>
+
+### Disable HTTPS (Not Recommended)
+
+To disable HTTPS, set the `KHOJ_NO_HTTPS` environment variable to `True`. This can be useful if Khoj is only accessible behind a secure, private network.
+
+```bash
+KHOJ_NO_HTTPS=True
+```
+
+## Using Tailscale for Remote Access
+
+<Note>
+  You can use [Tailscale](https://tailscale.com/) for easy, secure access to your self-hosted Khoj over the network.
+</Note>
+
+<Steps>
+  <Step title="Configure Domain">
+    Set `KHOJ_DOMAIN` to your machine's [Tailscale IP](https://tailscale.com/kb/1452/connect-to-devices#identify-your-devices) or [FQDN on tailnet](https://tailscale.com/kb/1081/magicdns#fully-qualified-domain-names-vs-machine-names).
+    
+    ```bash
+    KHOJ_DOMAIN=100.4.2.0
+    # or
+    KHOJ_DOMAIN=khoj.tailfe8c.ts.net
+    ```
+  </Step>
+  
+  <Step title="Access from Any Device">
+    Access Khoj by opening `http://tailscale-ip-of-server:42110` or `http://fqdn-of-server:42110` from any device on your Tailscale network.
+  </Step>
+</Steps>
+
+<Tip>
+  See the [Tailscale setup guide](/advanced/tailscale) for more detailed instructions on using Tailscale with Khoj.
+</Tip>

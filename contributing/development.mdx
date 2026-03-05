@@ -1,0 +1,450 @@
+---
+title: Development Setup
+description: Set up your local development environment for Khoj
+icon: code
+---
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+<AccordionGroup>
+  <Accordion title="Required Software">
+    - **Python 3.10, 3.11, or 3.12**: [Download Python](https://www.python.org/downloads/)
+    - **Git**: [Install Git](https://git-scm.com/downloads)
+    - **PostgreSQL with pgvector**: Database and vector extension
+    - **Bun**: Fast JavaScript runtime ([Install Bun](https://bun.sh))
+    - **uv**: Fast Python package manager ([Install uv](https://github.com/astral-sh/uv))
+  </Accordion>
+  
+  <Accordion title="Optional Tools">
+    - **Docker & Docker Compose**: For containerized development
+    - **pre-commit**: For automated code quality checks
+    - **Node.js/Yarn**: Alternative to Bun for web development
+  </Accordion>
+</AccordionGroup>
+
+## Installation Methods
+
+<Tabs>
+  <Tab title="Using Pip (Recommended)">
+    
+### 1. Clone and Setup Virtual Environment
+
+<CodeGroup>
+```bash macOS/Linux
+# Clone the repository
+git clone https://github.com/khoj-ai/khoj && cd khoj
+
+# Create and activate virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install Khoj with all extras
+uv sync --all-extras
+```
+
+```bash Windows
+# Clone the repository
+git clone https://github.com/khoj-ai/khoj
+cd khoj
+
+# Create and activate virtual environment
+python3 -m venv .venv
+.venv\Scripts\activate
+
+# Install Khoj with all extras
+uv sync --all-extras
+```
+</CodeGroup>
+
+### 2. Install and Configure PostgreSQL
+
+Khoj uses PostgreSQL with the `pgvector` extension for storing embeddings.
+
+<Tabs>
+  <Tab title="macOS">
+    Install [Postgres.app](https://postgresapp.com/) - comes pre-installed with pgvector.
+    
+    ```bash
+    # Create the database
+    createdb khoj -U postgres --password
+    ```
+  </Tab>
+  
+  <Tab title="Windows">
+    1. Use the [recommended installer](https://www.postgresql.org/download/windows/)
+    2. Follow [pgvector installation instructions](https://github.com/pgvector/pgvector#windows)
+    
+    ```bash
+    # Create the database
+    createdb -U postgres khoj --password
+    ```
+    
+    <Warning>
+      Windows support for pgvector is experimental. Consider using Docker for a more reliable setup.
+    </Warning>
+  </Tab>
+  
+  <Tab title="Linux">
+    ```bash
+    # Install PostgreSQL (Ubuntu/Debian)
+    sudo apt update
+    sudo apt install postgresql postgresql-contrib
+    
+    # Install pgvector
+    sudo apt install postgresql-server-dev-all
+    git clone https://github.com/pgvector/pgvector.git
+    cd pgvector
+    make
+    sudo make install
+    
+    # Create the database
+    sudo -u postgres createdb khoj --password
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+  Set the `POSTGRES_PASSWORD` environment variable to match your database password. The default is `postgres`.
+</Note>
+
+### 3. Build Frontend Assets
+
+```bash
+cd src/interface/web/
+
+# Install dependencies and build
+bun install
+bun export
+```
+
+<Tip>
+  For frontend development, use `bun dev` to start a development server at http://localhost:3000. Always run `bun export` to test changes at http://localhost:42110 before creating a PR.
+</Tip>
+
+<Warning>
+  Streaming doesn't work on the dev server (localhost:3000) due to Next.js SSR handling. Test streaming features on localhost:42110.
+</Warning>
+
+### 4. Run Khoj
+
+<Steps>
+  <Step title="Start the Server">
+    ```bash
+    khoj -vv
+    ```
+    
+    The server will start at `http://localhost:42110`
+  </Step>
+  
+  <Step title="Configure Khoj">
+    - Access the web interface at http://localhost:42110
+    - Add files and directories to index via the settings page
+    - Click "Save" to trigger indexing
+  </Step>
+  
+  <Step title="Wait for Indexing">
+    Khoj will load ML models, generate embeddings, and index your content. This may take a few minutes on first run.
+  </Step>
+</Steps>
+
+  </Tab>
+  
+  <Tab title="Using Docker">
+    
+### 1. Install Docker
+
+Make sure you have the latest versions of [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed.
+
+### 2. Clone and Configure
+
+```bash
+# Clone the repository
+git clone https://github.com/khoj-ai/khoj && cd khoj
+```
+
+### 3. Update docker-compose.yml
+
+1. Update environment variables as needed
+2. Comment out the `image` line
+3. Uncomment the `build` line in the `server` service
+
+```yaml
+server:
+  # image: ghcr.io/khoj-ai/khoj:latest
+  build: .
+  # ... rest of config
+```
+
+### 4. Run Khoj
+
+```bash
+# Start services (server + database)
+docker-compose up -d
+```
+
+The server will be available at `http://localhost:42110`
+
+### 5. Rebuild After Changes
+
+```bash
+# Rebuild without cache
+docker-compose build --no-cache
+
+# Restart services
+docker-compose up -d
+```
+
+  </Tab>
+</Tabs>
+
+## Development Setup Script
+
+For a faster setup, use the provided development script:
+
+```bash
+# Basic setup (server + web app)
+./scripts/dev_setup.sh
+
+# Full setup (includes Desktop and Obsidian clients)
+./scripts/dev_setup.sh --full
+```
+
+This script:
+- Installs the Khoj server and web app
+- Sets up Git hooks for automatic code formatting and type checking
+- Configures pre-commit hooks
+- Optionally installs Desktop and Obsidian client apps
+
+## Client Configuration
+
+When testing with Khoj clients (Desktop, Obsidian, Emacs), update the server URL to point to your local instance:
+
+```
+http://127.0.0.1:42110
+```
+
+## Validation and Testing
+
+### Before Making Changes
+
+<Steps>
+  <Step title="Install Git Hooks">
+    ```bash
+    ./scripts/dev_setup.sh
+    ```
+    
+    If pre-commit isn't installed:
+    ```bash
+    pip install pre-commit
+    pre-commit install -t pre-push -t pre-commit
+    ```
+  </Step>
+  
+  <Step title="Verify Setup">
+    ```bash
+    # Run pre-commit checks manually
+    pre-commit run --hook-stage manual --all
+    ```
+  </Step>
+</Steps>
+
+### Before Creating a PR
+
+<Warning>
+  You must be in an active virtual environment to run tests and linters.
+</Warning>
+
+<Steps>
+  <Step title="Create or Link GitHub Issue">
+    Ensure there's a GitHub issue that can be linked to your PR. Tag a maintainer on the issue for visibility. Discuss the code design before creating a PR to get it merged faster.
+  </Step>
+  
+  <Step title="Run Tests">
+    ```bash
+    pytest
+    ```
+    
+    Run specific tests:
+    ```bash
+    pytest tests/test_client.py
+    pytest tests/test_agents.py -v
+    ```
+  </Step>
+  
+  <Step title="Run Type Checker">
+    ```bash
+    mypy
+    ```
+  </Step>
+  
+  <Step title="Add Unit Tests">
+    Think about how to verify your functionality with tests. Ask for help in the GitHub issue or Discord's `#contributors` channel if you're unsure.
+  </Step>
+</Steps>
+
+### After Creating a PR
+
+Automated validation workflows will run for every PR. Tag a maintainer to trigger the workflows if they don't start automatically.
+
+The workflows include:
+- **Test Suite**: Runs on Python 3.10, 3.11, and 3.12
+- **Type Checking**: Validates type hints with mypy
+- **Linting**: Checks code style with ruff
+- **Pre-commit Hooks**: Validates formatting and imports
+
+## Obsidian Plugin Development
+
+### Setup
+
+<Steps>
+  <Step title="Navigate to Plugin Directory">
+    ```bash
+    cd src/interface/obsidian
+    ```
+  </Step>
+  
+  <Step title="Install Dependencies">
+    ```bash
+    yarn install
+    ```
+  </Step>
+  
+  <Step title="Start Development Server">
+    ```bash
+    yarn dev
+    ```
+    
+    This continuously rebuilds the plugin as you make changes, outputting to `main.js`.
+  </Step>
+</Steps>
+
+### Loading in Obsidian
+
+<Steps>
+  <Step title="Install Khoj Plugin">
+    Make sure you have the [Khoj plugin](https://publish.obsidian.md/hub/02+-+Community+Expansions/02.05+All+Community+Expansions/Plugins/khoj) installed in Obsidian.
+  </Step>
+  
+  <Step title="Open Plugin Folder">
+    - Open Obsidian settings (gear icon)
+    - Click 'Community Plugins'
+    - Click the folder icon next to 'Installed Plugins'
+  </Step>
+  
+  <Step title="Replace main.js">
+    Navigate to the `khoj` folder and replace `main.js` with your development build from `src/interface/obsidian/main.js`.
+  </Step>
+  
+  <Step title="Reload Obsidian">
+    Restart Obsidian or use the "Reload app without saving" command to test your changes.
+  </Step>
+</Steps>
+
+## Windows Installation Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Command 'khoj' Not Recognized">
+    1. Try reactivating the virtual environment:
+       ```bash
+       .venv\Scripts\deactivate
+       .venv\Scripts\activate
+       ```
+    2. If it still doesn't work, repeat the installation process
+  </Accordion>
+  
+  <Accordion title="Python Package Missing">
+    Use `uv` to add the missing package:
+    ```bash
+    uv add <package-name>
+    ```
+    Then try running `khoj` again.
+  </Accordion>
+  
+  <Accordion title="Command 'createdb' Not Recognized">
+    Add PostgreSQL binaries to your PATH:
+    ```
+    C:\Program Files\PostgreSQL\16\bin
+    ```
+  </Accordion>
+  
+  <Accordion title="Connection Refused Error">
+    1. Locate `pg_hba.conf` in your PostgreSQL installation directory
+    2. Edit the file to use **trust** authentication:
+    ```
+    host    all             postgres        127.0.0.1/32            trust
+    local   all             all                                     trust
+    host    all             all             127.0.0.1/32            trust
+    host    all             all             ::1/128                 trust
+    ```
+    3. Restart PostgreSQL service
+  </Accordion>
+  
+  <Accordion title="pgvector Installation Errors">
+    1. Reinstall Visual Studio 2022 Build Tools with:
+       - Desktop development with C++ (in Workloads)
+       - MSVC C++ Build Tools (in Individual Components)
+       - Windows 10/11 SDK (in Individual Components)
+       - C++/CLI support for build tools (in Individual Components)
+    
+    2. Open "x64 Native Tools Command Prompt for VS 2022" as Administrator
+    
+    3. Follow [pgvector Windows installation instructions](https://github.com/pgvector/pgvector?tab=readme-ov-file#windows)
+  </Accordion>
+</AccordionGroup>
+
+## Environment Variables
+
+<CodeGroup>
+```bash Development
+# Database
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=khoj
+
+# Server
+KHOJ_DOMAIN=localhost
+KHOJ_NO_HTTPS=true
+
+# Debugging
+KHOJ_DEBUG=true
+```
+
+```bash Production
+# Database
+POSTGRES_HOST=your-db-host
+POSTGRES_PORT=5432
+POSTGRES_USER=khoj_user
+POSTGRES_PASSWORD=secure_password
+POSTGRES_DB=khoj_prod
+
+# Server
+KHOJ_DOMAIN=app.khoj.dev
+KHOJ_NO_HTTPS=false
+
+# Optional: API Keys
+GEMINI_API_KEY=your_key
+OPENAI_API_KEY=your_key
+ANTHROPIC_API_KEY=your_key
+```
+</CodeGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Understand the Architecture" icon="sitemap" href="/contributing/architecture">
+    Learn about Khoj's system design and code structure
+  </Card>
+  <Card title="Performance Guidelines" icon="gauge" href="/contributing/performance">
+    Learn about optimization and benchmarking
+  </Card>
+  <Card title="Find Issues to Work On" icon="github" href="https://github.com/khoj-ai/khoj/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22">
+    Browse beginner-friendly issues
+  </Card>
+  <Card title="Join Discord" icon="discord" href="https://discord.gg/WaxF3SkFPU">
+    Connect with other contributors
+  </Card>
+</CardGroup>

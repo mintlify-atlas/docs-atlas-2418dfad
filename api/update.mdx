@@ -1,0 +1,419 @@
+---
+title: Content Update API
+description: Index and manage your documents and data sources with the Khoj Content API
+---
+
+## Overview
+
+The Content Update API allows you to index documents, manage data sources, and keep your Khoj knowledge base synchronized with your files.
+
+## Update Index
+
+Force a reindex of your content.
+
+```bash cURL
+curl "https://app.khoj.dev/api/update?force=true" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+<ParamField query="t" type="string" optional>
+  Content type to update. Options: `all`, `org`, `markdown`, `pdf`, `plaintext`, `image`, `docx`, `github`, `notion`
+</ParamField>
+
+<ParamField query="force" type="boolean" default="false">
+  Force complete regeneration of the index
+</ParamField>
+
+**Response**
+
+```json
+{
+  "status": "ok",
+  "message": "khoj reloaded"
+}
+```
+
+## Upload Files
+
+Upload and index files directly via the API.
+
+### Upload Single/Multiple Files
+
+```bash cURL
+curl -X PUT https://app.khoj.dev/api/content \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -F "files=@document1.pdf" \
+  -F "files=@notes.md" \
+  -F "t=all"
+```
+
+```python Python
+import requests
+
+headers = {"Authorization": "Bearer YOUR_API_TOKEN"}
+files = [
+    ('files', ('document.pdf', open('document.pdf', 'rb'), 'application/pdf')),
+    ('files', ('notes.md', open('notes.md', 'rb'), 'text/markdown'))
+]
+params = {'t': 'all'}
+
+response = requests.put(
+    "https://app.khoj.dev/api/content",
+    headers=headers,
+    files=files,
+    params=params
+)
+```
+
+<ParamField query="t" type="string" default="all">
+  Content type for uploaded files
+</ParamField>
+
+<ParamField body="files" type="file[]" required>
+  Files to upload (multipart/form-data)
+</ParamField>
+
+**Response**: Comma-separated list of indexed filenames
+
+### Update Existing Files
+
+Use `PATCH` instead of `PUT` to update existing files without replacing the entire index:
+
+```bash
+curl -X PATCH https://app.khoj.dev/api/content \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -F "files=@updated-notes.md"
+```
+
+### Supported File Types
+
+- **Documents**: Markdown (`.md`), Org-mode (`.org`), Plain text (`.txt`)
+- **Office**: PDF (`.pdf`), Word (`.docx`)
+- **Images**: PNG, JPEG, WebP
+- **Code**: Most text-based formats
+
+## Manage Files
+
+### List All Files
+
+Get a list of all indexed files.
+
+```bash
+curl "https://app.khoj.dev/api/content/files?page=0" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+<ParamField query="page" type="integer" default="0">
+  Page number for pagination (10 files per page)
+</ParamField>
+
+<ParamField query="truncated" type="boolean" default="true">
+  If true, returns only first 1000 characters of each file's content
+</ParamField>
+
+**Response**
+
+```json
+{
+  "files": [
+    {
+      "file_name": "notes/meeting-2024-03-05.md",
+      "raw_text": "# Meeting Notes\n\nAttendees: ...",
+      "updated_at": "2024-03-05 15:30:00"
+    }
+  ],
+  "num_pages": 3
+}
+```
+
+### Get Single File
+
+Retrieve a specific file by name.
+
+```bash
+curl "https://app.khoj.dev/api/content/file?file_name=notes/meeting.md" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+<ParamField query="file_name" type="string" required>
+  Full path of the file to retrieve
+</ParamField>
+
+**Response**
+
+```json
+{
+  "id": 123,
+  "file_name": "notes/meeting.md",
+  "raw_text": "Full file content here..."
+}
+```
+
+### Delete Files
+
+Delete a single file from the index.
+
+```bash
+curl -X DELETE "https://app.khoj.dev/api/content/file?filename=old-notes.md" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+Delete multiple files:
+
+```bash
+curl -X DELETE "https://app.khoj.dev/api/content/files" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "files": ["old-notes.md", "temp.txt"]
+  }'
+```
+
+<ParamField body="files" type="string[]" required>
+  Array of filenames to delete
+</ParamField>
+
+## Content Types
+
+### Get Available Content Types
+
+List content types currently indexed for the user.
+
+```bash
+curl "https://app.khoj.dev/api/content/types" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+**Response**
+
+```json
+["all", "markdown", "pdf", "org", "github"]
+```
+
+### Delete Content Type
+
+Remove all content of a specific type.
+
+```bash
+curl -X DELETE "https://app.khoj.dev/api/content/type/pdf" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+<ParamField path="content_type" type="string" required>
+  Type of content to delete (e.g., "pdf", "markdown", "all")
+</ParamField>
+
+## Content Sources
+
+### Get Files by Source
+
+List files from a specific source.
+
+```bash
+curl "https://app.khoj.dev/api/content/computer" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+Available sources:
+- `computer` - Local files uploaded via API or desktop app
+- `github` - Files from connected GitHub repositories
+- `notion` - Pages from connected Notion workspace
+
+### Delete Content Source
+
+Remove all content from a specific source.
+
+```bash
+curl -X DELETE "https://app.khoj.dev/api/content/source/github" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+## External Integrations
+
+### GitHub Integration
+
+#### Get GitHub Configuration
+
+```bash
+curl "https://app.khoj.dev/api/content/github" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+#### Set GitHub Configuration
+
+Connect GitHub repositories to Khoj.
+
+```bash
+curl -X POST "https://app.khoj.dev/api/content/github" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "pat_token": "ghp_your_github_token",
+    "repos": [
+      {
+        "name": "my-repo",
+        "owner": "username",
+        "branch": "main"
+      }
+    ]
+  }'
+```
+
+<ParamField body="pat_token" type="string" required>
+  GitHub Personal Access Token with repo read permissions
+</ParamField>
+
+<ParamField body="repos" type="array" required>
+  Array of repository configurations
+  
+  <Expandable title="repository object">
+    <ParamField body="name" type="string" required>
+      Repository name
+    </ParamField>
+    
+    <ParamField body="owner" type="string" required>
+      Repository owner username or organization
+    </ParamField>
+    
+    <ParamField body="branch" type="string" required>
+      Branch to index (e.g., "main", "master")
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+### Notion Integration
+
+#### Get Notion Configuration
+
+```bash
+curl "https://app.khoj.dev/api/content/notion" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+#### Set Notion Configuration
+
+Connect your Notion workspace.
+
+```bash
+curl -X POST "https://app.khoj.dev/api/content/notion" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "token": "secret_notion_integration_token"
+  }'
+```
+
+<ParamField body="token" type="string" required>
+  Notion Integration Token (Internal Integration)
+</ParamField>
+
+<Note>
+  After setting the token, Khoj will automatically sync your Notion pages in the background.
+</Note>
+
+## Document Conversion
+
+Convert documents to text for processing.
+
+```bash
+curl -X POST "https://app.khoj.dev/api/content/convert" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -F "files=@document.pdf" \
+  -F "files=@notes.docx"
+```
+
+**Response**
+
+```json
+[
+  {
+    "name": "document.pdf",
+    "content": "Page 1 of document.pdf:\n\nExtracted text content...",
+    "file_type": "pdf",
+    "size": 15234
+  }
+]
+```
+
+Supported formats: PDF, DOCX, Markdown, Org-mode, Plain text
+
+<Warning>
+  Maximum file size is 10MB per file for conversion.
+</Warning>
+
+## Index Size
+
+Check your current index size.
+
+```bash
+curl "https://app.khoj.dev/api/content/size" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+**Response**
+
+```json
+{
+  "indexed_data_size_in_mb": 45
+}
+```
+
+## Storage Limits
+
+- **Free tier**: 50 MB indexed content
+- **Premium tier**: 500 MB indexed content
+
+These limits apply to the processed/indexed data, not the raw file sizes.
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Regular Updates" icon="sync">
+    Call `/api/update` regularly to keep your index fresh, especially if files change externally.
+  </Card>
+  
+  <Card title="Batch Uploads" icon="layer-group">
+    Upload multiple files in a single request for better performance.
+  </Card>
+  
+  <Card title="Use PATCH for Updates" icon="pen-to-square">
+    Use PATCH instead of PUT when updating existing files to avoid reindexing everything.
+  </Card>
+  
+  <Card title="Monitor Index Size" icon="chart-line">
+    Check your index size regularly to stay within limits.
+  </Card>
+</CardGroup>
+
+## Error Handling
+
+### 422 Unprocessable Entity
+
+```json
+{
+  "detail": "Audio size larger than 10Mb limit"
+}
+```
+
+File exceeds size limits. Break into smaller files or compress.
+
+### 500 Internal Server Error
+
+```json
+{
+  "detail": "Failed to update server indexed content"
+}
+```
+
+Indexing failed. Check file format and try again.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Search API" icon="magnifying-glass" href="/api/search">
+    Search your indexed content
+  </Card>
+  <Card title="Chat API" icon="comments" href="/api/chat">
+    Chat with your documents
+  </Card>
+</CardGroup>

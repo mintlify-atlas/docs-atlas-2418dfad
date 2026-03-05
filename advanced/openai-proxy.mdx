@@ -1,0 +1,108 @@
+---
+title: OpenAI API Proxy
+description: Use any OpenAI-compatible API server with Khoj
+---
+
+<Info>
+  This is only helpful for self-hosted users. If you're using [Khoj Cloud](https://app.khoj.dev), you're limited to our first-party models.
+</Info>
+
+<Note>
+  Khoj natively supports local LLMs [available on HuggingFace in GGUF format](https://huggingface.co/models?library=gguf). Using an OpenAI API proxy with Khoj may be useful for ease of setup, trying new models or using commercial LLMs via API.
+</Note>
+
+## Overview
+
+Khoj can use any OpenAI API compatible server including:
+
+### Local Providers
+- [Ollama](https://docs.khoj.dev/advanced/openai-proxy#ollama)
+- [LMStudio](/advanced/lmstudio) (currently unsupported)
+- [LiteLLM](/advanced/litellm)
+
+### Commercial Providers
+- [HuggingFace](https://huggingface.co/docs/api-inference/tasks/chat-completion#using-the-api)
+- [OpenRouter](https://openrouter.ai/docs/quick-start)
+- And many more OpenAI-compatible services
+
+Configuring this allows you to use non-standard, open or commercial, local or hosted LLM models for Khoj.
+
+<Tip>
+  Combine them with Khoj to turn your favorite LLM into an AI agent. Allowing you to chat with your docs, find answers from the internet, build custom agents and run automations.
+</Tip>
+
+## Specific Integrations
+
+For specific integrations, see our dedicated setup guides:
+
+<CardGroup cols={3}>
+  <Card title="Ollama" icon="robot" href="/advanced/ollama">
+    Run local open-source LLMs
+  </Card>
+  <Card title="LiteLLM" icon="layer-group" href="/advanced/litellm">
+    Unified proxy for multiple LLM providers
+  </Card>
+  <Card title="LMStudio" icon="desktop" href="/advanced/lmstudio">
+    GUI for local LLMs (unsupported)
+  </Card>
+</CardGroup>
+
+## General Setup
+
+For general instructions to setup Khoj with any OpenAI API proxy:
+
+<Steps>
+  <Step title="Start API Server">
+    Start your preferred OpenAI API compatible app locally or get API keys from commercial AI model providers.
+  </Step>
+  
+  <Step title="Create AI Model API">
+    Create a new [AI Model API](http://localhost:42110/server/admin/database/aimodelapi/add) on your Khoj admin panel:
+    
+    - **Name**: `any name`
+    - **Api Key**: `any string` (or your actual API key for commercial providers)
+    - **Api Base Url**: *The URL of your OpenAI Compatible API*
+  </Step>
+  
+  <Step title="Create Chat Model">
+    Create a new [Chat Model](http://localhost:42110/server/admin/database/chatmodel/add) on your Khoj admin panel:
+    
+    - **Name**: `llama3` (replace with the name of your model)
+    - **Model Type**: `Openai`
+    - **Ai Model Api**: *The AI Model API you created in step 2*
+    - **Max prompt size**: `2000` (replace with the max prompt size of your model)
+    - **Tokenizer**: *Do not set for OpenAI, Mistral, Llama3 based models*
+  </Step>
+  
+  <Step title="Select Model">
+    Go to [your config](http://localhost:42110/settings) and select the model you just created in the chat model dropdown.
+  </Step>
+</Steps>
+
+## Configuration Examples
+
+<CodeGroup>
+
+```bash Local Server
+# Example: Using a local OpenAI-compatible server
+API_BASE_URL=http://localhost:8000/v1
+API_KEY=dummy-key
+```
+
+```bash HuggingFace
+# Example: Using HuggingFace Inference API
+API_BASE_URL=https://api-inference.huggingface.co/models/
+API_KEY=your_hf_api_key
+```
+
+```bash OpenRouter
+# Example: Using OpenRouter
+API_BASE_URL=https://openrouter.ai/api/v1
+API_KEY=your_openrouter_api_key
+```
+
+</CodeGroup>
+
+<Warning>
+  Ensure your API proxy supports the OpenAI API format, including the `/v1/chat/completions` endpoint. Not all proxies support all OpenAI features like JSON mode or function calling.
+</Warning>

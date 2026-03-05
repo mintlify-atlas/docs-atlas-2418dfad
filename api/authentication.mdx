@@ -1,0 +1,307 @@
+---
+title: Authentication
+description: Authenticate your API requests with tokens, OAuth, or magic links
+---
+
+## Overview
+
+Khoj supports multiple authentication methods:
+
+1. **API Tokens** - For programmatic access (recommended for API usage)
+2. **OAuth with Google** - For user login via web interface
+3. **Magic Links** - Passwordless email authentication
+
+Most API endpoints require the `authenticated` scope and will redirect unauthenticated requests to the login page.
+
+## API Token Authentication
+
+API tokens provide secure programmatic access to your Khoj account. This is the recommended method for API integrations.
+
+### Generate an API Token
+
+Generate a new API token for your account.
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://app.khoj.dev/api/auth/token \
+  -H "Cookie: session=YOUR_SESSION_COOKIE" \
+  -H "Content-Type: application/json" \
+  -d '{"token_name": "My API Token"}'
+```
+
+```python Python
+import requests
+
+session = requests.Session()
+# First login to get session cookie
+# Then generate token
+response = session.post(
+    "https://app.khoj.dev/api/auth/token",
+    json={"token_name": "My API Token"}
+)
+token_data = response.json()
+print(f"Token: {token_data['token']}")
+```
+</CodeGroup>
+
+**Request**
+
+<ParamField body="token_name" type="string" optional>
+  Optional name for the token to help you identify it later
+</ParamField>
+
+**Response**
+
+<ResponseField name="token" type="string">
+  The generated API token (store this securely)
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  The name you assigned to the token
+</ResponseField>
+
+```json Example Response
+{
+  "token": "kh_1a2b3c4d5e6f7g8h9i0j",
+  "name": "My API Token"
+}
+```
+
+<Warning>
+  Store your API token securely. It provides full access to your account and cannot be retrieved again. If lost, you'll need to generate a new token.
+</Warning>
+
+### Using API Tokens
+
+Include your API token in the `Authorization` header of your requests:
+
+```bash
+curl https://app.khoj.dev/api/search?q=example \
+  -H "Authorization: Bearer kh_YOUR_API_TOKEN"
+```
+
+### List Your Tokens
+
+View all active API tokens for your account.
+
+```bash cURL
+curl https://app.khoj.dev/api/auth/token \
+  -H "Cookie: session=YOUR_SESSION_COOKIE"
+```
+
+**Response**: Array of token objects with names and creation dates
+
+### Delete a Token
+
+Revoke an API token when it's no longer needed.
+
+```bash cURL
+curl -X DELETE https://app.khoj.dev/api/auth/token?token=kh_TOKEN_TO_DELETE \
+  -H "Cookie: session=YOUR_SESSION_COOKIE"
+```
+
+<ParamField query="token" type="string" required>
+  The token string to delete
+</ParamField>
+
+## OAuth Authentication
+
+Khoj supports OAuth 2.0 authentication with Google.
+
+### OAuth Login Flow
+
+1. **Initiate Login** - Redirect user to `/api/auth/login`
+2. **OAuth Redirect** - User authenticates with Google
+3. **Callback** - Google redirects to `/api/auth/redirect`
+4. **Session Created** - User session established
+
+### Endpoints
+
+#### GET `/api/auth/login`
+
+Initiates the OAuth flow by redirecting to Google's authorization page.
+
+```bash
+curl https://app.khoj.dev/api/auth/login
+```
+
+#### GET `/api/auth/redirect`
+
+Callback endpoint for OAuth. Google redirects here after authentication.
+
+<ParamField query="code" type="string">
+  Authorization code from Google
+</ParamField>
+
+<ParamField query="next" type="string" optional>
+  URL to redirect to after successful authentication
+</ParamField>
+
+#### GET `/api/auth/logout`
+
+Ends the user session.
+
+```bash
+curl https://app.khoj.dev/api/auth/logout \
+  -H "Cookie: session=YOUR_SESSION_COOKIE"
+```
+
+### OAuth Metadata
+
+Retrieve OAuth configuration details.
+
+```bash
+curl https://app.khoj.dev/api/auth/oauth/metadata
+```
+
+**Response**
+
+```json
+{
+  "google": {
+    "client_id": "YOUR_GOOGLE_CLIENT_ID",
+    "redirect_uri": "https://app.khoj.dev/api/auth/redirect"
+  }
+}
+```
+
+## Magic Link Authentication
+
+Magic links provide passwordless authentication via email.
+
+### Send Magic Link
+
+Request a magic link to be sent to your email.
+
+```bash cURL
+curl -X POST https://app.khoj.dev/api/auth/magic \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com"}'
+```
+
+<ParamField body="email" type="string" required>
+  Email address to send the magic link to
+</ParamField>
+
+**Response**: `200 OK` if email was sent successfully
+
+<Note>
+  Rate limited to 10 requests per 24 hours per user and 20 requests per 24 hours per email.
+</Note>
+
+### Verify Magic Link
+
+This endpoint is called automatically when the user clicks the magic link.
+
+```bash
+GET /api/auth/magic?code=VERIFICATION_CODE&email=user@example.com
+```
+
+<ParamField query="code" type="string" required>
+  Verification code from the magic link
+</ParamField>
+
+<ParamField query="email" type="string" required>
+  Email address associated with the magic link
+</ParamField>
+
+**Response**: Redirects to home page (`/`) on success
+
+## Session Management
+
+Khoj uses session cookies for web-based authentication. The session is stored in the `user` field of the request session.
+
+### Check Authentication Status
+
+Verify your authentication and get user info.
+
+```bash
+curl https://app.khoj.dev/api/health \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+**Response**
+
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+### Get User Information
+
+Retrieve detailed information about the authenticated user.
+
+```bash
+curl https://app.khoj.dev/api/v1/user \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+**Response**
+
+<ResponseField name="email" type="string">
+  User's email address
+</ResponseField>
+
+<ResponseField name="username" type="string">
+  Username
+</ResponseField>
+
+<ResponseField name="photo" type="string">
+  URL to user's profile photo
+</ResponseField>
+
+<ResponseField name="is_active" type="boolean">
+  Whether the user has an active premium subscription
+</ResponseField>
+
+<ResponseField name="has_documents" type="boolean">
+  Whether the user has indexed any documents
+</ResponseField>
+
+<ResponseField name="khoj_version" type="string">
+  Version of Khoj server
+</ResponseField>
+
+```json Example
+{
+  "email": "user@example.com",
+  "username": "user123",
+  "photo": "https://example.com/photo.jpg",
+  "is_active": true,
+  "has_documents": true,
+  "khoj_version": "1.0.0"
+}
+```
+
+## Security Best Practices
+
+<Steps>
+  <Step title="Use HTTPS">
+    Always use HTTPS in production to protect tokens in transit.
+  </Step>
+  
+  <Step title="Store Tokens Securely">
+    Never commit tokens to version control. Use environment variables or secure secret management.
+  </Step>
+  
+  <Step title="Rotate Tokens Regularly">
+    Generate new tokens periodically and delete old ones.
+  </Step>
+  
+  <Step title="Use Minimal Scopes">
+    Only request the permissions your application needs.
+  </Step>
+  
+  <Step title="Monitor Token Usage">
+    Regularly review active tokens and revoke any that are no longer needed.
+  </Step>
+</Steps>
+
+## Anonymous Mode
+
+Khoj can be run in anonymous mode with `--anonymous-mode` flag, which disables authentication entirely. This is only recommended for local development or single-user deployments.
+
+<Warning>
+  Anonymous mode bypasses all authentication checks. Do not use in production with public access.
+</Warning>

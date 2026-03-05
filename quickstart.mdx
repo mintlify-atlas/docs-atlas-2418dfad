@@ -1,80 +1,217 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: Quickstart
+description: Get started with Khoj in minutes - your personal AI second brain
 ---
 
-## Get started in three steps
+Welcome to Khoj! Get up and running with your AI second brain in just a few minutes. This guide will take you from signup to having your first meaningful conversation with Khoj.
 
-Get your documentation site running locally and make your first customization.
+## What is Khoj?
 
-### Step 1: Set up your local environment
-
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
-
-### Step 2: Deploy your changes
-
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
-
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
-
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
-
-### Step 3: Go live
-
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
-
-## Next steps
-
-Now that you have your docs running, explore these key features:
-
-<CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
-</CardGroup>
+Khoj is your personal AI assistant that can:
+- Chat with you about anything using state-of-the-art LLMs (GPT-4, Claude, Gemini, or local models)
+- Search and understand your personal documents (PDFs, markdown, org-mode, Word, Notion)
+- Access information from the internet when needed
+- Generate images, execute code, and create diagrams
+- Work across all your devices - web, desktop, Obsidian, Emacs, and WhatsApp
 
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+  Khoj is open-source and can be self-hosted for complete privacy, or used via our cloud service at [app.khoj.dev](https://app.khoj.dev)
+</Note>
+
+## Get Started with Khoj Cloud
+
+The fastest way to start using Khoj is through our cloud service. No installation required!
+
+<Steps>
+  <Step title="Create Your Account">
+    Go to [app.khoj.dev](https://app.khoj.dev) and sign up using:
+    
+    - **Google Single Sign-On** (recommended for quickest setup)
+    - **Email and Password**
+    
+    Your account is created instantly and you can start chatting right away.
+    
+    <Tip>
+      With Google SSO, Khoj only receives your name, email, and profile photo - no access to other Google services.
+    </Tip>
+  </Step>
+
+  <Step title="Start Your First Chat">
+    Once logged in, you'll see the chat interface. Try asking Khoj:
+    
+    <CodeGroup>
+    ```text General Knowledge
+    Explain quantum computing in simple terms
+    ```
+    
+    ```text Research Mode
+    /research What are the latest developments in renewable energy?
+    ```
+    
+    ```text Online Search
+    /online What's the weather in San Francisco today?
+    ```
+    </CodeGroup>
+    
+    Khoj will respond using its general knowledge. To make it truly powerful, let's add your personal data.
+  </Step>
+
+  <Step title="Add Your Documents">
+    Make Khoj your second brain by uploading your personal documents:
+    
+    **Quick Upload (Drag & Drop)**
+    
+    Simply drag and drop files directly into the chat window. Khoj supports:
+    - PDFs
+    - Markdown (.md)
+    - Org-mode (.org)
+    - Word documents (.docx)
+    - Plain text (.txt)
+    
+    <img src="https://assets.khoj.dev/home_page_data_upload.gif" alt="Drag and drop upload demo" />
+    
+    **Bulk Upload**
+    
+    1. Click on your profile icon in the top-right
+    2. Navigate to **Settings** → **Data Sources**
+    3. Click **Add Documents** to upload multiple files at once
+    
+    **Sync Your Notes**
+    
+    For continuous syncing, install the [Desktop app](/clients/desktop) or plugins for:
+    - [Obsidian](/clients/obsidian) - Perfect for Obsidian users
+    - [Emacs](/clients/emacs) - Native Emacs integration
+  </Step>
+
+  <Step title="Chat with Your Knowledge">
+    Once your documents are uploaded (indexing takes a few seconds), ask questions about them:
+    
+    ```text
+    What are the main points from my meeting notes last week?
+    ```
+    
+    ```text
+    /notes Summarize my research on machine learning
+    ```
+    
+    Khoj will retrieve relevant information from your documents and provide contextual answers with citations.
+    
+    <img src="https://assets.khoj.dev/quadratic_equation_khoj_web.gif" alt="Chat demo" />
+  </Step>
+
+  <Step title="Explore Advanced Features">
+    Now that you're set up, explore Khoj's powerful features:
+    
+    <CardGroup cols={2}>
+      <Card title="Create Custom Agents" icon="robot" href="/features/agents">
+        Build agents with custom personalities and knowledge bases
+      </Card>
+      
+      <Card title="Generate Images" icon="image" href="/features/image-generation">
+        Use `/image` to create images from text descriptions
+      </Card>
+      
+      <Card title="Set Up Automations" icon="clock" href="/features/automations">
+        Schedule research tasks and get personalized newsletters
+      </Card>
+      
+      <Card title="Execute Code" icon="code" href="/features/code-execution">
+        Run Python code snippets with `/code`
+      </Card>
+    </CardGroup>
+  </Step>
+</Steps>
+
+## Essential Slash Commands
+
+Slash commands give you fine-grained control over how Khoj responds:
+
+| Command | Description | Example |
+|---------|-------------|----------|
+| `/notes` | Search only your personal documents | `/notes What did I write about project X?` |
+| `/general` | Use only Khoj's general knowledge | `/general Explain relativity` |
+| `/online` | Search the internet for current info | `/online Latest AI news` |
+| `/research` | Deep dive with comprehensive research | `/research Climate change solutions` |
+| `/image` | Generate images | `/image A sunset over mountains` |
+| `/code` | Execute Python code | `/code Calculate fibonacci(10)` |
+| `/diagram` | Create Excalidraw diagrams | `/diagram Design a database schema` |
+| `/help` | Show all available commands | `/help` |
+
+<Tip>
+  Use keyboard shortcuts to speed up your workflow. Press `?` in the web app to see all shortcuts.
+</Tip>
+
+## Using Conversation Filters
+
+Narrow down which documents Khoj searches by using the file filter panel:
+
+1. Look for the **file filter icon** in the left sidebar
+2. Select specific documents or folders
+3. Khoj will only search within those filtered files for that conversation
+
+<img src="/img/file_filters_conversation.png" alt="File filter panel" width="400" />
+
+## Connect More Data Sources
+
+Expand Khoj's knowledge by connecting external services:
+
+<CardGroup cols={2}>
+  <Card title="Notion Integration" icon="book" href="/data-sources/notion">
+    Sync your Notion workspace automatically
+  </Card>
+  
+  <Card title="GitHub Integration" icon="github" href="/data-sources/github">
+    Index your GitHub repositories and issues
+  </Card>
+</CardGroup>
+
+## Choose Your Chat Model
+
+Khoj Cloud comes with multiple AI models pre-configured:
+
+- **GPT-4o** - OpenAI's most capable model (default)
+- **Claude 3.5 Sonnet** - Anthropic's advanced reasoning model
+- **Gemini 2.5 Flash** - Google's fast, efficient model
+
+To change your model:
+1. Go to **Settings** → **Chat Model**
+2. Select your preferred model from the dropdown
+3. Save and start chatting!
+
+<Warning>
+  Free tier users have rate limits. Upgrade to a subscription for unlimited usage and access to all models.
+</Warning>
+
+## Next Steps
+
+Now that you're up and running, explore these resources:
+
+<CardGroup cols={2}>
+  <Card title="Privacy & Security" icon="shield" href="/privacy-security">
+    Learn how your data is protected
+  </Card>
+  
+  <Card title="Self-Hosting" icon="server" href="/self-hosting">
+    Run Khoj on your own hardware for complete privacy
+  </Card>
+  
+  <Card title="All Features" icon="stars" href="/features/overview">
+    Discover everything Khoj can do
+  </Card>
+  
+  <Card title="Desktop Apps" icon="desktop" href="/clients/desktop">
+    Install native desktop applications
+  </Card>
+</CardGroup>
+
+## Getting Help
+
+Need assistance? We're here to help:
+
+- **Discord Community**: [discord.gg/BDgyabRM6e](https://discord.gg/BDgyabRM6e)
+- **GitHub Issues**: [github.com/khoj-ai/khoj](https://github.com/khoj-ai/khoj)
+- **Documentation**: You're already here! 📚
+
+<Note>
+  Use `/help` in any chat to get quick assistance and see all available commands.
 </Note>
