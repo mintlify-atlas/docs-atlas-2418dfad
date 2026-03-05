@@ -106,6 +106,7 @@
               "api/update",
               "api/agents",
               "api/automations",
+              "api/memories",
               "api/subscriptions"
             ]
           }
